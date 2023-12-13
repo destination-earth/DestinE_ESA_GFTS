@@ -1,0 +1,33 @@
+name: gfts
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - jupyter-book
+  - matplotlib
+  - numpy
+  - ghp-import
+  - xarray
+  - cftime
+  - netcdf4
+  - h5netcdf
+  - cartopy
+  - holoviews
+  - hvplot
+  - geoviews
+  - cartopy
+  - geopandas
+  - pooch
+  - fsspec
+  - s3fs
+  - git
+  - jupyterlab-git
+  - 'nodejs>=16,<17'
+  - jupyterlab-myst>=2.0.0
+  - pip:
+    - wget
+    - sphinx-exercise
+    - jupytext
+    - nbgitpuller
+    - mystmd
