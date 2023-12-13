@@ -1,0 +1,4 @@
+format: jb-book
+root: intro
+chapters:
+  - file: code_of_conduct
