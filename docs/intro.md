@@ -33,7 +33,7 @@ authors:
       - developmentseed
   - id: ricardoduplos
     name: Ricardo Mestre
-    orcid: 
+    orcid: 0009-0008-7946-8568
     corresponding: false
     roles:
       - User Interface
@@ -113,7 +113,14 @@ This project entails the implementation of an advanced fish tracking system util
 
 +++
 
+<a href="https://w3id.org/ro-id/2edcfa66-0f59-42f4-aa29-1c5681466424">  <img alt="RoHub" src="https://img.shields.io/badge/RoHub-FAIR_Executable_Research_Object-2ea44f?logo=Open+Access&logoColor=blue"></a>
+
 # Overview of GFTS DESP use case
+
+The presentation below has been presented by Mathieu Woillez at the [Roadshow Webinar: DestinE in action – meet the first DESP use cases](https://destination-earth.eu/event/destine-in-action-meet-the-first-desp-use-cases/) (13 December 2023)
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10372387.svg)](https://doi.org/10.5281/zenodo.10372387)
+
 
 <style>
 .responsive-wrap iframe{ max-width: 100%;}
@@ -123,6 +130,5 @@ This project entails the implementation of an advanced fish tracking system util
   <iframe src="https://docs.google.com/presentation/d/1DMa__GRQXhpkqx4VNWDgHdYr_Z2SsWkc_j3m2E01GUs/embed?start=false&loop=false&delayms=3000" frameborder="0" width="960" height="569" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
 <!-- Google embed ends -->
 </div>
-
 
 
