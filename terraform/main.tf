@@ -1,4 +1,5 @@
 terraform {
+  required_version = "~> 1.6"
   required_providers {
     ovh = {
       source  = "ovh/ovh"
@@ -157,7 +158,7 @@ output "kubeconfig" {
   description = <<EOF
     # save output with:
     export KUBECONFIG=$PWD/../jupyterhub/secrets/kubeconfig.yaml
-    terraform output -raw kubeconfig > $KUBECONFIG
+    tofu output -raw kubeconfig > $KUBECONFIG
     chmod 600 $KUBECONFIG
     kubectl config rename-context kubernetes-admin@gfts gfts
     kubectl config use-context gfts
@@ -306,10 +307,10 @@ resource "harbor_garbage_collection" "gc" {
 # registry outputs
 
 output "registry_url" {
-  value = ovh_cloud_project_containerregistry.registry.url
+  value       = ovh_cloud_project_containerregistry.registry.url
   description = <<EOF
     # login to docker registry with:
-    echo $(terraform output -raw registry_builder_token) | docker login $(terraform output -raw registry_url) --username $(terraform output -raw registry_builder_name) --password-stdin
+    echo $(tofu output -raw registry_builder_token) | docker login $(tofu output -raw registry_url) --username $(tofu output -raw registry_builder_name) --password-stdin
     EOF
 }
 
