@@ -6,10 +6,10 @@ Run:
 
     python3 deploy.py helm
 """
+import os
 import shlex
 import subprocess
 from pathlib import Path
-import os
 
 import click
 
@@ -20,7 +20,7 @@ kube_config = jupyterhub / "secrets" / "kubeconfig.yaml"
 
 def sh(cmd: list[str], **kwargs):
     """Run a single shell command
-    
+
     wraps subprocess.run
     """
     # kwargs.setdefault("capture_output", True)
@@ -42,12 +42,14 @@ def tofu_output(output_name: str) -> str:
     with p:
         return p.stdout.read()
 
+
 @click.group()
 def cli():
     """Main entrypoint to run a deployment
-    
+
     `deploy.py helm` to run a helm upgrade
     """
+
 
 @cli.command()
 def docker_login():
@@ -69,17 +71,18 @@ def docker_login():
 
 
 @cli.command()
-@click.argument('chartpress_args', nargs=-1)
+@click.argument("chartpress_args", nargs=-1)
 def chartpress(chartpress_args):
     """Run chartpress
-    
+
     updates image in registry
     """
     if not chartpress_args:
-        chartpress_args = ["--push",]
+        chartpress_args = ["--push"]
     cmd = ["chartpress", "--builder=docker-buildx", "--platform=linux/amd64"]
     cmd.extend(chartpress_args)
     sh(cmd, cwd=jupyterhub)
+
 
 @cli.command()
 def helm():
@@ -100,7 +103,6 @@ def helm():
         ],
         env=env,
     )
-
 
 
 if __name__ == "__main__":

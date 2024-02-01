@@ -88,3 +88,8 @@ and cleanup your local files:
 ```
 chartpress --reset
 ```
+
+## The user image
+
+The user image is defined in `images/user`.
+To change what's in the image, modify `images/user/environment.yml` and run `make images/user/conda-linux-64.lock`.

@@ -1,0 +1,4 @@
+# requirements for running deployment tools
+chartpress
+click
+conda-lock
