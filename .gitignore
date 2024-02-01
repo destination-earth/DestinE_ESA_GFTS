@@ -161,3 +161,5 @@ cython_debug/
 
 .DS_Store
 .terraform
+charts
+tmpcharts

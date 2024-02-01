@@ -1,0 +1,15 @@
+dependencies:
+- name: jupyterhub
+  repository: https://jupyterhub.github.io/helm-chart
+  version: 3.2.2-0.dev.git.6503.he072ce42
+- name: ingress-nginx
+  repository: https://kubernetes.github.io/ingress-nginx
+  version: 4.9.1
+- name: prometheus
+  repository: https://prometheus-community.github.io/helm-charts
+  version: 25.8.1
+- name: grafana
+  repository: https://grafana.github.io/helm-charts
+  version: 7.0.14
+digest: sha256:5bf18b615d83c0ccfa9d14bf4f3c5f679116436fa8ba4cfff8d7a03dd515db43
+generated: "2024-02-01T12:06:59.068324+01:00"
