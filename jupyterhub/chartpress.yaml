@@ -1,0 +1,6 @@
+charts:
+  - name: gfts-hub
+    imagePrefix: c63eqfuv.c1.gra9.container-registry.ovh.net/gfts/jupyterhub-
+    images:
+      user:
+        valuesPath: jupyterhub.singleuser.image
