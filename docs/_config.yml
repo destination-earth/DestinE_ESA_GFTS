@@ -1,15 +1,15 @@
 #######################################################################################
 # A default configuration that will be loaded for all jupyter books
-# See the documentation for help and more options: 
+# See the documentation for help and more options:
 # https://jupyterbook.org/customize/config.html
 
 #######################################################################################
 # Book settings
-title                       : Global Fish Tracking System (GFTS) - DESP use case  # The title of the book. Will be placed in the left navbar.
-author                      : Pangeo # The author of the book
-copyright                   : "2023"  # Copyright year to be placed in the footer
-logo                        : "./images/gfts.png"  # A path to the book logo
-only_build_toc_files        : true
+title: Global Fish Tracking System (GFTS) - DESP use case # The title of the book. Will be placed in the left navbar.
+author: Pangeo # The author of the book
+copyright: "2023" # Copyright year to be placed in the footer
+logo: "./images/gfts.png" # A path to the book logo
+only_build_toc_files: true
 
 # Force re-execution of notebooks on each build.
 # See https://jupyterbook.org/content/execute.html
@@ -20,8 +20,8 @@ execute:
 # Add a launch button on a specific binder instance
 launch_buttons:
   notebook_interface: "jupyterlab"
-  binderhub_url: "https://notebooks.gesis.org/binder/"  # The URL for your BinderHub (e.g., https://mybinder.org)
-  jupyterhub_url: "http://pangeo-eosc.vm.fedcloud.eu/jupyterhub/"  # The URL for your JupyterHub. (e.g., https://datahub.berkeley.edu)
+  binderhub_url: "https://notebooks.gesis.org/binder/" # The URL for your BinderHub (e.g., https://mybinder.org)
+  jupyterhub_url: "http://pangeo-eosc.vm.fedcloud.eu/jupyterhub/" # The URL for your JupyterHub. (e.g., https://datahub.berkeley.edu)
 
 # Define the name of the latex output file for PDF builds
 latex:
@@ -34,9 +34,9 @@ bibtex_bibfiles:
 
 # Information about where the book exists on the web
 repository:
-  url: https://github.com/destination-earth/DestinE_ESA_GFTS  # Online location of your book
-  path_to_book: docs  # Optional path to your book, relative to the repository root
-  branch: main  # Which branch of the repository should be used when creating links (optional)
+  url: https://github.com/destination-earth/DestinE_ESA_GFTS # Online location of your book
+  path_to_book: docs # Optional path to your book, relative to the repository root
+  branch: main # Which branch of the repository should be used when creating links (optional)
 
 # Add GitHub buttons to your book
 # See https://jupyterbook.org/customize/config.html#add-a-link-to-your-repository
@@ -47,6 +47,6 @@ html:
 sphinx:
   config:
     html_js_files:
-    - https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js
+      - https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js
   extra_extensions:
     - sphinx_exercise

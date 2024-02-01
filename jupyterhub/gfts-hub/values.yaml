@@ -1,0 +1,178 @@
+coreNodeSelector: &coreNodeSelector
+  hub.jupyter.org/node-purpose: core
+
+jupyterhub:
+  proxy:
+    chp:
+      nodeSelector: *coreNodeSelector
+    service:
+      type: ClusterIP
+  ingress:
+    enabled: true
+    annotations:
+      ingress.kubernetes.io/proxy-body-size: 64m
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: "true"
+    hosts:
+      - gfts.minrk.net
+    tls:
+      - secretName: tls-jupyterhub
+        hosts:
+          - gfts.minrk.net
+
+  singleuser:
+    events: true
+    storage:
+      homeMountPath: /home/user
+    image:
+      name: "c63eqfuv.c1.gra9.container-registry.ovh.net/gfts/jupyterhub-user"
+      tag: "set-by-chartpress"
+      pullPolicy: Always
+    memory:
+      limit: 2G
+      guarantee: 1G
+    cpu:
+      limit: 1
+      guarantee: 0.5
+    extraEnv:
+      CULL_CONNECTED: "1"
+      CULL_TIMEOUT: "1800"
+      CULL_KERNEL_TIMEOUT: "1800"
+      CULL_INTERVAL: "120"
+
+  prePuller:
+    hook:
+      enabled: false
+    continuous:
+      enabled: true
+
+  hub:
+    nodeSelector: *coreNodeSelector
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/path: /hub/metrics
+    config:
+      JupyterHub:
+        authenticate_prometheus: false
+      Authenticator:
+        allowed_users:
+          - minrk
+          - tinaok
+          - yellowcap
+          - danielfdsilva
+          - annefou
+    loadRoles:
+      management:
+        scopes:
+          - admin-ui
+          - list:users
+          - read:users
+          - servers
+          - groups
+        users:
+          - annefou
+          - minrk
+
+  scheduling:
+    userScheduler:
+      enabled: true
+    podPriority:
+      enabled: true
+    userPlaceholder:
+      enabled: true
+      replicas: 0
+    userPods:
+      nodeAffinity:
+        # TODO: 'require' when we deploy for real
+        matchNodePurpose: prefer
+    corePods:
+      nodeAffinity:
+        matchNodePurpose: require
+
+grafana:
+  nodeSelector: *coreNodeSelector
+  grafana.ini:
+    auth.anonymous:
+      enabled: true
+      org_name: Main Org.
+      org_role: Viewer
+    auth.basic:
+      enabled: true
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: "true"
+    hosts:
+      - grafana.gfts.minrk.net
+    tls:
+      - hosts:
+          - grafana.gfts.minrk.net
+        secretName: tls-grafana
+  persistence:
+    size: 2Gi
+    enabled: true
+    accessModes:
+      - ReadWriteOnce
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+        - name: prometheus
+          orgId: 1
+          type: prometheus
+          url: https://prometheus..minrk.net
+          isDefault: true
+          editable: false
+
+prometheus:
+  nodeSelector: *coreNodeSelector
+  nodeExporter:
+    updateStrategy:
+      type: RollingUpdate
+  alertmanager:
+    enabled: false
+  pushgateway:
+    enabled: false
+  rbac:
+    create: true
+  server:
+    nodeSelector: *coreNodeSelector
+    podLabels:
+      hub.jupyter.org/network-access-hub: "true"
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: nginx
+        kubernetes.io/tls-acme: "true"
+      hosts:
+        - prometheus.gfts.minrk.net
+      tls:
+        - hosts:
+            - prometheus.gfts.minrk.net
+          secretName: tls-prometheus
+  kube-state-metrics:
+    metricLabelsAllowlist:
+      - pods=[app,component]
+      - nodes=[*]
+
+ingress-nginx:
+  rbac:
+    create: true
+  statsExporter:
+    service:
+      annotations:
+        prometheus.io/scrape: "true"
+  controller:
+    nodeSelector: *coreNodeSelector
+    replicaCount: 2
+    scope:
+      enabled: true
+    config:
+      # Allow POSTs of up to 64MB, for large notebook support.
+      proxy-body-size: 64m
+    stats:
+      enabled: true
+    service:
+      # Preserve client IPs
+      externalTrafficPolicy: Local

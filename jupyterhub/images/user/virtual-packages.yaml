@@ -1,0 +1,8 @@
+# virtual packages apply constraints
+subdirs:
+  linux-64:
+    packages:
+      # run conda info in image to get these
+      __glibc: "2.35"
+      __linux: "5.15.0"
+      __unix: "0"

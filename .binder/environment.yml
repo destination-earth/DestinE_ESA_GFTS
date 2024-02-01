@@ -23,11 +23,11 @@ dependencies:
   - s3fs
   - git
   - jupyterlab-git
-  - 'nodejs>=16,<17'
+  - "nodejs>=16,<17"
   - jupyterlab-myst>=2.0.0
   - pip:
-    - wget
-    - sphinx-exercise
-    - jupytext
-    - nbgitpuller
-    - mystmd
+      - wget
+      - sphinx-exercise
+      - jupytext
+      - nbgitpuller
+      - mystmd

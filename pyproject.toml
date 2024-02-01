@@ -1,0 +1,11 @@
+[tool.ruff.lint]
+ignore = [
+    "F841", # unused variable
+]
+select = [
+    "E7", # comparisons
+    "E9", # syntax
+    "I", # isort
+    "UP", # pyupgrade
+    "F", # flake8
+]
