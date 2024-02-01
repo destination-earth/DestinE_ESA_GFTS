@@ -39,6 +39,9 @@ USER root
 RUN nbdime config-git --enable --system
 USER $NB_UID
 
+# disable "Jupyter news" pop-up
+RUN jupyter labextension disable "@jupyterlab/apputils-extension:announcements"
+
 WORKDIR /home/$NB_USER
 COPY jupyter_server_config.py /etc/jupyter/jupyter_server_config.py
 
