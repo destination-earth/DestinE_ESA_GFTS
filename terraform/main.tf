@@ -97,9 +97,9 @@ resource "ovh_cloud_project_kube_nodepool" "core" {
   name         = "core-202401"
   # b2-15 is 4 core, 15GB
   flavor_name = "b3-8"
-  max_nodes   = 1
+  max_nodes   = 2
   min_nodes   = 1
-  autoscale   = false
+  autoscale   = true
   template {
     metadata {
       annotations = {}
@@ -199,6 +199,15 @@ resource "helm_release" "cert-manager" {
   set {
     name  = "installCRDs"
     value = true
+  }
+  # match ClusterIssuer in gfts-hub chart
+  set {
+    name  = "ingressShim.defaultIssuerKind"
+    value = "ClusterIssuer"
+  }
+  set {
+    name  = "ingressShim.defaultIssuerName"
+    value = "letsencrypt-prod"
   }
 }
 
@@ -339,7 +348,7 @@ output "registry_puller_name" {
   value     = harbor_robot_account.puller.full_name
   sensitive = true
 }
-output "registry_user_puller_token" {
+output "registry_puller_token" {
   value     = harbor_robot_account.puller.secret
   sensitive = true
 }
