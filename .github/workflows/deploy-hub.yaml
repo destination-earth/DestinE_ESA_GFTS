@@ -1,0 +1,68 @@
+name: deploy hub
+concurrency: deploy
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - test-deploy
+    paths:
+      - jupyterhub/**
+      - .github/workflows/deploy-hub.yaml
+
+env:
+  KUBECTL_VERSION: v1.28.3
+  HELM_VERSION: v3.14.0
+
+jobs:
+  deploy:
+    runs-on: ubuntu-22.04
+    environment: deploy
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: install dependencies
+        run: |
+          pip install --upgrade setuptools pip
+          pip install --upgrade -r jupyterhub/requirements.txt
+
+      - name: "Install kubectl ${{ env.KUBECTL_VERSION }}"
+        uses: azure/setup-kubectl@v3.2
+        with:
+          version: ${{ env.KUBECTL_VERSION }}
+
+      - name: "setup helm ${{ env.HELM_VERSION }}"
+        run: |
+          curl -sf https://raw.githubusercontent.com/helm/helm/${HELM_VERSION}/scripts/get-helm-3 | DESIRED_VERSION=${HELM_VERSION} bash
+
+      - name: "Stage 2: Unlock git-crypt secrets"
+        uses: sliteteam/github-action-git-crypt-unlock@f99c0c6b60bb7ec30dcec033a8f0a3b3d48f21e1
+        env:
+          GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
+
+      - name: Login to Docker
+        uses: azure/docker-login@v1
+        with:
+          # tofu output registry_url
+          login-server: c63eqfuv.c1.gra9.container-registry.ovh.net
+          # tofu output registry_builder_name
+          username: ${{ secrets.DOCKER_USERNAME }}
+          # tofu output registry_builder_token
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build image with chartpress
+        run: |
+          cd jupyterhub
+          python3 deploy.py chartpress
+
+      - name: Deploy with helm
+        run: |
+          cd jupyterhub
+          python3 deploy.py helm
