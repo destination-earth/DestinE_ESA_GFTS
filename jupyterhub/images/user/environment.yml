@@ -5,7 +5,7 @@ dependencies:
   - mamba
   - conda
   - python=3.11
-  
+
   # computation
   - altair
   - dask
@@ -14,7 +14,7 @@ dependencies:
   - numpy
   - pandas
   - scipy
-  
+
   # IPython/Jupyter
   - jupyterhub-base=4
   - jupyter_server

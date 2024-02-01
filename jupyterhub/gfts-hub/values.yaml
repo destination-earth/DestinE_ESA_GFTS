@@ -1,10 +1,11 @@
 jupyterhub:
   singleuser:
-    image: "c63eqfuv.c1.gra9.container-registry.ovh.net/gfts/jupyterhub-user:set-by-chartpress"
+    image:
+      name: "c63eqfuv.c1.gra9.container-registry.ovh.net/gfts/jupyterhub-user"
+      tag: "0.0.1-0.dev.git.13.h01d33ca"
 
 prometheus:
   enabled: true
 
 grafana:
   enabled: true
-

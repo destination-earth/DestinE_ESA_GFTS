@@ -11,12 +11,3 @@ nano
 sudo
 vim
 wget
-
-# novnc
-# tightvncserver
-# novnc
-# websockify
-# supervisor
-# xinit
-# xfonts-base
-# xterm
