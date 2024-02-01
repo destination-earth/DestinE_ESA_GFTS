@@ -1,0 +1,6 @@
+channels:
+  - conda-forge
+  - minrk
+auto_update_conda: false
+update_dependencies: false
+show_channel_urls: true

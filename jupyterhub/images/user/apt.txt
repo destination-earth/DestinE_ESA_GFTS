@@ -1,0 +1,22 @@
+# build-essential
+binutils
+bzip2
+ca-certificates
+emacs
+git
+less
+libgl1
+locales
+nano
+sudo
+vim
+wget
+
+# novnc
+# tightvncserver
+# novnc
+# websockify
+# supervisor
+# xinit
+# xfonts-base
+# xterm

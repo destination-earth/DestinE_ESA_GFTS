@@ -1,0 +1,32 @@
+channels:
+  - conda-forge
+dependencies:
+  # basics, since this is starting from micromamba
+  - mamba
+  - conda
+  - python=3.11
+  
+  # computation
+  - altair
+  - dask
+  - distributed
+  - matplotlib-base
+  - numpy
+  - pandas
+  - scipy
+  
+  # IPython/Jupyter
+  - jupyterhub-base=4
+  - jupyter_server
+  - jupyterlab=4
+  - jupyter-resource-usage
+  - jupyterlab_code_formatter
+  - jupyterlab-git
+  - notebook=7
+  - nbdime
+  - ipykernel
+  - ipywidgets
+  - nbgitpuller
+
+  # Progress-bars
+  - tqdm
