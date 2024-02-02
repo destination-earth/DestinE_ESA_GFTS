@@ -29,10 +29,10 @@ jupyterhub:
       tag: "set-by-chartpress"
       pullPolicy: Always
     memory:
-      limit: 2G
+      limit: 4G
       guarantee: 1G
     cpu:
-      limit: 1
+      limit: 2
       guarantee: 0.5
     extraEnv:
       CULL_CONNECTED: "1"
