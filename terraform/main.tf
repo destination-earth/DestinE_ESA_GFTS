@@ -89,8 +89,6 @@ resource "ovh_cloud_project_kube" "cluster" {
   update_policy = "MINIMAL_DOWNTIME"
 }
 
-# ovh node flavors: https://www.ovhcloud.com/en/public-cloud/prices/
-
 resource "ovh_cloud_project_kube_nodepool" "core" {
   service_name = local.service_name
   kube_id      = ovh_cloud_project_kube.cluster.id
@@ -103,7 +101,7 @@ resource "ovh_cloud_project_kube_nodepool" "core" {
   template {
     metadata {
       annotations = {}
-      finalizers  = ["ovhcloud.com/v1beta1", "ovhcloud.com/v1"]
+      finalizers  = []
       labels = {
         "hub.jupyter.org/node-purpose" = "core"
       }
@@ -133,7 +131,7 @@ resource "ovh_cloud_project_kube_nodepool" "user" {
   template {
     metadata {
       annotations = {}
-      finalizers  = ["ovhcloud.com/v1beta1", "ovhcloud.com/v1"]
+      finalizers  = []
       labels = {
         "hub.jupyter.org/node-purpose" = "users"
       }
