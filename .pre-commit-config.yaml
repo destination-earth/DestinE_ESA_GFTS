@@ -32,6 +32,14 @@ repos:
     hooks:
       - id: prettier
 
+  # Reset Chart.yaml version and values.yaml image tags
+  - repo: https://github.com/jupyterhub/chartpress
+    rev: 2.1.0
+    hooks:
+      - id: chartpress
+        # run in subdirectory
+        entry: bash -c 'cd jupyterhub && "$@"' --
+
   # Autoformat and linting, misc. details
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.5.0
