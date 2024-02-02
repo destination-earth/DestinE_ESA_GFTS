@@ -9,6 +9,11 @@ dependencies:
     version: "3.2.2-0.dev.git.6503.he072ce42"
     repository: https://jupyterhub.github.io/helm-chart
 
+  # dask-gateway
+  - name: dask-gateway
+    version: "2024.1.0"
+    repository: https://helm.dask.org/
+
   # ingress
   - name: ingress-nginx
     version: "4.9.1"

@@ -176,3 +176,11 @@ ingress-nginx:
     service:
       # Preserve client IPs
       externalTrafficPolicy: Local
+
+dask-gateway:
+  gateway:
+    extraConfig:
+      resource-limits: |
+        # for now, limit resources to very small clusters
+        c.ClusterConfig.cluster_max_cores = 8
+        c.ClusterConfig.cluster_max_memory = "8 G"

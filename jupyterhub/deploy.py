@@ -85,20 +85,39 @@ def chartpress(chartpress_args):
 
 
 @cli.command()
-def helm():
+@click.option(
+    "--skip-dependency",
+    is_flag=True,
+    show_default=True,
+    default=False,
+    help="Skip `helm dependency update` for quicker repeat deployments",
+)
+@click.option(
+    "--diff",
+    is_flag=True,
+    show_default=True,
+    default=False,
+    help="Show diff instead of deploying",
+)
+def helm(skip_dependency, diff):
     """Run helm to deploy updates to jupyterhub"""
     env = os.environ.copy()
     env["KUBECONFIG"] = str(kube_config)
-    sh(["helm", "dependency", "update", "./gfts-hub"], cwd=jupyterhub)
+    if not skip_dependency and not diff:
+        sh(["helm", "dependency", "update", "./gfts-hub"], cwd=jupyterhub)
+
+    helm = ["helm"]
+    if diff:
+        helm.extend(["diff", "--context", "3"])
     sh(
-        [
-            "helm",
+        helm
+        + [
             "upgrade",
             "--install",
-            "--create-namespace",
             "--namespace=hub",
             "hub",
             "./gfts-hub",
+            "--values=config/daskhub.yaml",
             "--values=secrets/config.yaml",
         ],
         env=env,
