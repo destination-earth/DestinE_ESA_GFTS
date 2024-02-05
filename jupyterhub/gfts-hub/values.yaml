@@ -32,8 +32,8 @@ jupyterhub:
       limit: 12G
       guarantee: 4G
     cpu:
-      limit: 8
-      guarantee: 2
+      limit: 4
+      guarantee: 1
     extraEnv:
       CULL_CONNECTED: "1"
       CULL_TIMEOUT: "1800"
