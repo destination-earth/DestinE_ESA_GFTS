@@ -184,3 +184,6 @@ dask-gateway:
         # for now, limit resources to very small clusters
         c.ClusterConfig.cluster_max_cores = 8
         c.ClusterConfig.cluster_max_memory = "8 G"
+
+        # shutdown idle clusters after one hour
+        c.ClusterConfig.idle_timeout = 3600
