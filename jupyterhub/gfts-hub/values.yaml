@@ -29,11 +29,11 @@ jupyterhub:
       tag: "set-by-chartpress"
       pullPolicy: Always
     memory:
-      limit: 12G
-      guarantee: 4G
+      limit: 24G
+      guarantee: 8G
     cpu:
-      limit: 4
-      guarantee: 1
+      limit: 6
+      guarantee: 2
     extraEnv:
       CULL_CONNECTED: "1"
       CULL_TIMEOUT: "1800"
@@ -83,8 +83,10 @@ jupyterhub:
       replicas: 0
     userPods:
       nodeAffinity:
-        # TODO: 'require' when we deploy for real
-        matchNodePurpose: prefer
+        # 'prefer' lets users run on small core nodes
+        # to save cost
+        # 'require' protects core nodes from user resource consumption
+        matchNodePurpose: require
     corePods:
       nodeAffinity:
         matchNodePurpose: require
