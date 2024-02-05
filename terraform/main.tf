@@ -89,6 +89,8 @@ resource "ovh_cloud_project_kube" "cluster" {
   update_policy = "MINIMAL_DOWNTIME"
 }
 
+# ovh node flavors: https://www.ovhcloud.com/en/public-cloud/prices/
+
 resource "ovh_cloud_project_kube_nodepool" "core" {
   service_name = local.service_name
   kube_id      = ovh_cloud_project_kube.cluster.id
@@ -122,10 +124,10 @@ resource "ovh_cloud_project_kube_nodepool" "core" {
 resource "ovh_cloud_project_kube_nodepool" "user" {
   service_name = local.service_name
   kube_id      = ovh_cloud_project_kube.cluster.id
-  name         = "user-202401"
-  # r2-120 is 8 core, 120GB
-  flavor_name = "b3-16"
-  max_nodes   = 1
+  name         = "user-202402"
+  # b3-32 is 8-core, 32GB
+  flavor_name = "b3-32"
+  max_nodes   = 2
   min_nodes   = 0
   autoscale   = true
   template {
