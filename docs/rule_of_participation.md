@@ -4,7 +4,6 @@
 
 Thank you for considering to contribute to this European initiative with your ideas and suggestions.
 
-
 ## Guidelines
 
 Reading our guidelines is key to maximise your contribution, understanding project policies, knowing repositories management, naming conventions, etc.
@@ -12,8 +11,7 @@ Reading our guidelines is key to maximise your contribution, understanding proje
 # Rules of participation
 
 It is possible to participate in the organization of the DestinE project and in the definition of the Use Cases, if part of Horizon Europe or of a project in partnership with DestinE. 
-Each use case and project will have its own repository, following the naming convention explained in the [Read Me](README.md).
-
+Each use case and project will have its own repository, following the naming convention explained in the [Read Me](https://github.com/destination-earth/DestinE) of the DestinE repository.
 
 For each new project which want to be part of this organisation and fully hosted here, it is required to have the following elements in the repository: 
 * Licence
