@@ -1,4 +1,8 @@
 format: jb-book
 root: intro
-chapters:
-  - file: code_of_conduct
+parts:
+  - caption: About
+    chapters:
+    - file: contribute
+    - file: code_of_conduct
+    - file: rule_of_participation
