@@ -16,5 +16,6 @@ pip install jupyter-book sphinx-exercise sphinx-autobuild
 And then run a small sphinx server with live-reload functionality
 
 ```bash
-sphinx-autobuild docs _build/html -b html
+cd docs
+sphinx-autobuild . _build/html -b html
 ```
