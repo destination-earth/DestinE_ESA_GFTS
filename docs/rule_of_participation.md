@@ -1,11 +1,11 @@
 # Introduction
 
-### Welcome to the DestinE GitHub Community!
+## Welcome to the DestinE GitHub Community!
 
 Thank you for considering to contribute to this European initiative with your ideas and suggestions.
 
 
-### Guidelines
+## Guidelines
 
 Reading our guidelines is key to maximise your contribution, understanding project policies, knowing repositories management, naming conventions, etc.
 
