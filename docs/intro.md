@@ -103,6 +103,8 @@ tags:
 thumbnail: images/gfts.png
 ---
 
+# Global Fish Tracking System
+
 +++ {"part":"abstract"}
 
 % The article should include an abstract block at the beginning. The block is delimited by `+++` before and after, and you must specify `"part": "abstract"` as JSON metadata on the block opener. This metadata is required for recognizing the content of this cell as the abstract.
