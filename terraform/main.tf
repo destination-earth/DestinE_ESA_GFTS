@@ -63,11 +63,6 @@ resource "ovh_cloud_project_network_private_subnet" "subnet" {
   dhcp    = true
 }
 
-import {
-  to = ovh_cloud_project_kube.cluster
-  id = "2a0ebfcd5a8d46a797b921841717b052/899fbf3a-988c-4054-8945-c6fb5fef858c"
-}
-
 resource "ovh_cloud_project_kube" "cluster" {
   service_name = local.service_name
   name         = local.cluster_name
