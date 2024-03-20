@@ -121,10 +121,10 @@ resource "ovh_cloud_project_kube_nodepool" "core" {
   }
 }
 
-resource "ovh_cloud_project_kube_nodepool" "user" {
+resource "ovh_cloud_project_kube_nodepool" "users" {
   service_name = local.service_name
   kube_id      = ovh_cloud_project_kube.cluster.id
-  name         = "user-202402"
+  name         = "user-202403"
   # b3-32 is 8-core, 32GB
   flavor_name = "b3-32"
   max_nodes   = 2
@@ -135,7 +135,7 @@ resource "ovh_cloud_project_kube_nodepool" "user" {
       annotations = {}
       finalizers  = []
       labels = {
-        "hub.jupyter.org/node-purpose" = "users"
+        "hub.jupyter.org/node-purpose" = "user"
       }
     }
     spec {
