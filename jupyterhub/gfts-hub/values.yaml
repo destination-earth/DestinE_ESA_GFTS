@@ -23,7 +23,7 @@ jupyterhub:
   singleuser:
     events: true
     storage:
-      homeMountPath: /home/user
+      homeMountPath: /home/jovyan
     image:
       name: "c63eqfuv.c1.gra9.container-registry.ovh.net/gfts/jupyterhub-user"
       tag: "set-by-chartpress"
