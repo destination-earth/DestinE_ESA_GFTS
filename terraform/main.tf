@@ -47,7 +47,7 @@ locals {
   cluster_name = "gfts"
   region       = "GRA11"
   s3_region    = "gra"
-  s3_endpoint  = "s3.gra.io.cloud.ovh.net"
+  s3_endpoint  = "s3.gra.perf.cloud.ovh.net"
   s3_users = toset(["annefou", "todaka", "minrk"])
 }
 
@@ -137,12 +137,21 @@ output "s3_credentials" {
   sensitive   = true
   value       = {
     for name in local.s3_users :
-    name => <<EOF
+    name => <<-EOF
     [gfts]
     aws_access_key_id=${ovh_cloud_project_user_s3_credential.s3_users[name].access_key_id}
     aws_secret_access_key=${ovh_cloud_project_user_s3_credential.s3_users[name].secret_access_key}
-    aws_endpoint_url=https://s3.gra.io.cloud.ovh.net
+    aws_endpoint_url=https://s3.gra.perf.cloud.ovh.net
     EOF
+  }
+}
+
+output "s3_admin_credentials" {
+  description = "s3 credentials for administration"
+  sensitive   = true
+  value       = {
+    access_key_id = ovh_cloud_project_user_s3_credential.s3_admin.access_key_id,
+    secret_access_key = ovh_cloud_project_user_s3_credential.s3_admin.secret_access_key,
   }
 }
 
