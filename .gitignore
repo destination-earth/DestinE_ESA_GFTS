@@ -163,3 +163,4 @@ cython_debug/
 .terraform
 charts
 tmpcharts
+.virtual_documents
