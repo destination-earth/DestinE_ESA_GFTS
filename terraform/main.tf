@@ -21,6 +21,10 @@ terraform {
       source  = "hashicorp/helm"
       version = "~> 2.12"
     }
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 4.0"
+    }
   }
   # store state on gcs, like other clusters
   backend "s3" {
@@ -41,9 +45,103 @@ provider "ovh" {
 locals {
   service_name = "2a0ebfcd5a8d46a797b921841717b052"
   cluster_name = "gfts"
-  # GRA9 is colocated with registry
-  region = "GRA11"
+  region       = "GRA11"
+  s3_region    = "gra"
+  s3_endpoint  = "s3.gra.io.cloud.ovh.net"
 }
+
+####### s3 buckets #######
+
+resource "ovh_cloud_project_user" "s3_admin" {
+  service_name = local.service_name
+  description  = "admin s3 from OpenTofu"
+  role_name    = "objectstore_operator"
+}
+
+resource "ovh_cloud_project_user_s3_credential" "s3_admin" {
+  service_name = local.service_name
+  user_id      = ovh_cloud_project_user.s3_admin.id
+}
+
+
+# Configure the AWS Provider
+provider "aws" {
+  region     = local.s3_region
+  access_key = ovh_cloud_project_user_s3_credential.s3_admin.access_key_id
+  secret_key = ovh_cloud_project_user_s3_credential.s3_admin.secret_access_key
+
+  #OVH implementation has no STS service
+  skip_credentials_validation = true
+  skip_requesting_account_id  = true
+  # the gra region is unknown to AWS hence skipping is needed.
+  skip_region_validation = true
+  endpoints {
+    s3 = local.s3_endpoint
+  }
+}
+
+resource "ovh_cloud_project_user" "todaka" {
+  service_name = local.service_name
+  description  = "todaka"
+  role_name    = "objectstore_operator"
+}
+
+resource "ovh_cloud_project_user_s3_credential" "todaka" {
+  service_name = local.service_name
+  user_id      = ovh_cloud_project_user.todaka.id
+}
+
+resource "ovh_cloud_project_user_s3_policy" "todaka" {
+  service_name = local.service_name
+  user_id      = ovh_cloud_project_user.todaka.id
+  policy = jsonencode({
+    "Statement" : [
+      {
+        "Sid" : "import-gfts-data",
+        "Effect" : "Allow",
+        "Action" : [
+          "s3:GetObject", "s3:PutObject", "s3:ListBucket",
+          # "s3:DeleteObject",
+          "s3:ListMultipartUploadParts", "s3:ListBucketMultipartUploads",
+          "s3:AbortMultipartUpload", "s3:GetBucketLocation",
+        ],
+        "Resource" : [
+          "arn:aws:s3:::${aws_s3_bucket.gfts-data-lake.bucket}",
+          "arn:aws:s3:::${aws_s3_bucket.gfts-data-lake.bucket}/*",
+        ]
+      },
+      # {
+      #   "Sid" : "deny-create-bucket",
+      #   "Effect" : "Deny",
+      #   "Action" : [
+      #     "s3:CreateBucket",
+      #   ],
+      #   "Resource" : [
+      #     "arn:aws:s3:::*",
+      #   ]
+      # },
+    ]
+  })
+}
+
+resource "aws_s3_bucket" "gfts-data-lake" {
+  bucket = "destine-gfts-data-lake"
+}
+
+output "todaka_s3_access_key" {
+  description = "s3 access key for gfts import"
+  value       = ovh_cloud_project_user_s3_credential.todaka.access_key_id
+  sensitive   = true
+}
+
+output "todaka_s3_secret_key" {
+  description = "s3 secret key for gfts import"
+  value       = ovh_cloud_project_user_s3_credential.todaka.secret_access_key
+  sensitive   = true
+}
+
+######### Kubernetes ##########
+
 
 # create a private network for our cluster
 resource "ovh_cloud_project_network_private" "network" {
@@ -123,7 +221,7 @@ resource "ovh_cloud_project_kube_nodepool" "users" {
   # b3-32 is 8-core, 32GB
   flavor_name = "b3-32"
   max_nodes   = 2
-  min_nodes   = 0
+  min_nodes   = 1
   autoscale   = true
   template {
     metadata {
@@ -141,7 +239,10 @@ resource "ovh_cloud_project_kube_nodepool" "users" {
   lifecycle {
     ignore_changes = [
       # don't interfere with autoscaling
-      desired_nodes
+      desired_nodes,
+      # seems to be something weird going on here
+      # with metadata labels
+      template,
     ]
   }
 }
