@@ -65,6 +65,7 @@ jupyterhub:
       management:
         scopes:
           - admin-ui
+          - access:servers
           - list:users
           - read:users
           - servers
