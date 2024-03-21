@@ -48,6 +48,7 @@ locals {
   region       = "GRA11"
   s3_region    = "gra"
   s3_endpoint  = "s3.gra.io.cloud.ovh.net"
+  s3_users = toset(["annefou", "todaka", "minrk"])
 }
 
 ####### s3 buckets #######
@@ -80,20 +81,23 @@ provider "aws" {
   }
 }
 
-resource "ovh_cloud_project_user" "todaka" {
+resource "ovh_cloud_project_user" "s3_users" {
+  for_each = local.s3_users
   service_name = local.service_name
-  description  = "todaka"
+  description  = each.key
   role_name    = "objectstore_operator"
 }
 
-resource "ovh_cloud_project_user_s3_credential" "todaka" {
+resource "ovh_cloud_project_user_s3_credential" "s3_users" {
+  for_each = local.s3_users
   service_name = local.service_name
-  user_id      = ovh_cloud_project_user.todaka.id
+  user_id      = ovh_cloud_project_user.s3_users[each.key].id
 }
 
-resource "ovh_cloud_project_user_s3_policy" "todaka" {
+resource "ovh_cloud_project_user_s3_policy" "s3_users" {
+  for_each = local.s3_users
   service_name = local.service_name
-  user_id      = ovh_cloud_project_user.todaka.id
+  user_id      = ovh_cloud_project_user.s3_users[each.key].id
   policy = jsonencode({
     "Statement" : [
       {
@@ -128,16 +132,18 @@ resource "aws_s3_bucket" "gfts-data-lake" {
   bucket = "destine-gfts-data-lake"
 }
 
-output "todaka_s3_access_key" {
-  description = "s3 access key for gfts import"
-  value       = ovh_cloud_project_user_s3_credential.todaka.access_key_id
+output "s3_credentials" {
+  description = "s3 credentials for gfts import"
   sensitive   = true
-}
-
-output "todaka_s3_secret_key" {
-  description = "s3 secret key for gfts import"
-  value       = ovh_cloud_project_user_s3_credential.todaka.secret_access_key
-  sensitive   = true
+  value       = {
+    for name in local.s3_users :
+    name => <<EOF
+    [gfts]
+    aws_access_key_id=${ovh_cloud_project_user_s3_credential.s3_users[name].access_key_id}
+    aws_secret_access_key=${ovh_cloud_project_user_s3_credential.s3_users[name].secret_access_key}
+    aws_endpoint_url=https://s3.gra.io.cloud.ovh.net
+    EOF
+  }
 }
 
 ######### Kubernetes ##########
