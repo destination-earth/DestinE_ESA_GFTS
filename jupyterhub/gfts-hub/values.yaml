@@ -40,6 +40,21 @@ jupyterhub:
       CULL_TIMEOUT: "1800"
       CULL_KERNEL_TIMEOUT: "1800"
       CULL_INTERVAL: "120"
+    initContainers:
+      # seems to be something in the volume mount resetting permissions
+      # .ssh doesn't like to be public, so ensure it's private
+      - name: ssh-permissions
+        image: busybox:1.36
+        command:
+          - sh
+          - "-c"
+          - |
+            if [ -d /homedir/.ssh ]; then
+              chmod -R og= /homedir/.ssh
+            fi
+        volumeMounts:
+          - mountPath: /homedir
+            name: volume-{username}
 
   prePuller:
     hook:
@@ -62,6 +77,10 @@ jupyterhub:
           - yellowcap
           - danielfdsilva
           - annefou
+      KubeSpawner:
+        pod_security_context:
+          fsGroup: 100
+          fsGroupChangePolicy: OnRootMismatch
     loadRoles:
       management:
         scopes:
