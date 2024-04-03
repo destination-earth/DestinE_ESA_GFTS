@@ -1,7 +1,7 @@
 dependencies:
 - name: jupyterhub
   repository: https://jupyterhub.github.io/helm-chart
-  version: 3.3.2
+  version: 3.3.6
 - name: dask-gateway
   repository: https://helm.dask.org/
   version: 2024.1.0
@@ -14,5 +14,5 @@ dependencies:
 - name: grafana
   repository: https://grafana.github.io/helm-charts
   version: 7.0.14
-digest: sha256:0e76398b9b637b1a642450e916c5b13b1a259d5c1bdb746fb06a13b528177c83
-generated: "2024-03-21T13:17:37.982155+01:00"
+digest: sha256:f65f939aed209d2ebec4ea4534deef0d14d8b99ee1c5ee20ddee11d0a7115b20
+generated: "2024-04-03T14:18:11.909303+02:00"
