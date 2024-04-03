@@ -1,1 +1,2 @@
-jupyterhub==4.1.0
+jupyter-fs
+jupyterhub==4.1.4

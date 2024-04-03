@@ -6,7 +6,7 @@ kubeVersion: ">= 1.24.0-0"
 dependencies:
   # jupyterhub
   - name: jupyterhub
-    version: "3.3.2"
+    version: "3.3.6"
     repository: https://jupyterhub.github.io/helm-chart
 
   # dask-gateway

@@ -1,4 +1,4 @@
-FROM quay.io/pangeo/pangeo-notebook:2024.01.23
+FROM quay.io/pangeo/pangeo-notebook:2024.03.22
 
 # install some extra things with requirements.txt
 COPY requirements.txt /tmp/requirements.txt
