@@ -40,6 +40,9 @@ jupyterhub:
       CULL_TIMEOUT: "1800"
       CULL_KERNEL_TIMEOUT: "1800"
       CULL_INTERVAL: "120"
+      AWS_ENDPOINT_URL_S3: "https://s3.gra.perf.cloud.ovh.net"
+      AWS_DEFAULT_REGION: gra
+      JUPYER_FS_BUCKETS: destine-gfts-data-lake,gfts-reference-data,gfts-ifremer
     initContainers:
       # seems to be something in the volume mount resetting permissions
       # .ssh doesn't like to be public, so ensure it's private
@@ -85,9 +88,6 @@ jupyterhub:
         pod_security_context:
           fsGroup: 100
           fsGroupChangePolicy: OnRootMismatch
-        environment:
-          AWS_ENDPOINT_URL_S3: "https://s3.gra.perf.cloud.ovh.net"
-          AWS_DEFAULT_REGION: "gra"
 
     extraConfig:
       load_creds: |
