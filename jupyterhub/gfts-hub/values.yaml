@@ -77,6 +77,10 @@ jupyterhub:
           - yellowcap
           - danielfdsilva
           - annefou
+          - aderrien7
+          - mwoillez
+          - marinerandon
+          - keewis
       KubeSpawner:
         pod_security_context:
           fsGroup: 100
