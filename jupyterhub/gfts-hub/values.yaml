@@ -85,6 +85,30 @@ jupyterhub:
         pod_security_context:
           fsGroup: 100
           fsGroupChangePolicy: OnRootMismatch
+        environment:
+          AWS_ENDPOINT_URL_S3: "https://s3.gra.perf.cloud.ovh.net"
+          AWS_DEFAULT_REGION: "gra"
+
+    extraConfig:
+      load_creds: |
+        import json
+        from pathlib import Path
+        creds_path = Path("/srv/s3creds.json")
+
+        def load_creds(spawner):
+            with creds_path.open() as f:
+                all_creds = json.load(f)
+            name = spawner.user.name
+            if name in all_creds:
+                spawner.log.info(f"Loading AWS credentials for {name}")
+                creds = all_creds[name]
+            else:
+                spawner.log.info(f"Using default AWS credentials for {name}")
+                creds = all_creds["_default"]
+            spawner.environment["AWS_ACCESS_KEY_ID"] = creds["aws_access_key_id"]
+            spawner.environment["AWS_SECRET_ACCESS_KEY"] = creds["aws_secret_access_key"]
+          
+        c.KubeSpawner.pre_spawn_hook = load_creds
     loadRoles:
       management:
         scopes:

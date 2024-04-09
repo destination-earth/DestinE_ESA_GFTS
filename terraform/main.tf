@@ -43,12 +43,37 @@ provider "ovh" {
 }
 
 locals {
-  service_name = "2a0ebfcd5a8d46a797b921841717b052"
-  cluster_name = "gfts"
-  region       = "GRA11"
-  s3_region    = "gra"
-  s3_endpoint  = "s3.gra.perf.cloud.ovh.net"
-  s3_users = toset(["annefou", "todaka", "minrk"])
+  service_name   = "2a0ebfcd5a8d46a797b921841717b052"
+  os_tenant_name = "4396734720592405"
+  cluster_name   = "gfts"
+  region         = "GRA11"
+  s3_region      = "gra"
+  s3_endpoint    = "s3.gra.perf.cloud.ovh.net"
+  s3_users = toset([
+    "annefou",
+    "todaka",
+    "minrk",
+    "tinaok",
+    "mwoillez",
+    "marinerandon",
+    "aderrien7",
+    "keewis",
+    "_default",
+  ])
+  s3_admins = toset([
+    "annefou",
+    "todaka",
+    "tinaok",
+    "minrk",
+  ])
+  s3_ifremer_developers = toset([
+    "aderrien7",
+    "keewis",
+  ])
+  s3_ifremer_users = toset([
+    "mwoillez",
+    "marinerandon",
+  ])
 }
 
 ####### s3 buckets #######
@@ -82,20 +107,23 @@ provider "aws" {
 }
 
 resource "ovh_cloud_project_user" "s3_users" {
-  for_each = local.s3_users
+  for_each     = local.s3_users
   service_name = local.service_name
   description  = each.key
   role_name    = "objectstore_operator"
 }
 
 resource "ovh_cloud_project_user_s3_credential" "s3_users" {
-  for_each = local.s3_users
+  for_each     = local.s3_users
   service_name = local.service_name
   user_id      = ovh_cloud_project_user.s3_users[each.key].id
 }
 
-resource "ovh_cloud_project_user_s3_policy" "s3_users" {
-  for_each = local.s3_users
+# don't need this right now
+# this is another way to grant s3 super-user
+# instead, use ACLs below
+resource "ovh_cloud_project_user_s3_policy" "s3_admins" {
+  for_each     = toset([]) # local.s3_admins
   service_name = local.service_name
   user_id      = ovh_cloud_project_user.s3_users[each.key].id
   policy = jsonencode({
@@ -110,8 +138,9 @@ resource "ovh_cloud_project_user_s3_policy" "s3_users" {
           "s3:AbortMultipartUpload", "s3:GetBucketLocation",
         ],
         "Resource" : [
-          "arn:aws:s3:::${aws_s3_bucket.gfts-data-lake.bucket}",
-          "arn:aws:s3:::${aws_s3_bucket.gfts-data-lake.bucket}/*",
+          # "arn:aws:s3:::${aws_s3_bucket.gfts-data-lake.id}",
+          # "arn:aws:s3:::${aws_s3_bucket.gfts-data-lake.id}/*",
+          "arn:aws:s3:::*",
         ]
       },
       # {
@@ -128,14 +157,118 @@ resource "ovh_cloud_project_user_s3_policy" "s3_users" {
   })
 }
 
+data "aws_canonical_user_id" "current" {}
+
+
 resource "aws_s3_bucket" "gfts-data-lake" {
   bucket = "destine-gfts-data-lake"
 }
 
+resource "aws_s3_bucket" "gfts-reference-data" {
+  bucket = "gfts-reference-data"
+}
+
+resource "aws_s3_bucket" "gfts-ifremer" {
+  bucket = "gfts-ifremer"
+}
+
+resource "aws_s3_bucket_acl" "gfts-data-lake" {
+  bucket = aws_s3_bucket.gfts-data-lake.id
+  access_control_policy {
+    dynamic "grant" {
+      for_each = local.s3_admins
+      content {
+        grantee {
+          id   = "${local.os_tenant_name}:${ovh_cloud_project_user.s3_users[grant.value].username}"
+          type = "CanonicalUser"
+        }
+        permission = "FULL_CONTROL"
+      }
+    }
+
+    # everyone authenticated can read
+    grant {
+      grantee {
+        type = "Group"
+        uri  = "http://acs.amazonaws.com/groups/global/AuthenticatedUsers"
+      }
+      permission = "READ"
+    }
+
+    owner {
+      id = data.aws_canonical_user_id.current.id
+    }
+  }
+}
+
+resource "aws_s3_bucket_acl" "gfts-reference-data" {
+  bucket = aws_s3_bucket.gfts-reference-data.id
+  access_control_policy {
+    dynamic "grant" {
+      for_each = setunion(local.s3_admins, local.s3_ifremer_developers)
+      content {
+        grantee {
+          id   = "${local.os_tenant_name}:${ovh_cloud_project_user.s3_users[grant.value].username}"
+          type = "CanonicalUser"
+        }
+        permission = "FULL_CONTROL"
+      }
+    }
+
+    dynamic "grant" {
+      for_each = local.s3_ifremer_users
+      content {
+        grantee {
+          id   = "${local.os_tenant_name}:${ovh_cloud_project_user.s3_users[grant.value].username}"
+          type = "CanonicalUser"
+        }
+        permission = "READ"
+      }
+    }
+
+    owner {
+      id = data.aws_canonical_user_id.current.id
+    }
+  }
+}
+
+
+resource "aws_s3_bucket_acl" "gfts-ifremer" {
+  bucket = aws_s3_bucket.gfts-ifremer.id
+  access_control_policy {
+    # dynamic "grant" {
+    #   for_each = local.s3_admins
+    #   content {
+    #     grantee {
+    #       id   = ovh_cloud_project_user.s3_users[grant.value].id
+    #       type = "CanonicalUser"
+    #     }
+    #     permission = "FULL_CONTROL"
+    #   }
+    # }
+
+    dynamic "grant" {
+      for_each = setunion(local.s3_admins, local.s3_ifremer_developers, local.s3_ifremer_users)
+      content {
+        grantee {
+          id   = "${local.os_tenant_name}:${ovh_cloud_project_user.s3_users[grant.value].username}"
+          type = "CanonicalUser"
+        }
+        permission = "FULL_CONTROL"
+      }
+    }
+
+    owner {
+      id = data.aws_canonical_user_id.current.id
+    }
+  }
+}
+
+
 output "s3_credentials" {
   description = "s3 credentials for gfts import"
   sensitive   = true
-  value       = {
+  value = {
     for name in local.s3_users :
     name => <<-EOF
     [gfts]
@@ -146,11 +279,23 @@ output "s3_credentials" {
   }
 }
 
+output "s3_credentials_json" {
+  description = "s3 credentials for gfts import"
+  sensitive   = true
+  value = {
+    for name in local.s3_users :
+    name => {
+      aws_access_key_id     = ovh_cloud_project_user_s3_credential.s3_users[name].access_key_id
+      aws_secret_access_key = ovh_cloud_project_user_s3_credential.s3_users[name].secret_access_key
+    }
+  }
+}
+
 output "s3_admin_credentials" {
   description = "s3 credentials for administration"
   sensitive   = true
-  value       = {
-    access_key_id = ovh_cloud_project_user_s3_credential.s3_admin.access_key_id,
+  value = {
+    access_key_id     = ovh_cloud_project_user_s3_credential.s3_admin.access_key_id,
     secret_access_key = ovh_cloud_project_user_s3_credential.s3_admin.secret_access_key,
   }
 }
