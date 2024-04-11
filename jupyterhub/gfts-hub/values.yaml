@@ -42,7 +42,7 @@ jupyterhub:
       CULL_INTERVAL: "120"
       AWS_ENDPOINT_URL_S3: "https://s3.gra.perf.cloud.ovh.net"
       AWS_DEFAULT_REGION: gra
-      JUPYER_FS_BUCKETS: destine-gfts-data-lake,gfts-reference-data,gfts-ifremer
+      # JUPYTER_FS_BUCKETS: destine-gfts-data-lake,gfts-reference-data,gfts-ifremer
     initContainers:
       # seems to be something in the volume mount resetting permissions
       # .ssh doesn't like to be public, so ensure it's private
