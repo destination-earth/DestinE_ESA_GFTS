@@ -1,2 +1,7 @@
-jupyter-fs
-jupyterhub==4.1.4
+# packages to be installed with pip
+# if they should be installed with conda,
+# use conda-requirements.txt
+
+jupyterhub==4.1.5
+# git+https://github.com/iaocea/pangeo-fish#egg=pangeo-fish
+git+https://github.com/iaocea/xarray-healpy#egg=xarray-healpy
