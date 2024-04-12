@@ -1,9 +1,15 @@
-FROM quay.io/pangeo/pangeo-notebook:2024.03.22
+FROM quay.io/pangeo/pangeo-notebook:2024.04.08
 
-# install some extra things with requirements.txt
+# install some extra packages
+# first, install conda packages from conda-requirements.txt
+COPY conda-requirements.txt /tmp/conda-requirements.txt
+RUN mamba install -y -n notebook --file /tmp/conda-requirements.txt \
+ && mamba clean --all -y
+
+# next pip pacakges from requirements.txt
 COPY requirements.txt /tmp/requirements.txt
-ENV PIP_CACHE_DIR=/tmp/pip-cache
-RUN  --mount=type=cache,target=$PIP_CACHE_DIR pip install --no-cache -r /tmp/requirements.txt
+ARG PIP_CACHE_DIR=/tmp/pip-cache
+RUN --mount=type=cache,target=$PIP_CACHE_DIR pip install --no-cache -r /tmp/requirements.txt
 
 # disable "Jupyter news" pop-up
 RUN jupyter labextension disable "@jupyterlab/apputils-extension:announcements"
