@@ -2,6 +2,7 @@
 # if they should be installed with conda,
 # use conda-requirements.txt
 
+gh-scoped-creds
 jupyterhub==4.1.5
 # git+https://github.com/iaocea/pangeo-fish#egg=pangeo-fish
 git+https://github.com/iaocea/xarray-healpy#egg=xarray-healpy
