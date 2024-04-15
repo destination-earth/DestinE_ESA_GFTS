@@ -40,6 +40,8 @@ jupyterhub:
       CULL_TIMEOUT: "1800"
       CULL_KERNEL_TIMEOUT: "1800"
       CULL_INTERVAL: "120"
+      GH_SCOPED_CREDS_CLIENT_ID: Iv1.f4a7db20c671f599
+      GH_SCOPED_CREDS_APP_URL: https://github.com/apps/gfts-jupyterhub
       AWS_ENDPOINT_URL_S3: "https://s3.gra.perf.cloud.ovh.net"
       AWS_DEFAULT_REGION: gra
       # JUPYTER_FS_BUCKETS: destine-gfts-data-lake,gfts-reference-data,gfts-ifremer
