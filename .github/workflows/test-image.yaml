@@ -1,0 +1,28 @@
+name: test image
+
+on:
+  pull_request:
+    paths:
+      - jupyterhub/images/**
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: install dependencies
+        run: |
+          pip install --upgrade setuptools pip
+          pip install --upgrade -r jupyterhub/requirements.txt
+
+      - name: Build image with chartpress
+        run: |
+          cd jupyterhub
+          python3 deploy.py chartpress --no-push
