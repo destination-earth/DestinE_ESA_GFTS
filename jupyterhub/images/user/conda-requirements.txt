@@ -3,6 +3,7 @@
 # to install with pip, use requirements.txt
 cdshealpix
 dask-image
+eccodes>=2.35.0
 healpy
 rich
 xmovie
