@@ -72,13 +72,14 @@ def docker_login():
 
 @cli.command()
 @click.argument("chartpress_args", nargs=-1)
-def chartpress(chartpress_args):
+@click.option("--push/--no-push", default=True)
+def chartpress(chartpress_args, push):
     """Run chartpress
 
     updates image in registry
     """
-    if not chartpress_args:
-        chartpress_args = ["--push"]
+    if not chartpress_args and push:
+        chartpress_args += ("--push",)
     cmd = ["chartpress", "--builder=docker-buildx", "--platform=linux/amd64"]
     cmd.extend(chartpress_args)
     sh(cmd, cwd=jupyterhub)
