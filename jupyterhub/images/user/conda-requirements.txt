@@ -7,4 +7,4 @@ healpy
 rich
 xmovie
 zstandard
-eccodes==2.25.0
+eccodes==2.35.0
