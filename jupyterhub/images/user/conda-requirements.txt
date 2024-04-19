@@ -5,7 +5,7 @@ cdshealpix
 dask-image
 eccodes>=2.35.0
 healpy
+rclone
 rich
 xmovie
 zstandard
-rclone
