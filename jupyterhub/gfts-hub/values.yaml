@@ -70,7 +70,7 @@ jupyterhub:
             provider = Other
             env_auth = true
             region = gra
-            endpoint = ${AWS_ENDPOINT_URL_S3}
+            endpoint = https://s3.gra.perf.cloud.ovh.net
             EOF
         volumeMounts:
           - mountPath: /homedir
