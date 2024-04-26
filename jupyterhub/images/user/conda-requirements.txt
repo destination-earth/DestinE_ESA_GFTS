@@ -4,9 +4,9 @@
 cdshealpix
 dask-image
 eccodes>=2.35.0
+fastparquet
 healpy
 rclone
 rich
 xmovie
 zstandard
-fastparquet
