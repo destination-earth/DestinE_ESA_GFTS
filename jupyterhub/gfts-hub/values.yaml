@@ -48,7 +48,7 @@ jupyterhub:
     initContainers:
       # seems to be something in the volume mount resetting permissions
       # .ssh doesn't like to be public, so ensure it's private
-      - name: ssh-permissions
+      - name: ssh-permissions-and-rclone-config
         image: busybox:1.36
         command:
           - sh
@@ -57,6 +57,21 @@ jupyterhub:
             if [ -d /homedir/.ssh ]; then
               chmod -R og= /homedir/.ssh
             fi
+            mkdir -p /homedir/.config/rclone
+            cat <<EOF > /homedir/.config/rclone/rclone.conf
+            [cmarine]
+            type = s3
+            provider = Other
+            endpoint = https://s3.waw3-1.cloudferro.com
+            acl = public-read
+
+            [gfts]
+            type = s3
+            provider = Other
+            env_auth = true
+            region = gra
+            endpoint = https://s3.gra.perf.cloud.ovh.net
+            EOF
         volumeMounts:
           - mountPath: /homedir
             name: volume-{username}
