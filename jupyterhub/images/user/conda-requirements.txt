@@ -9,3 +9,4 @@ rclone
 rich
 xmovie
 zstandard
+fastparquet
