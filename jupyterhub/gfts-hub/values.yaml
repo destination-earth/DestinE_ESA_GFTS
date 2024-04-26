@@ -58,7 +58,7 @@ jupyterhub:
               chmod -R og= /homedir/.ssh
             fi
             mkdir -p /homedir/.config/rclone
-            cat << EOF
+            cat <<EOF > /homedir/.config/rclone/rclone.conf
             [cmarine]
             type = s3
             provider = Other
