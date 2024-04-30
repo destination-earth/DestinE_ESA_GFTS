@@ -14,7 +14,7 @@ only_build_toc_files: true
 # Force re-execution of notebooks on each build.
 # See https://jupyterbook.org/content/execute.html
 execute:
-  execute_notebooks: force
+  execute_notebooks: false
   timeout: 1000
 
 # Add a launch button on a specific binder instance
