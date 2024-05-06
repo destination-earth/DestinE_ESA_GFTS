@@ -1,7 +1,7 @@
 FROM quay.io/pangeo/pangeo-notebook:2024.04.08
 
 # Install fusermount3 command
-RUN apt-get -y update && apt-get install -y fuse3
+RUN apt-get update && apt-get install -y fuse3
 
 # install some extra packages
 # first, install conda packages from conda-requirements.txt
