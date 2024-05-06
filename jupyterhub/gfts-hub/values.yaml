@@ -45,6 +45,14 @@ jupyterhub:
       AWS_ENDPOINT_URL_S3: "https://s3.gra.perf.cloud.ovh.net"
       AWS_DEFAULT_REGION: gra
       # JUPYTER_FS_BUCKETS: destine-gfts-data-lake,gfts-reference-data,gfts-ifremer
+    extraFiles:
+      allow-iframe:
+        mountPath: /etc/jupyter/jupyter_server_config.json
+        data:
+          ServerApp:
+            tornado_settings:
+              headers:
+                Content-Security-Policy: frame-ancestors 'self'
     initContainers:
       # seems to be something in the volume mount resetting permissions
       # .ssh doesn't like to be public, so ensure it's private
