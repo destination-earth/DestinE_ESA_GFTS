@@ -71,6 +71,7 @@ locals {
     "keewis",
   ])
   s3_ifremer_users = toset([
+    "annefou",
     "mwoillez",
     "marinerandon",
   ])
