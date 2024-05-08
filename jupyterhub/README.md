@@ -55,7 +55,7 @@ Now jupyterhub should be running at https://gfts.minrk.net
 ## Background
 
 `tofu` is used to deploy cloud resources.
-Its configuration is in the `terraform` directory.
+Its configuration is in the `jupyterhub/tofu` directory.
 We only need to use `tofu`
 Once we have kubernetes running, we don't use `tofu` much anymore.
 `tofu` is not run on CI, because its actions can be quite destructive.

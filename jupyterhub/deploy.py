@@ -14,7 +14,7 @@ from pathlib import Path
 import click
 
 jupyterhub = Path(__file__).parent.absolute()
-terraform = jupyterhub.parent / "terraform"
+tofu = jupyterhub / "tofu"
 kube_config = jupyterhub / "secrets" / "kubeconfig.yaml"
 
 
@@ -37,7 +37,7 @@ def tofu_output(output_name: str) -> str:
         output_name,
         check=True,
         stdout=subprocess.PIPE,
-        cwd=terraform,
+        cwd=tofu,
     )
     with p:
         return p.stdout.read()
