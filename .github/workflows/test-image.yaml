@@ -3,7 +3,7 @@ name: test image
 on:
   pull_request:
     paths:
-      - jupyterhub/images/**
+      - gfts-track-reconstruction/jupyterhub/images/**
 
 jobs:
   build:
@@ -19,10 +19,11 @@ jobs:
 
       - name: install dependencies
         run: |
+          cd gfts-track-reconstruction
           pip install --upgrade setuptools pip
           pip install --upgrade -r jupyterhub/requirements.txt
 
       - name: Build image with chartpress
         run: |
-          cd jupyterhub
+          cd gfts-track-reconstruction/jupyterhub
           python3 deploy.py chartpress --no-push

@@ -8,7 +8,7 @@ on:
       - main
       - test-deploy
     paths:
-      - jupyterhub/**
+      - gfts-track-reconstruction/jupyterhub/**
       - .github/workflows/deploy-hub.yaml
 
 env:
@@ -30,6 +30,7 @@ jobs:
 
       - name: install dependencies
         run: |
+          cd gfts-track-reconstruction
           pip install --upgrade setuptools pip
           pip install --upgrade -r jupyterhub/requirements.txt
 
@@ -59,10 +60,10 @@ jobs:
 
       - name: Build image with chartpress
         run: |
-          cd jupyterhub
+          cd gfts-track-reconstruction/jupyterhub
           python3 deploy.py chartpress
 
       - name: Deploy with helm
         run: |
-          cd jupyterhub
+          cd gfts-track-reconstruction/jupyterhub
           python3 deploy.py helm
