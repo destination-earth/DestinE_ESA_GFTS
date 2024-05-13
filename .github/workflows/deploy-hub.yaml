@@ -15,6 +15,10 @@ env:
   KUBECTL_VERSION: v1.28.3
   HELM_VERSION: v3.14.0
 
+defaults:
+  run:
+    working-directory: gfts-track-reconstruction/jupyterhub
+
 jobs:
   deploy:
     runs-on: ubuntu-22.04
@@ -30,9 +34,8 @@ jobs:
 
       - name: install dependencies
         run: |
-          cd gfts-track-reconstruction
           pip install --upgrade setuptools pip
-          pip install --upgrade -r jupyterhub/requirements.txt
+          pip install --upgrade -r requirements.txt
 
       - name: "Install kubectl ${{ env.KUBECTL_VERSION }}"
         uses: azure/setup-kubectl@v3.2
@@ -60,10 +63,8 @@ jobs:
 
       - name: Build image with chartpress
         run: |
-          cd gfts-track-reconstruction/jupyterhub
           python3 deploy.py chartpress
 
       - name: Deploy with helm
         run: |
-          cd gfts-track-reconstruction/jupyterhub
           python3 deploy.py helm

@@ -5,6 +5,10 @@ on:
     paths:
       - gfts-track-reconstruction/jupyterhub/images/**
 
+defaults:
+  run:
+    working-directory: gfts-track-reconstruction/jupyterhub
+
 jobs:
   build:
     runs-on: ubuntu-22.04
@@ -19,11 +23,9 @@ jobs:
 
       - name: install dependencies
         run: |
-          cd gfts-track-reconstruction
           pip install --upgrade setuptools pip
-          pip install --upgrade -r jupyterhub/requirements.txt
+          pip install --upgrade -r requirements.txt
 
       - name: Build image with chartpress
         run: |
-          cd gfts-track-reconstruction/jupyterhub
           python3 deploy.py chartpress --no-push
