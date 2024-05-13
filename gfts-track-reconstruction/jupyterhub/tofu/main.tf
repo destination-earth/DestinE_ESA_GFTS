@@ -49,6 +49,11 @@ locals {
   region         = "GRA11"
   s3_region      = "gra"
   s3_endpoint    = "s3.gra.perf.cloud.ovh.net"
+  s3_buckets = toset([
+    "gfts-ifremer",
+    "gfts-reference-data",
+    "destine-gfts-data-lake",
+  ])
   s3_users = toset([
     "annefou",
     "todaka",
@@ -124,7 +129,7 @@ resource "ovh_cloud_project_user_s3_credential" "s3_users" {
 # this is another way to grant s3 super-user
 # instead, use ACLs below
 resource "ovh_cloud_project_user_s3_policy" "s3_admins" {
-  for_each     = toset([]) # local.s3_admins
+  for_each     = local.s3_admins
   service_name = local.service_name
   user_id      = ovh_cloud_project_user.s3_users[each.key].id
   policy = jsonencode({
@@ -139,24 +144,35 @@ resource "ovh_cloud_project_user_s3_policy" "s3_admins" {
           "s3:AbortMultipartUpload", "s3:GetBucketLocation",
         ],
         "Resource" : [
-          # "arn:aws:s3:::${aws_s3_bucket.gfts-data-lake.id}",
-          # "arn:aws:s3:::${aws_s3_bucket.gfts-data-lake.id}/*",
           "arn:aws:s3:::*",
         ]
       },
-      # {
-      #   "Sid" : "deny-create-bucket",
-      #   "Effect" : "Deny",
-      #   "Action" : [
-      #     "s3:CreateBucket",
-      #   ],
-      #   "Resource" : [
-      #     "arn:aws:s3:::*",
-      #   ]
-      # },
     ]
   })
 }
+
+resource "ovh_cloud_project_user_s3_policy" "s3_users" {
+  for_each     = local.s3_users
+  service_name = local.service_name
+  user_id      = ovh_cloud_project_user.s3_users[each.key].id
+  policy = jsonencode({
+    "Statement" : [
+      {
+        "Sid" : "read",
+        "Effect" : "Allow",
+        "Action" : [
+          "s3:GetObject", "s3:ListBucket", "s3:GetBucketLocation",
+        ],
+        "Resource" : [
+          "arn:aws:s3:::${aws_s3_bucket.gfts-data-lake.id}/*",
+          "arn:aws:s3:::${aws_s3_bucket.gfts-ifremer.id}/*",
+          "arn:aws:s3:::${aws_s3_bucket.gfts-reference-data.id}/*",
+        ]
+      },
+    ]
+  })
+}
+
 
 data "aws_canonical_user_id" "current" {}
 
