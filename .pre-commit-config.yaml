@@ -38,7 +38,7 @@ repos:
     hooks:
       - id: chartpress
         # run in subdirectory
-        entry: bash -c 'cd jupyterhub && "$@"' --
+        entry: bash -c 'cd gfts-track-reconstruction/jupyterhub && "$@"' --
 
   # Autoformat and linting, misc. details
   - repo: https://github.com/pre-commit/pre-commit-hooks
