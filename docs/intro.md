@@ -1,7 +1,7 @@
 ---
 # File metadata may be provided as frontmatter YAML
 title: Global Fish Tracking System (GFTS)
-subtitle: DESP Use case
+subtitle: DestinE Platform Use case
 description: Making fishing more sustainable
 date: 2023-12-12
 authors:
@@ -116,9 +116,9 @@ This project entails the implementation of an advanced fish tracking system util
 
 <a href="https://w3id.org/ro-id/2edcfa66-0f59-42f4-aa29-1c5681466424"> <img alt="RoHub" src="https://img.shields.io/badge/RoHub-FAIR_Executable_Research_Object-2ea44f?logo=Open+Access&logoColor=blue"></a>
 
-# Overview of GFTS DESP use case
+# Overview of GFTS DestinE Platform use case
 
-The presentation below has been presented by Mathieu Woillez at the [Roadshow Webinar: DestinE in action – meet the first DESP use cases](https://destination-earth.eu/event/destine-in-action-meet-the-first-desp-use-cases/) (13 December 2023)
+The presentation below has been presented by Mathieu Woillez at the [Roadshow Webinar: DestinE in action – meet the first DestinE Platform use cases](https://destination-earth.eu/event/destine-in-action-meet-the-first-desp-use-cases/) (13 December 2023)
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10372387.svg)](https://doi.org/10.5281/zenodo.10372387)
 

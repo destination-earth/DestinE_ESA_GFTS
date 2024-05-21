@@ -1,6 +1,6 @@
 # Global Fish Tracking Service (GFTS)
 
-A Destination Earth DESP use case.
+A Destination Earth Platform use case.
 
 ## Contributions
 
