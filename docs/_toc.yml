@@ -11,6 +11,7 @@ parts:
       - file: s3_CMEMS_2D_kerchunk
       - file: s3_CMEMS_3D_kerchunk
       - file: s3chunked_parquet
+      - file: gfts_intake
   - caption: Reporting
     chapters:
       - file: deliverables
