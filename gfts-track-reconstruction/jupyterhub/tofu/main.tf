@@ -79,6 +79,7 @@ locals {
     "annefou",
     "mwoillez",
     "marinerandon",
+    "danielfdsilva",
   ])
 }
 
