@@ -18,6 +18,7 @@ dependencies:
   - geoviews
   - cartopy
   - geopandas
+  - movingpandas
   - pooch
   - fsspec
   - s3fs
