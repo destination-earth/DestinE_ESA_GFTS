@@ -54,7 +54,7 @@ html_theme_options = {
     "use_edit_page_button": False,
     "use_issues_button": True,
 }
-html_title = "Global Fish Tracking System (GFTS) - DESP use case"
+html_title = "Global Fish Tracking System (GFTS) - DestinE Platform use case"
 latex_engine = "pdflatex"
 myst_enable_extensions = [
     "colon_fence",

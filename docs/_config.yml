@@ -5,7 +5,7 @@
 
 #######################################################################################
 # Book settings
-title: Global Fish Tracking System (GFTS) - DESP use case # The title of the book. Will be placed in the left navbar.
+title: Global Fish Tracking System (GFTS) - DestinE Platform use case # The title of the book. Will be placed in the left navbar.
 author: Pangeo # The author of the book
 copyright: "2023" # Copyright year to be placed in the footer
 logo: "./images/gfts.png" # A path to the book logo
