@@ -13,6 +13,7 @@ parts:
       - file: s3chunked_parquet
       - file: gfts_intake
       - file: pannel_plot_s3
+      - file: Compute_3D_pdf
   - caption: Reporting
     chapters:
       - file: deliverables
