@@ -426,6 +426,41 @@ resource "ovh_cloud_project_kube_nodepool" "users" {
   }
 }
 
+resource "ovh_cloud_project_kube_nodepool" "user-big" {
+  service_name = local.service_name
+  kube_id      = ovh_cloud_project_kube.cluster.id
+  name         = "user-big-202405"
+  # r3-512 is 64 core, 512 GB
+  # quota limits us to one of these
+  flavor_name = "r3-512"
+  max_nodes   = 1
+  min_nodes   = 0
+  autoscale   = true
+  template {
+    metadata {
+      annotations = {}
+      finalizers  = []
+      labels = {
+        "hub.jupyter.org/node-purpose"   = "user"
+        "gfts.destination-earth.eu/size" = "big512"
+      }
+    }
+    spec {
+      unschedulable = false
+      taints        = []
+    }
+  }
+  lifecycle {
+    ignore_changes = [
+      # don't interfere with autoscaling
+      desired_nodes,
+      # seems to be something weird going on here
+      # with metadata labels
+      template,
+    ]
+  }
+}
+
 
 output "kubeconfig" {
   value       = ovh_cloud_project_kube.cluster.kubeconfig

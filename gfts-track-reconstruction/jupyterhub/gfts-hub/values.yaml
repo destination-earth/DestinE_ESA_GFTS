@@ -22,6 +22,7 @@ jupyterhub:
 
   singleuser:
     events: true
+    startTimeout: 600
     storage:
       capacity: 100Gi
       homeMountPath: /home/jovyan
@@ -45,6 +46,33 @@ jupyterhub:
       AWS_ENDPOINT_URL_S3: "https://s3.gra.perf.cloud.ovh.net"
       AWS_DEFAULT_REGION: gra
       # JUPYTER_FS_BUCKETS: destine-gfts-data-lake,gfts-reference-data,gfts-ifremer
+    profileList:
+      - display_name: "GFTS environment"
+        slug: default
+        description: Select resource allocation
+        default: true
+        profile_options:
+          resource_allocation:
+            display_name: Resource allocation
+            choices:
+              default:
+                default: true
+                display_name: Default (24 GB / 2-6 CPU)
+                kubespawner_override:
+                  mem_guarantee: 8G
+                  mem_limit: 24G
+                  cpu_guarantee: 2
+                  cpu_limit: 6
+              huge:
+                display_name: Huge (480 GB / 60 CPU)
+                kubespawner_override:
+                  mem_guarantee: 480e9
+                  mem_limit: 480e9
+                  cpu_guarantee: 60
+                  cpu_limit: 60
+                  node_selector:
+                    gfts.destination-earth.eu/size: big512
+
     extraFiles:
       allow-iframe:
         mountPath: /etc/jupyter/jupyter_server_config.json
