@@ -14,6 +14,7 @@ parts:
       - file: gfts_intake
       - file: pannel_plot_s3
       - file: Compute_3D_pdf
+      - file: ClimateDT-zarr-2D-3D
   - caption: Reporting
     chapters:
       - file: deliverables
