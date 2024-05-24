@@ -64,6 +64,7 @@ locals {
     "aderrien7",
     "keewis",
     "_default",
+    "danielfdsilva",
   ])
   s3_admins = toset([
     "annefou",
