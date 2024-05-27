@@ -234,15 +234,15 @@ based on the known fish movements.
 The table below lists institutes that expressed interest in using the
 GFTS system for fish track analysis.
 
-|**Institute**                        |  **Species**|      **Location**  |
-| ----------------------------------- | ----------- | ------------------ |
-|Swedish University of Agricultural Science   |  Shark      |      Sweden        |
-|Universidade do Algarve              |  \-         |      Portugal      |
-|Dalhousie University                 |  \-         |      Canada        |
-|Flanders Marine Institute            |  \-         |      Belgium       |
-|Nihon University College of Bioresource Sciences Department of Marine Science         |  \-         |       Japan        |
-|Centre d'Etudes Biologiques de Chizé |  \-         |      France        |
-|Institute of Marine Research         |  \-         |        Norway      |
+| **Institute**                                                                 | **Species** | **Location** |
+| ----------------------------------------------------------------------------- | ----------- | ------------ |
+| Swedish University of Agricultural Science                                    | Shark       | Sweden       |
+| Universidade do Algarve                                                       | \-          | Portugal     |
+| Dalhousie University                                                          | \-          | Canada       |
+| Flanders Marine Institute                                                     | \-          | Belgium      |
+| Nihon University College of Bioresource Sciences Department of Marine Science | \-          | Japan        |
+| Centre d'Etudes Biologiques de Chizé                                          | \-          | France       |
+| Institute of Marine Research                                                  | \-          | Norway       |
 
 ### Uncertainty
 
@@ -413,15 +413,13 @@ workflow. There are no additional use case notes at the moment.
 
 ### Implementation Plan
 
-* WP1: Management
+- WP1: Management
   - Task 1: Daniel Wiesmann (DS)
-* WP2:                                               
-  - Task 2: Technology, Benjamin Ragan-Kelley (SRL)                                                                     
+- WP2:
+  - Task 2: Technology, Benjamin Ragan-Kelley (SRL)
   - Task 2: Science, Tina Odaka (IFREMER);
-* WP3:                                   
-  - Task 3: Tina Odaka (Ifremer)                                              
-* WP4:
-  - Task 4: User experience, Mathieu Woillez (IFREMER);                                                                
-  - Task 4: Technology, Daniel Wiesmann (DS)                                  
-
-
+- WP3:
+  - Task 3: Tina Odaka (Ifremer)
+- WP4:
+  - Task 4: User experience, Mathieu Woillez (IFREMER);
+  - Task 4: Technology, Daniel Wiesmann (DS)
