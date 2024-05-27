@@ -3,6 +3,7 @@ root: intro
 parts:
   - caption: About
     chapters:
+      - file: GFTS_Use_Case_Description
       - file: contribute
       - file: code_of_conduct
       - file: rule_of_participation
