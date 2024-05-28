@@ -15,6 +15,7 @@ parts:
       - file: gfts_intake
       - file: pannel_plot_s3
       - file: Compute_3D_pdf
+      - file: visu3Dvista
   - caption: Reporting
     chapters:
       - file: deliverables
