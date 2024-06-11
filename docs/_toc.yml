@@ -3,6 +3,7 @@ root: intro
 parts:
   - caption: About
     chapters:
+      - file: GFTS_Use_Case_Description
       - file: contribute
       - file: code_of_conduct
       - file: rule_of_participation
@@ -11,10 +12,12 @@ parts:
       - file: s3_CMEMS_2D_kerchunk
       - file: s3_CMEMS_3D_kerchunk
       - file: s3chunked_parquet
+      - file: cmems_catalog_creation
       - file: gfts_intake
       - file: pannel_plot_s3
       - file: Compute_3D_pdf
       - file: ClimateDT-zarr-2D-3D
+      - file: visu3Dvista
   - caption: Reporting
     chapters:
       - file: deliverables
