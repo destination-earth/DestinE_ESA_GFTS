@@ -1,0 +1,807 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>This notebooks is used to plot a panel dashboard to visualize data for the GFTS project &#8212; Global Fish Tracking System (GFTS) - DestinE Platform use case</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/exercise.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=36754332"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'pannel_plot_s3';</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Computing 3D PDF from State matrix and tag pressure information" href="Compute_3D_pdf.html" />
+    <link rel="prev" title="Reading CMEMS Copernicus data from GFTS s3 bucket" href="gfts_intake.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/gfts.png" class="logo__image only-light" alt="Global Fish Tracking System (GFTS) - DestinE Platform use case - Home"/>
+    <script>document.write(`<img src="_static/gfts.png" class="logo__image only-dark" alt="Global Fish Tracking System (GFTS) - DestinE Platform use case - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Global Fish Tracking System
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">About</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="GFTS_Use_Case_Description.html">The GFTS Use Case</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contribute.html">How to contribute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code_of_conduct.html">Contributor Covenant Code of Conduct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rule_of_participation.html">Introduction</a></li>
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Data preparation</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="s3_CMEMS_2D_kerchunk.html">Create Kerchunk catalog for CMEMS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="s3_CMEMS_3D_kerchunk.html">Create Kerchunk catalog for CMEMS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="s3chunked_parquet.html">Read parquet kerchunk catalog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cmems_catalog_creation.html"><strong>Copernicus data exploration</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="gfts_intake.html">Reading CMEMS Copernicus data from GFTS s3 bucket</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#"><strong>This notebooks is used to plot a panel dashboard to visualize data for the GFTS project</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="Compute_3D_pdf.html">Computing 3D PDF from State matrix and tag pressure information</a></li>
+<li class="toctree-l1"><a class="reference internal" href="visu3Dvista.html">Visualize bathymetry with pyvista</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reporting</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="deliverables.html">Project deliverables and reports</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://notebooks.gesis.org/binder/v2/gh/destination-earth/DestinE_ESA_GFTS/main?urlpath=lab/tree/docs/pannel_plot_s3.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Binder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Binder logo" src="_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="http://pangeo-eosc.vm.fedcloud.eu/jupyterhub/hub/user-redirect/git-pull?repo=https%3A//github.com/destination-earth/DestinE_ESA_GFTS&urlpath=lab/tree/DestinE_ESA_GFTS/docs/pannel_plot_s3.ipynb&branch=main" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on JupyterHub"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="JupyterHub logo" src="_static/images/logo_jupyterhub.svg">
+  </span>
+<span class="btn__text-container">JupyterHub</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/destination-earth/DestinE_ESA_GFTS" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/destination-earth/DestinE_ESA_GFTS/issues/new?title=Issue%20on%20page%20%2Fpannel_plot_s3.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/pannel_plot_s3.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>This notebooks is used to plot a panel dashboard to visualize data for the GFTS project</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="this-notebooks-is-used-to-plot-a-panel-dashboard-to-visualize-data-for-the-gfts-project">
+<h1><strong>This notebooks is used to plot a panel dashboard to visualize data for the GFTS project</strong><a class="headerlink" href="#this-notebooks-is-used-to-plot-a-panel-dashboard-to-visualize-data-for-the-gfts-project" title="Link to this heading">#</a></h1>
+<hr class="docutils" />
+<p>The <a class="reference external" href="https://panel.holoviz.org/">panel dashboard</a> displays the following informations :</p>
+<ul class="simple">
+<li><p>The temperature measured by the fish.</p></li>
+<li><p>The depth measured by the fish.</p></li>
+<li><p>The evolution of the latitude and the longitude during the time.</p></li>
+</ul>
+<hr class="docutils" />
+<p>First of all, you need to access the following <a class="reference external" href="https://gfts.minrk.net">jubyterhub server</a>, you will need to log with your github account and you will select a configuration for starting a notebook.</p>
+<p>To acces this notebook you have to clone the following <a class="reference external" href="https://github.com/destination-earth/DestinE_ESA_GFTS">github repository</a>.
+First you will fork the repository, see this <a class="reference external" href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo">link</a>.
+Then, you will clone <strong>your forked version</strong>, you will use the git jupyter extension, the section is in the sidebar. Here is a <a class="reference external" href="https://blog.reviewnb.com/jupyterlab-git-extension/#git-workflow-clone">tutorial</a>.<br />
+If you want to submit code reviews, please see this <a class="reference external" href="https://github.com/destination-earth/DestinE_ESA_GFTS/blob/main/docs/rule_of_participation.md">rule of participation</a></p>
+<p>To be able to run this notebook you need to clone <a class="reference external" href="https://github.com/IAOCEA/pangeo-fish">pangeo-fish</a> repository, you can reuse the previous steps you used before, no need to fork the repository this time.
+Once you have clone the pangeo-fish repository, you need to install it with the following command :<br />
+<code class="docutils literal notranslate"><span class="pre">!pip</span> <span class="pre">install</span> <span class="pre">pangeo-fish/</span></code>  /!\ You might need to update the path to the pangeo-fish folder you cloned.<br />
+Normally, you can turn the first cell of the notebook into a code cell (select the cell and press Y key) and run it, wait for the installation to finish, then turn it back into a raw cell (select the cell and press R key), otherwise this cell will needlessly be runned by panel once you launch the dashboard. You can also use the notebook toolbar to change the cell type form code to raw.</p>
+<p>Normally, all the other library to use this notebook should already installed once this has been done. To start the preview with panel, click the blue pannel logo <img alt="Panel logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAMAAABF0y+mAAAAM1BMVEUAcrUBd7jk6OuoxdsAcrUAbLP08vAAbbUAdLUAcrVQnMm6z99+rM86jcJ5sNElhL10qc1QLvfMAAAACnRSTlPP////////KCjO4FwxLQAAAJNJREFUKJGNktEShCAIRRXCCrX2/792aaYU3YXpTDM+nMQLGtawGIQtmE6s48S+kkRkSBEHMim6rMyYAA7u1EdSTj9kenYWRPGQsVNaWTnjxFzifGhvJbbcTp+V4yCj4gOA19rSImgkmvxAf2Ua5Vw267Ij5xTIbcUdgjc+f/DelenLXu5vTGs/EwNfuo963S23b1+vug28mwd6wAAAAABJRU5ErkJggg==" /> in the notebook tool bar.<br />
+This will open a new tab in your notebook that displays panel informations.</p>
+<p>Please note that all the tracks have been generated but note checked manually, some can display incoherent data. It will be checked and corrected later on.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import necessary libraries and modules.</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
+<span class="kn">from</span> <span class="nn">pangeo_fish.io</span> <span class="kn">import</span> <span class="n">open_tag</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">movingpandas</span> <span class="k">as</span> <span class="nn">mpd</span>
+<span class="kn">from</span> <span class="nn">pangeo_fish.tags</span> <span class="kn">import</span> <span class="n">to_time_slice</span>
+<span class="kn">import</span> <span class="nn">holoviews</span> <span class="k">as</span> <span class="nn">hv</span>
+<span class="kn">import</span> <span class="nn">panel</span> <span class="k">as</span> <span class="nn">pn</span>
+<span class="kn">from</span> <span class="nn">pangeo_fish.io</span> <span class="kn">import</span> <span class="n">read_trajectories</span>
+<span class="kn">from</span> <span class="nn">pangeo_fish</span> <span class="kn">import</span> <span class="n">visualization</span>
+<span class="kn">import</span> <span class="nn">s3fs</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">### Parameters to access data, no need to modify to load tags normally</span>
+
+<span class="n">pn</span><span class="o">.</span><span class="n">extension</span><span class="p">()</span>
+<span class="n">s3</span> <span class="o">=</span> <span class="n">s3fs</span><span class="o">.</span><span class="n">S3FileSystem</span><span class="p">(</span>
+    <span class="n">anon</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">client_kwargs</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;endpoint_url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://s3.gra.perf.cloud.ovh.net&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+<span class="p">)</span>
+<span class="c1"># Tag list is the list of available tags</span>
+<span class="n">tag_list_</span> <span class="o">=</span> <span class="n">s3</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="s2">&quot;gfts-ifremer/tags/bargip/tracks&quot;</span><span class="p">)</span>
+<span class="n">tag_list</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">tag</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;gfts-ifremer/tags/bargip/tracks/&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">tag_list_</span>
+    <span class="k">if</span> <span class="n">tag</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;gfts-ifremer/tags/bargip/tracks/&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="ow">in</span> <span class="p">[</span>
+        <span class="n">fail</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.ipynb&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">fail</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="s2">&quot;../notebooks/papermill/papermill_output/done/&quot;</span><span class="p">)</span>
+    <span class="p">]</span>
+<span class="p">]</span>
+
+<span class="n">cloud_root</span> <span class="o">=</span> <span class="s2">&quot;s3://gfts-ifremer/tags/bargip&quot;</span>
+
+<span class="c1"># tag_root specifies the root URL for tag data used for this computation.</span>
+<span class="n">tag_root</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">cloud_root</span><span class="si">}</span><span class="s2">/cleaned&quot;</span>
+
+<span class="c1"># scratch_root specifies the root directory where are GFTS computation data stored.</span>
+<span class="n">scratch_root</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">cloud_root</span><span class="si">}</span><span class="s2">/tracks&quot;</span>
+
+<span class="c1"># storage_options specifies options for the filesystem storing and/or opening output files.</span>
+<span class="n">storage_options</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;anon&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="c1"># &#39;profile&#39; : &quot;gfts&quot;,</span>
+    <span class="s2">&quot;client_kwargs&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;endpoint_url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://s3.gra.perf.cloud.ovh.net&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;region_name&quot;</span><span class="p">:</span> <span class="s2">&quot;gra&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+<span class="p">}</span>
+
+<span class="c1"># bbox, bounding box, defines the latitude and longitude range for the analysis area.</span>
+<span class="n">bbox</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;latitude&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">42</span><span class="p">,</span> <span class="mi">53</span><span class="p">],</span> <span class="s2">&quot;longitude&quot;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">]}</span>
+<span class="c1"># tramodes are the two types of track that have been computed for GFTS.</span>
+<span class="n">track_modes</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;mode&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># pn.cache stores all the plot outputs to avoid doing the computation every time. Might need to disable if manipulating a wide amount of files.</span>
+<span class="nd">@pn</span><span class="o">.</span><span class="n">cache</span>
+
+<span class="c1"># Functions to plot the different visualization for a given tag id</span>
+<span class="k">def</span> <span class="nf">plot_time_series</span><span class="p">(</span><span class="n">plot_type</span><span class="o">=</span><span class="s2">&quot;time series&quot;</span><span class="p">,</span> <span class="n">tag_id</span><span class="o">=</span><span class="s2">&quot;CB_A11071&quot;</span><span class="p">):</span>
+    <span class="c1"># load trajectories</span>
+    <span class="n">trajectories</span> <span class="o">=</span> <span class="n">read_trajectories</span><span class="p">(</span>
+        <span class="n">track_modes</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">scratch_root</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">tag_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">storage_options</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;parquet&quot;</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Converting the trajectories to pandas DataFrames to access data easily</span>
+    <span class="n">mean_df</span> <span class="o">=</span> <span class="n">trajectories</span><span class="o">.</span><span class="n">trajectories</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">df</span>
+    <span class="n">mode_df</span> <span class="o">=</span> <span class="n">trajectories</span><span class="o">.</span><span class="n">trajectories</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">df</span>
+
+    <span class="n">tag</span> <span class="o">=</span> <span class="n">open_tag</span><span class="p">(</span><span class="n">tag_root</span><span class="p">,</span> <span class="n">tag_id</span><span class="p">)</span>
+    <span class="n">time_slice</span> <span class="o">=</span> <span class="n">to_time_slice</span><span class="p">(</span><span class="n">tag</span><span class="p">[</span><span class="s2">&quot;tagging_events/time&quot;</span><span class="p">])</span>
+    <span class="n">tag_log</span> <span class="o">=</span> <span class="n">tag</span><span class="p">[</span><span class="s2">&quot;dst&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">ds</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">time_slice</span><span class="p">)</span>
+
+    <span class="c1"># Creating pandas series for xarrray dataset</span>
+    <span class="n">mean_lon_</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">mean_df</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;longitude&quot;</span><span class="p">)</span>
+    <span class="n">mean_lat_</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">mean_df</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;latitude&quot;</span><span class="p">)</span>
+    <span class="n">mode_lon_</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">mode_df</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;longitude&quot;</span><span class="p">)</span>
+    <span class="n">mode_lat_</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">mode_df</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;latitude&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Creating xarray datasets</span>
+    <span class="n">mean_coords</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">mean_lon_</span><span class="p">,</span> <span class="n">mean_lat_</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">mode_coords</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">mode_lon_</span><span class="p">,</span> <span class="n">mode_lat_</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+
+    <span class="c1"># Assigning dataarrays to variables</span>
+    <span class="n">mean_lon</span> <span class="o">=</span> <span class="n">mean_coords</span><span class="p">[</span><span class="s2">&quot;longitude&quot;</span><span class="p">]</span>
+    <span class="n">mean_lat</span> <span class="o">=</span> <span class="n">mean_coords</span><span class="p">[</span><span class="s2">&quot;latitude&quot;</span><span class="p">]</span>
+    <span class="n">mode_lon</span> <span class="o">=</span> <span class="n">mode_coords</span><span class="p">[</span><span class="s2">&quot;longitude&quot;</span><span class="p">]</span>
+    <span class="n">mode_lat</span> <span class="o">=</span> <span class="n">mode_coords</span><span class="p">[</span><span class="s2">&quot;latitude&quot;</span><span class="p">]</span>
+
+    <span class="n">temp_plot</span> <span class="o">=</span> <span class="n">tag_log</span><span class="p">[</span><span class="s2">&quot;temperature&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hvplot</span><span class="p">(</span>
+        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;Red&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Temperature (°C)&quot;</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">600</span>
+    <span class="p">)</span>
+    <span class="n">depth_plot</span> <span class="o">=</span> <span class="n">tag_log</span><span class="p">[</span><span class="s2">&quot;pressure&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hvplot</span><span class="p">(</span>
+        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;Blue&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Pressure (m)&quot;</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">600</span>
+    <span class="p">)</span>
+    <span class="n">lon_plot</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">mean_lat</span><span class="o">.</span><span class="n">hvplot</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="p">[</span><span class="n">mean_lat_</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">mean_lat_</span><span class="o">.</span><span class="n">max</span><span class="p">()])</span>
+        <span class="o">*</span> <span class="n">mode_lat</span><span class="o">.</span><span class="n">hvplot</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;mode&quot;</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="p">[</span><span class="n">mode_lat_</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">mean_lat_</span><span class="o">.</span><span class="n">max</span><span class="p">()])</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">opts</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">show_grid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Fish latitude over time&quot;</span><span class="p">)</span>
+    <span class="n">lat_plot</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">mean_lon</span><span class="o">.</span><span class="n">hvplot</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="p">[</span><span class="n">mean_lon_</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">mean_lat_</span><span class="o">.</span><span class="n">max</span><span class="p">()])</span>
+        <span class="o">*</span> <span class="n">mode_lon</span><span class="o">.</span><span class="n">hvplot</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;mode&quot;</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="p">[</span><span class="n">mode_lon_</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">mean_lat_</span><span class="o">.</span><span class="n">max</span><span class="p">()])</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">opts</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">show_grid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Fish longitude over time&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">temp_plot</span> <span class="o">+</span> <span class="n">depth_plot</span> <span class="o">+</span> <span class="n">lon_plot</span> <span class="o">+</span> <span class="n">lat_plot</span><span class="p">)</span><span class="o">.</span><span class="n">cols</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">plot_track</span><span class="p">(</span><span class="n">tag_id</span><span class="o">=</span><span class="s2">&quot;CB_A11071&quot;</span><span class="p">):</span>
+    <span class="n">trajectories</span> <span class="o">=</span> <span class="n">read_trajectories</span><span class="p">(</span>
+        <span class="n">track_modes</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">scratch_root</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">tag_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">storage_options</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;parquet&quot;</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Converting the trajectories to pandas DataFrames to access data easily</span>
+    <span class="n">mean_df</span> <span class="o">=</span> <span class="n">trajectories</span><span class="o">.</span><span class="n">trajectories</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">df</span>
+    <span class="n">mode_df</span> <span class="o">=</span> <span class="n">trajectories</span><span class="o">.</span><span class="n">trajectories</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">df</span>
+
+    <span class="c1"># Adding month data</span>
+    <span class="n">mean_df</span><span class="p">[</span><span class="s2">&quot;month&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mean_df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">month</span>
+    <span class="n">mode_df</span><span class="p">[</span><span class="s2">&quot;month&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mode_df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">month</span>
+
+    <span class="c1"># Converting back to trajectories</span>
+    <span class="n">mean_traj</span> <span class="o">=</span> <span class="n">mpd</span><span class="o">.</span><span class="n">Trajectory</span><span class="p">(</span>
+        <span class="n">mean_df</span><span class="p">,</span> <span class="n">traj_id</span><span class="o">=</span><span class="n">mean_df</span><span class="o">.</span><span class="n">traj_id</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="n">mode_traj</span> <span class="o">=</span> <span class="n">mpd</span><span class="o">.</span><span class="n">Trajectory</span><span class="p">(</span>
+        <span class="n">mode_df</span><span class="p">,</span> <span class="n">traj_id</span><span class="o">=</span><span class="n">mode_df</span><span class="o">.</span><span class="n">traj_id</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="n">trajectories</span> <span class="o">=</span> <span class="n">mpd</span><span class="o">.</span><span class="n">TrajectoryCollection</span><span class="p">([</span><span class="n">mean_traj</span><span class="p">,</span> <span class="n">mode_traj</span><span class="p">])</span>
+
+    <span class="n">traj_plots</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">traj</span><span class="o">.</span><span class="n">hvplot</span><span class="p">(</span>
+            <span class="n">c</span><span class="o">=</span><span class="s2">&quot;month&quot;</span><span class="p">,</span>
+            <span class="n">tiles</span><span class="o">=</span><span class="s2">&quot;CartoLight&quot;</span><span class="p">,</span>
+            <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;rainbow&quot;</span><span class="p">,</span>
+            <span class="n">title</span><span class="o">=</span><span class="n">traj</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+            <span class="n">width</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+            <span class="n">height</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">traj</span> <span class="ow">in</span> <span class="n">trajectories</span><span class="o">.</span><span class="n">trajectories</span>
+    <span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">hv</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span><span class="n">traj_plots</span><span class="p">)</span><span class="o">.</span><span class="n">cols</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">plot_emission</span><span class="p">(</span><span class="n">tag_id</span><span class="o">=</span><span class="s2">&quot;DK_A10531&quot;</span><span class="p">):</span>
+    <span class="c1">## Might not work if dask involved or slider involved, I have to test</span>
+    <span class="n">emission</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">scratch_root</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">tag_id</span><span class="si">}</span><span class="s2">/combined.zarr&quot;</span><span class="p">,</span>
+            <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;zarr&quot;</span><span class="p">,</span>
+            <span class="n">chunks</span><span class="o">=</span><span class="p">{},</span>
+            <span class="n">inline_array</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">storage_options</span><span class="o">=</span><span class="n">storage_options</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="o">.</span><span class="n">rename_vars</span><span class="p">({</span><span class="s2">&quot;pdf&quot;</span><span class="p">:</span> <span class="s2">&quot;emission&quot;</span><span class="p">})</span>
+        <span class="o">.</span><span class="n">drop_vars</span><span class="p">([</span><span class="s2">&quot;final&quot;</span><span class="p">,</span> <span class="s2">&quot;initial&quot;</span><span class="p">])</span>
+    <span class="p">)</span>
+
+    <span class="n">states</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">scratch_root</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">tag_id</span><span class="si">}</span><span class="s2">/states.zarr&quot;</span><span class="p">,</span>
+        <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;zarr&quot;</span><span class="p">,</span>
+        <span class="n">chunks</span><span class="o">=</span><span class="p">{},</span>
+        <span class="n">inline_array</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">storage_options</span><span class="o">=</span><span class="n">storage_options</span><span class="p">,</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">emission</span><span class="p">[</span><span class="s2">&quot;mask&quot;</span><span class="p">])</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">([</span><span class="n">states</span><span class="p">,</span> <span class="n">emission</span><span class="o">.</span><span class="n">drop_vars</span><span class="p">([</span><span class="s2">&quot;mask&quot;</span><span class="p">])])</span>
+    <span class="n">plot1</span> <span class="o">=</span> <span class="n">visualization</span><span class="o">.</span><span class="n">plot_map</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;states&quot;</span><span class="p">],</span> <span class="n">bbox</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;cool&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">opts</span><span class="p">(</span>
+        <span class="n">height</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">600</span>
+    <span class="p">)</span>
+    <span class="n">plot2</span> <span class="o">=</span> <span class="n">visualization</span><span class="o">.</span><span class="n">plot_map</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;emission&quot;</span><span class="p">],</span> <span class="n">bbox</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;cool&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">opts</span><span class="p">(</span>
+        <span class="n">height</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">600</span>
+    <span class="p">)</span>
+    <span class="n">plot</span> <span class="o">=</span> <span class="n">hv</span><span class="o">.</span><span class="n">Layout</span><span class="p">([</span><span class="n">plot1</span><span class="p">,</span> <span class="n">plot2</span><span class="p">])</span><span class="o">.</span><span class="n">cols</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">plot</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Panel parameters</span>
+
+<span class="c1"># Initalizing the widget for tag selection</span>
+<span class="n">tag_widget</span> <span class="o">=</span> <span class="n">pn</span><span class="o">.</span><span class="n">widgets</span><span class="o">.</span><span class="n">Select</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;tag_id&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;NO_A12710&quot;</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">tag_list</span><span class="p">)</span>
+
+<span class="c1"># Binding widget with the plots</span>
+
+<span class="n">time_plot</span> <span class="o">=</span> <span class="n">pn</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="n">plot_time_series</span><span class="p">,</span> <span class="n">tag_id</span><span class="o">=</span><span class="n">tag_widget</span><span class="p">)</span>
+<span class="n">track_plot</span> <span class="o">=</span> <span class="n">pn</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="n">plot_track</span><span class="p">,</span> <span class="n">tag_id</span><span class="o">=</span><span class="n">tag_widget</span><span class="p">)</span>
+<span class="c1"># emission_plot = pn.bind(plot_emission,tag_id=tag_widget)</span>
+<span class="n">track_emission</span> <span class="o">=</span> <span class="n">pn</span><span class="o">.</span><span class="n">Row</span><span class="p">(</span><span class="n">time_plot</span><span class="p">,</span> <span class="n">track_plot</span><span class="p">)</span>
+
+<span class="c1"># Combining plots with the widget</span>
+<span class="n">plots</span> <span class="o">=</span> <span class="n">pn</span><span class="o">.</span><span class="n">Row</span><span class="p">(</span><span class="n">tag_widget</span><span class="p">,</span> <span class="n">track_emission</span><span class="p">)</span>
+
+<span class="n">pn</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">FastListTemplate</span><span class="p">(</span>
+    <span class="n">site</span><span class="o">=</span><span class="s2">&quot;Tag data display&quot;</span><span class="p">,</span>
+    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;plots&quot;</span><span class="p">,</span>
+    <span class="n">main</span><span class="o">=</span><span class="n">plots</span><span class="p">,</span>
+<span class="p">)</span><span class="o">.</span><span class="n">servable</span><span class="p">();</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plots</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="gfts_intake.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Reading CMEMS Copernicus data from GFTS s3 bucket</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="Compute_3D_pdf.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Computing 3D PDF from State matrix and tag pressure information</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Pangeo
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
