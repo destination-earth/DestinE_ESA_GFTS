@@ -1,11 +1,10 @@
-#  Global Fish Tracking Service (GFTS)
+# Global Fish Tracking Service (GFTS)
 
 A Destination Earth Platform use case.
 
 [![GFTS Jupyter book](https://github.com/destination-earth/DestinE_ESA_GFTS/actions/workflows/deploy.yml/badge.svg)](https://github.com/Fdestination-earth/DestinE_ESA_GFTS/actions/workflows/deploy.yml)
 
 [![GFTS Jupyter Hub](https://github.com/destination-earth/DestinE_ESA_GFTS/actions/workflows/deploy-hub.yaml/badge.svg)](https://github.com/Fdestination-earth/DestinE_ESA_GFTS/actions/workflows/deploy-hub.yaml)
-
 
 ## The GFTS in a nutshell
 
@@ -21,7 +20,6 @@ As a result, the Use Case will help to obtain accurate insights into fish popula
 - [@tinaok](https://www.github.com/tinaok)
 - [@aderrien7](https://www.github.com/aderrien7)
 
-
 ## Contributing
 
 Contributions are always welcome!
@@ -35,6 +33,7 @@ DestinE open source community abide to this [Code of Conduct](docs/code_of_condu
 Instructions on how to build and deploy GFTS hub are described in [./gfts-track-reconstruction/jupyterhub/README.md](https://github.com/destination-earth/DestinE_ESA_GFTS/blob/main/gfts-track-reconstruction/jupyterhub/README.md).
 
 The current Jupyterhub deployment is done on OVH cloud operator.
+
 ## Documentation
 
 Documentation can be viewed at [https://destination-earth.github.io/DestinE_ESA_GFTS](https://destination-earth.github.io/DestinE_ESA_GFTS).
@@ -44,7 +43,6 @@ Documentation can be viewed at [https://destination-earth.github.io/DestinE_ESA_
 ## Feedback
 
 If you have any feedback, please reach out to us by filling an [issue](https://github.com/destination-earth/DestinE_ESA_GFTS/issues/new).
-
 
 ## Run Locally
 
@@ -113,10 +111,10 @@ http://127.0.0.1:7777/lab
 ```
 
 Then you need to enter your token: it can be found at the bottom of the printout you got after running the docker run command given above.
+
 ## Support
 
 For support, please create a Github [issue](https://github.com/destination-earth/DestinE_ESA_GFTS/issues/new).
-
 
 ## Used By
 
@@ -126,9 +124,6 @@ This project is used by the following companies:
 - [Development Seed](http://developmentseed.org)
 - [Simula](http://simula.no)
 
-
 ## 🛠 Skills
 
 Python, Jupyter Notebooks.
-
-
