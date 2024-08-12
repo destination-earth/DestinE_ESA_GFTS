@@ -129,3 +129,8 @@ This project is used by the following companies:
 ## 🛠 Skills
 
 Python, Jupyter Notebooks.
+
+## License
+  
+All documentation and chapter materials in this repository are made available under the CC-BY-4 and the software are made available under the Apache-2 licence; for more details, see the [LICENSE file](https://github.com/destination-earth/DestinE_ESA_GFTS/blob/main/LICENSE).
+
