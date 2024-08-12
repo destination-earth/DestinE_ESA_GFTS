@@ -2,9 +2,10 @@
 
 A Destination Earth Platform use case.
 
-[![GFTS Jupyter book](https://github.com/destination-earth/DestinE_ESA_GFTS/actions/workflows/deploy.yml/badge.svg)](https://github.com/Fdestination-earth/DestinE_ESA_GFTS/actions/workflows/deploy.yml)
 
-[![GFTS Jupyter Hub](https://github.com/destination-earth/DestinE_ESA_GFTS/actions/workflows/deploy-hub.yaml/badge.svg)](https://github.com/Fdestination-earth/DestinE_ESA_GFTS/actions/workflows/deploy-hub.yaml)
+[![GFTS Jupyter book](https://github.com/destination-earth/DestinE_ESA_GFTS/actions/workflows/deploy.yml/badge.svg)](https://github.com/destination-earth/DestinE_ESA_GFTS/blob/main/.github/workflows/deploy.yml)
+
+[![GFTS Jupyter Hub](https://github.com/destination-earth/DestinE_ESA_GFTS/actions/workflows/deploy-hub.yaml/badge.svg)](https://github.com/destination-earth/DestinE_ESA_GFTS/blob/main/.github/workflows/deploy-hub.yaml)
 
 ## The GFTS in a nutshell
 
@@ -13,6 +14,8 @@ By relying on the Pangeo infrastructure on the DestinatE Platform, the Use Case 
 As a result, the Use Case will help to obtain accurate insights into fish populations by introducing the Global Fish Tracking System (GFTS) and a Decision Support Tool into the DestinE Platform.
 
 ## Authors
+
+### Active contributors
 
 - [@minrk](https://www.github.com/minrk)
 - [@annefou](https://www.github.com/annefou)
