@@ -9,33 +9,33 @@ authors:
   - given-names: Benjamin
     family-names: Ragan-Kelley
     email: minrk@simula.no
-    affiliation: 'Simula Research Laboratory, Norway'
-    orcid: 'https://orcid.org/0000-0002-1023-7082'
+    affiliation: "Simula Research Laboratory, Norway"
+    orcid: "https://orcid.org/0000-0002-1023-7082"
     credit: "Deployment of the GFTS JupyterHub for the DestinE platform"
     role: Developer
   - given-names: Daniel
     family-names: Wiesmann
     email: danielwiesmann@developmentseed.org
-    affiliation: 'Development Seed, Portugal'
-    orcid: 'https://orcid.org/0000-0002-3190-4278'
+    affiliation: "Development Seed, Portugal"
+    orcid: "https://orcid.org/0000-0002-3190-4278"
     credit: "Project coordination; Visualisation"
     role: Project coordinator
-  - orcid: 'https://orcid.org/0000-0002-1500-0156'
-    affiliation: 'IFREMER, France'
+  - orcid: "https://orcid.org/0000-0002-1500-0156"
+    affiliation: "IFREMER, France"
     given-names: Tina
     family-names: Odaka
     email: tina.odaka@ifremer.fr
     credit: "Develop and run of Pangeo-Fish"
     role: Developer
-  - orcid: 'https://orcid.org/0000-0002-1784-2920'
-    affiliation: 'Simula Research Laboratory, France'
+  - orcid: "https://orcid.org/0000-0002-1784-2920"
+    affiliation: "Simula Research Laboratory, France"
     email: annef@simula.no
     family-names: Fouilloux
     given-names: Anne
     credit: "Data-related development; Open Science compliance"
     role: Developer
-  - orcid: 'https://orcid.org/0000-0002-1032-2105'
-    affiliation: 'IFREMER, France'
+  - orcid: "https://orcid.org/0000-0002-1032-2105"
+    affiliation: "IFREMER, France"
     email: mathieu.woillez@ifremer.fr
     family-names: Woillez
     given-names: Mathieu
@@ -50,7 +50,7 @@ identifiers:
     value: >-
       https://destination-earth.eu/use-cases/global-fish-tracking-system-gfts/
     description: GFTS website.
-repository-code: 'https://github.com/destination-earth/DestinE_ESA_GFTS'
+repository-code: "https://github.com/destination-earth/DestinE_ESA_GFTS"
 url: >-
   https://destination-earth.github.io/DestinE_ESA_GFTS/intro.html
 abstract: >-
@@ -70,4 +70,4 @@ keywords:
   - DestinE
 license: Apache-2.0
 commit: c7ba7c1bf0afdc1e5b290644631de5c46fb67b0d
-date-released: '2024-06-23'
+date-released: "2024-06-23"
