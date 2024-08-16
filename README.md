@@ -1,11 +1,10 @@
 # Global Fish Tracking Service (GFTS)
 
-A Destination Earth Platform use case. 
+A Destination Earth Platform use case.
 
 [![GFTS Jupyter book](https://github.com/destination-earth/DestinE_ESA_GFTS/actions/workflows/deploy.yml/badge.svg)](https://github.com/Fdestination-earth/DestinE_ESA_GFTS/actions/workflows/deploy.yml)
 
 [![GFTS Jupyter Hub](https://github.com/destination-earth/DestinE_ESA_GFTS/actions/workflows/deploy-hub.yaml/badge.svg)](https://github.com/Fdestination-earth/DestinE_ESA_GFTS/actions/workflows/deploy-hub.yaml)
-
 
 This repository is the official content repository for the Gloabl FishTracking Service (GFTS), a Destination Earth Platform Use Case procured by ESA.
 
@@ -25,16 +24,15 @@ Documentation can be viewed at [https://destination-earth.github.io/DestinE_ESA_
 
 ### Prerequisites
 
-- Ensure you have Python 3.11 installed. 
+- Ensure you have Python 3.11 installed.
 
 ### Supported Environments
 
 This project is compatible with macOS and Linux distributions with Python 3.11 installed.
 
-
 ### Build Instructions
 
-To build this project, ensure you have Python 3  and all the necessary Python packages (see environmemt.yml) installed on your system. 
+To build this project, ensure you have Python 3 and all the necessary Python packages (see environmemt.yml) installed on your system.
 
 #### Clone the github repository
 
@@ -165,6 +163,7 @@ This project is used by the following companies:
 Python, Jupyter Notebooks.
 
 ## Citation
+
 Please refer to the whole course as described in the [CITATION.cff](https://github.com/destination-earth/DestinE_ESA_GFTS/edit/main/CITATION.cff) file
 
 ## License
@@ -178,4 +177,3 @@ This project is funded by the European Space Agency through the Destination Eart
 ## Project Status
 
 The project is currently work in progress
-
