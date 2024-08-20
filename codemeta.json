@@ -1,0 +1,102 @@
+{
+  "@context": "https://w3id.org/codemeta/3.0",
+  "type": "SoftwareSourceCode",
+  "applicationCategory": "Oceanography",
+  "author": [
+    {
+      "id": "https://orcid.org/0000-0002-1023-7082",
+      "type": "Person",
+      "affiliation": {
+        "type": "Organization",
+        "name": "Simula Research Laboratory, Norway"
+      },
+      "email": "minrk@simula.no",
+      "familyName": "Ragan-Kelley",
+      "givenName": "Benjamin"
+    },
+    {
+      "type": "Role",
+      "schema:author": "https://orcid.org/0000-0002-1023-7082",
+      "roleName": "Developer"
+    },
+    {
+      "id": "https://orcid.org/0000-0002-3190-4278",
+      "type": "Person",
+      "affiliation": {
+        "type": "Organization",
+        "name": "Development Seed, Portugal"
+      },
+      "email": "danielwiesmann@developmentseed.org",
+      "familyName": "Wiesmann",
+      "givenName": "Daniel"
+    },
+    {
+      "type": "Role",
+      "schema:author": "https://orcid.org/0000-0002-3190-4278",
+      "roleName": "coordinator"
+    },
+    {
+      "id": "https://orcid.org/0000-0002-1500-0156",
+      "type": "Person",
+      "affiliation": {
+        "type": "Organization",
+        "name": "IFREMER, France"
+      },
+      "email": "tina.odaka@ifremer.fr",
+      "familyName": "Odaka",
+      "givenName": "Tina"
+    },
+    {
+      "type": "Role",
+      "schema:author": "https://orcid.org/0000-0002-1500-0156",
+      "roleName": "Developer"
+    },
+    {
+      "id": "https://orcid.org/0000-0002-1784-2920",
+      "type": "Person",
+      "affiliation": {
+        "type": "Organization",
+        "name": "Simula Research Laboratory, Norway"
+      },
+      "email": "annef@simula.no",
+      "familyName": "Fouilloux",
+      "givenName": "Anne"
+    },
+    {
+      "type": "Role",
+      "schema:author": "https://orcid.org/0000-0002-1784-2920",
+      "roleName": "Developer"
+    },
+    {
+      "id": "https://orcid.org/0000-0002-1032-2105",
+      "type": "Person",
+      "affiliation": {
+        "type": "Organization",
+        "name": "IFREMER, France"
+      },
+      "email": "mathieu.woillez@ifremer.fr",
+      "familyName": "Woillez",
+      "givenName": "Mathieu"
+    }
+  ],
+  "codeRepository": "git+https://github.com/destination-earth/DestinE_ESA_GFTS",
+  "dateCreated": "2023-11-16",
+  "description": "The Global Fish Tracking System (GFTS) is a Destination Earth Platform use case. The lack of accurate modelling of fish movement, migration strategies, and site fidelity is a major challenge for policy-makers when they need to formulate effective conservation policies. By relying on the Pangeo infrastructure on the DestinatE Platform, the Use Case aims to predict the sea bass behavior and develop a Decision Support Tool (DST) for “what-if” scenario planning. As a result, the Use Case will help to obtain accurate insights into fish populations by introducing the Global Fish Tracking System (GFTS) and a Decision Support Tool into the DestinE Platform.",
+  "funder": {
+    "type": "Organization",
+    "name": "ESA"
+  },
+  "keywords": ["Fish", "ESA", "DestinE", "Pangeo", "Climate"],
+  "license": "https://spdx.org/licenses/Apache-2.0",
+  "name": "GFTS",
+  "operatingSystem": "Linux",
+  "programmingLanguage": "Python 3",
+  "relatedLink": [
+    "https://destination-earth.eu/use-cases/global-fish-tracking-system-gfts/",
+    "https://w3id.org/ro-id/2edcfa66-0f59-42f4-aa29-1c5681466424"
+  ],
+  "softwareRequirements": "https://github.com/destination-earth/DestinE_ESA_GFTS/blob/main/.binder/environment.yml",
+  "developmentStatus": "active",
+  "funding": "Destination Earth ESA use case",
+  "issueTracker": "https://github.com/destination-earth/DestinE_ESA_GFTS/issues"
+}
