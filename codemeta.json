@@ -86,7 +86,7 @@
     "type": "Organization",
     "name": "ESA"
   },
-  "keywords": ["fish", "ESA", "DestinE", "Pangeo", "Climate"],
+  "keywords": ["Fish", "ESA", "DestinE", "Pangeo", "Climate"],
   "license": "https://spdx.org/licenses/Apache-2.0",
   "name": "GFTS",
   "operatingSystem": "Linux",
