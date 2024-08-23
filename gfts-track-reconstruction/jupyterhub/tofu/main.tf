@@ -59,6 +59,7 @@ locals {
     "todaka",
     "minrk",
     "tinaok",
+    "jmdelouis",
     "mwoillez",
     "marinerandon",
     "aderrien7",
@@ -78,6 +79,7 @@ locals {
   ])
   s3_ifremer_users = toset([
     "annefou",
+    "jmdelouis",
     "mwoillez",
     "marinerandon",
     "danielfdsilva",
