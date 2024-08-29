@@ -66,6 +66,7 @@ locals {
     "keewis",
     "_default",
     "danielfdsilva",
+    "QuentinMaz",
   ])
   s3_admins = toset([
     "annefou",
@@ -83,6 +84,7 @@ locals {
     "mwoillez",
     "marinerandon",
     "danielfdsilva",
+    "QuentinMaz",
   ])
 }
 
