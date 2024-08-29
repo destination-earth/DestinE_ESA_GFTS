@@ -103,6 +103,7 @@ def convert_to_utc_with_formatting(date, time_zone):
         "%d/%m/%y %H:%M:%S",
         "%y-%m-%d %H:%M:%S",
         "%Y-%m-%d %H:%M:%S",
+        "%Y-%m-%dT%H:%M:%SZ",
     ]
 
     # Try parsing the date with different formats
@@ -324,9 +325,7 @@ def extract_DST(file_path, time_zone, remote=False):
                     reached_target_line = False
                 else:
                     # Otherwise, add the line of data to the current block
-                    line[0] = convert_to_utc_with_formatting(
-                        line[0], time_zone
-                    )  # Format date to ISO8601 and convert to UTC
+                    line[0] = format_date(line[0])  # Format date to ISO8601
                     line[1] = np.float64(
                         line[1]
                     )  # Convert data type from str to float64
@@ -344,6 +343,27 @@ def extract_DST(file_path, time_zone, remote=False):
     df = pd.DataFrame(all_data, columns=["time", "pressure", "temperature"])[
         ["time", "temperature", "pressure"]
     ]
+
+    # Getting all the timestamps
+    time_stamps = pd.to_datetime(df["time"])
+
+    # Calculting time deltas
+    time_deltas = time_stamps - time_stamps.iloc[0]
+
+    # Getting first timestamp and converting it to utc.
+    initial_time = time_stamps.iloc[0].strftime("%Y-%m-%dT%H:%M:%SZ")
+    time_utc = pd.to_datetime(
+        convert_to_utc_with_formatting(initial_time, "Europe/Paris")
+    )
+
+    # Calculating the new timestamps series and formatting it to ISO8601
+    corrected_timestamps = time_deltas + time_utc
+    formatted_corrected_timestamps = corrected_timestamps.dt.strftime(
+        "%Y-%m-%dT%H:%M:%SZ"
+    )
+
+    # Replacing the in the dataframe
+    df["time"] = formatted_corrected_timestamps
 
     # Check if the expected length matches the actual length of data extracted
     if expected_length == df.shape[0]:
