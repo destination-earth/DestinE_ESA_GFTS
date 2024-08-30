@@ -1,8 +1,8 @@
 # Setup instructions and User Access
 
 This section provides an overview of where to find information and source code related to the deployment and administration of GFTS JupyterHub. It also explains how users can be added and by whom.
- 
-## GFTS Hub deployment 
+
+## GFTS Hub deployment
 
 The source code and documentation to deploy the GFTS Hub on the DestinE Cloud Infrastructure (currently at OVH) are available in the `gfts-track-reconstruction` folder, located in the root directory.
 
@@ -13,7 +13,7 @@ A good starting point is the [README.md](https://github.com/destination-earth/De
 The user image is defined in the [gfts-track-reconstruction/jupyterhub/images/user](https://github.com/destination-earth/DestinE_ESA_GFTS/tree/main/gfts-track-reconstruction/jupyterhub/images/user) folder and consists of:
 
 - [Dockerfile](https://raw.githubusercontent.com/destination-earth/DestinE_ESA_GFTS/main/gfts-track-reconstruction/jupyterhub/images/user/Dockerfile) where you can review the Pangeo base image we are using, and see how additional conda and pip packages are installed, among other details;
-- [conda-requirements.txt](https://github.com/destination-earth/DestinE_ESA_GFTS/blob/main/gfts-track-reconstruction/jupyterhub/images/user/conda-requirements.txt) contains the list of packages to be installed with conda. To suggest the installation of a new conda package, you can edit this file and make a Pull Request. Be sure to follow the `requirements.txt` format when adding new packages. 
+- [conda-requirements.txt](https://github.com/destination-earth/DestinE_ESA_GFTS/blob/main/gfts-track-reconstruction/jupyterhub/images/user/conda-requirements.txt) contains the list of packages to be installed with conda. To suggest the installation of a new conda package, you can edit this file and make a Pull Request. Be sure to follow the `requirements.txt` format when adding new packages.
 - [requirements.txt](https://github.com/destination-earth/DestinE_ESA_GFTS/blob/main/gfts-track-reconstruction/jupyterhub/images/user/requirements.txt) contains the list of packages installed with pip. Similarly, you can suggest adding new pip packages by editing this file and submitting a Pull Request.
 
 ## S3 Buckets
@@ -31,7 +31,7 @@ Limited storage is available on the GFTS hub itself but we have setup different 
 The first step is to create an [issue](https://github.com/destination-earth/DestinE_ESA_GFTS/issues/new) with the following information:
 
 1. The GitHub username of the person you want to add to the GFTS Hub;
-2. The list of S3 buckets this new person would need to access. 
+2. The list of S3 buckets this new person would need to access.
 3. If a new group of users is required, please specify the name of the new S3 bucket to be created for this group and identify any existing users who need access to it. **A new group of users is only necessary if you have your own set of biologging data that must remain private and not be shared with everyone**.
 
 :::{seealso}
@@ -40,7 +40,7 @@ The current list of authorized GFTS users can be found in [`gfts-track-reconstru
 
 :::
 
-### Giving access to the GFTS Hub and S3 Buckets  (Admin only)
+### Giving access to the GFTS Hub and S3 Buckets (Admin only)
 
 While everyone can initiate a Pull Request to add a new user, only a few administrators can grant access (especially write access) to S3 Buckets. Below are the steps to follow if you are an administrator:
 
@@ -55,6 +55,7 @@ Steps 3 and 4 are what actually grant the jupyterhub user s3 access.
 :::{caution}
 
 The following packages need to be installed on your system:
+
 1. [ssh-vault](https://ssh-vault.com);
 2. [git-crypt](https://github.com/AGWA/git-crypt/blob/master/INSTALL.md);
 3. [opentofu](https://opentofu.org)
@@ -80,4 +81,3 @@ tofu apply
 Then you are ready to go and can follow the steps explained above to grant access to S3 buckets to a new user.
 
 :::
-
