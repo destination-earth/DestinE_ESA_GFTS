@@ -21,3 +21,6 @@ parts:
   - caption: Reporting
     chapters:
       - file: deliverables
+  - caption: The GFTS Hub
+    chapters:
+      - file: admin_hub
