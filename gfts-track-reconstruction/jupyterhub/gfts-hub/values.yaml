@@ -159,7 +159,7 @@ jupyterhub:
           - mwoillez
           - marinerandon
           - keewis
-          - QuentinMaz
+          - quentinmaz
       KubeSpawner:
         pod_security_context:
           fsGroup: 100
