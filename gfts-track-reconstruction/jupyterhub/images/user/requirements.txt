@@ -6,4 +6,4 @@ gh-scoped-creds
 jupyter-keepalive
 jupyterhub==4.1.6
 # git+https://github.com/iaocea/pangeo-fish#egg=pangeo-fish
-git+https://github.com/iaocea/xarray-healpy#egg=xarray-healpy
+git+https://github.com/iaocea/xarray-regridding#egg=xarray-regridding

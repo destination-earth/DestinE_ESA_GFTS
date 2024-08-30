@@ -1,4 +1,4 @@
-FROM quay.io/pangeo/pangeo-notebook:2024.04.08
+FROM quay.io/pangeo/pangeo-notebook:2024.08.18
 
 # Install fusermount3 command and open GL library
 USER root
