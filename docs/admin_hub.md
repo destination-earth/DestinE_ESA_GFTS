@@ -60,7 +60,7 @@ The following packages need to be installed on your system:
 2. [git-crypt](https://github.com/AGWA/git-crypt/blob/master/INSTALL.md);
 3. [opentofu](https://opentofu.org)
 
-As an admin, you'll need to set up your environment. The GFTS maintainer will provide you with a key encrypted with your GitHub SSH key. Save the content sent by the GFTS maintainer into a file, and name it `ssh-vault.txt`.
+As an admin, you'll need to set up your environment. The GFTS maintainer will provide you with a key encrypted with your GitHub SSH key. Save the content sent by the GFTS maintainer into a file, and name it `ssh-vault.txt`. At the moment, the keys are known to [annefou](https://github.com/annefou) and [minrk](https://github.com/minrk).
 
 ```
 cat ssh-vault.txt | ssh-vault view | base64 --decode > keyfile && git-crypt unlock keyfile && rm keyfile
@@ -78,6 +78,7 @@ tofu init
 tofu apply
 ```
 
+:::
+
 Then you are ready to go and can follow the steps explained above to grant access to S3 buckets to a new user.
 
-:::
