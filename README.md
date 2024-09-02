@@ -68,14 +68,6 @@ To deactivate the `gfts` environment:
 conda deactivate
 ```
 
-#### Installation with pip
-
-We assume you have installed Python 3.11 on your system. To install the necessary Python package with `pip`:
-
-```bash
-pip install -r requirements.txt
-```
-
 #### Execution Instructions
 
 The section below explains how to start JupyerLab and run the Jupyter notebooks.
