@@ -81,4 +81,3 @@ tofu apply
 :::
 
 Then you are ready to go and can follow the steps explained above to grant access to S3 buckets to a new user.
-
