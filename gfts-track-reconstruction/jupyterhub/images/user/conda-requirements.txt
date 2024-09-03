@@ -6,6 +6,7 @@ dask-image
 eccodes>=2.35.0
 fastparquet
 healpy
+papermill
 rclone
 rich
 xmovie
