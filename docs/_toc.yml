@@ -11,6 +11,7 @@ parts:
     chapters:
       - file: new2gfts
       - file: CopernicusMarine
+      - file: tag_data
   - caption: Data preparation
     chapters:
       - file: s3_CMEMS_2D_kerchunk
