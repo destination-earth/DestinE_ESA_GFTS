@@ -7,6 +7,10 @@ parts:
       - file: contribute
       - file: code_of_conduct
       - file: rule_of_participation
+  - caption: Onboarding new users
+    chapters:
+      - file: new2gfts
+      - file: CopernicusMarine
   - caption: Data preparation
     chapters:
       - file: s3_CMEMS_2D_kerchunk
