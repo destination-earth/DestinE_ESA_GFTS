@@ -23,9 +23,10 @@ parts:
       - file: Compute_3D_pdf
       - file: ClimateDT-zarr-2D-3D
       - file: visu3Dvista
-  - caption: Reporting
+  - caption: Reporting & Outreach
     chapters:
       - file: deliverables
+      - file: outreach
   - caption: The GFTS Hub
     chapters:
       - file: admin_hub
