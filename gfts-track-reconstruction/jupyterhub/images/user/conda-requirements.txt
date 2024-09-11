@@ -1,12 +1,15 @@
 # packages to be installed with conda
 # requirements.txt format
 # to install with pip, use requirements.txt
+altair
 cdshealpix
 dask-image
 eccodes>=2.35.0
 fastparquet
 healpy
 papermill
+pixi
+pre-commit
 rclone
 rich
 xmovie
