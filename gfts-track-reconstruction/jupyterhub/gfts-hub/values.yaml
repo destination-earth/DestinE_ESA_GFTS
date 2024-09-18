@@ -248,7 +248,7 @@ grafana:
         - name: prometheus
           orgId: 1
           type: prometheus
-          url: https://prometheus..minrk.net
+          url: https://prometheus.gfts.minrk.net
           isDefault: true
           editable: false
 
