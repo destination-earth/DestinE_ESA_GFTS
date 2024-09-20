@@ -5,6 +5,9 @@ dependencies:
 - name: dask-gateway
   repository: https://helm.dask.org/
   version: 2024.1.0
+- name: kbatch-proxy
+  repository: https://kbatch-dev.github.io/helm-chart
+  version: 0.4.2
 - name: ingress-nginx
   repository: https://kubernetes.github.io/ingress-nginx
   version: 4.9.1
@@ -14,5 +17,5 @@ dependencies:
 - name: grafana
   repository: https://grafana.github.io/helm-charts
   version: 7.0.14
-digest: sha256:f65f939aed209d2ebec4ea4534deef0d14d8b99ee1c5ee20ddee11d0a7115b20
-generated: "2024-04-03T14:18:11.909303+02:00"
+digest: sha256:537e964a33edb2d34d66718427bc2b0716efc7c299330414696b1e80eb3f91ac
+generated: "2024-09-04T14:58:24.438886+02:00"

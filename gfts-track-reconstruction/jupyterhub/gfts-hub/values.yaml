@@ -30,6 +30,16 @@ jupyterhub:
       name: "c63eqfuv.c1.gra9.container-registry.ovh.net/gfts/jupyterhub-user"
       tag: "set-by-chartpress"
       pullPolicy: Always
+    networkPolicy:
+      egress:
+        # allow access to kbatch-proxy
+        - to:
+            - podSelector:
+                matchLabels:
+                  app.kubernetes.io/name: kbatch-proxy
+          ports:
+            - protocol: TCP
+              port: 80
     memory:
       limit: 24G
       guarantee: 8G
@@ -43,6 +53,7 @@ jupyterhub:
       CULL_INTERVAL: "120"
       GH_SCOPED_CREDS_CLIENT_ID: Iv1.f4a7db20c671f599
       GH_SCOPED_CREDS_APP_URL: https://github.com/apps/gfts-jupyterhub
+      KBATCH_URL: http://kbatch-proxy
       AWS_ENDPOINT_URL_S3: "https://s3.gra.perf.cloud.ovh.net"
       AWS_DEFAULT_REGION: gra
       # JUPYTER_FS_BUCKETS: destine-gfts-data-lake,gfts-reference-data,gfts-ifremer
@@ -186,6 +197,11 @@ jupyterhub:
           
         c.KubeSpawner.pre_spawn_hook = load_creds
     loadRoles:
+      server:
+        scopes:
+          - access:servers!server
+          - users:activity!user
+          - access:services!service=kbatch
       management:
         scopes:
           - admin-ui
@@ -197,6 +213,13 @@ jupyterhub:
         users:
           - annefou
           - minrk
+      kbatch-users:
+        scopes:
+          - "access:services!service=kbatch"
+        users:
+          - minrk
+    services:
+      kbatch-proxy: {}
 
   scheduling:
     userScheduler:
@@ -314,3 +337,92 @@ dask-gateway:
 
         # shutdown idle clusters after one hour
         c.ClusterConfig.idle_timeout = 3600
+
+kbatch-proxy:
+  fullnameOverride: kbatch-proxy
+  image:
+    repository: ghcr.io/minrk/kbatch-proxy
+    tag: "gfts"
+    pullPolicy: Always
+  app:
+    # jupyterhub_service_prefix: /services/kbatch-proxy
+    # cannot use internal ip
+    # pending https://github.com/kbatch-dev/helm-chart/pull/6
+    jupyterhub_api_url: https://gfts.minrk.net/hub/api/
+    extra_env:
+      JUPYTERHUB_SERVICE_NAME: kbatch
+      KBATCH_JOB_TEMPLATE_FILE: /srv/job_template.yaml
+      KBATCH_PROFILE_FILE: /srv/profiles.yaml
+    extraFiles:
+      job_template:
+        mountPath: /srv/job_template.yaml
+        data:
+          apiVersion: batch/v1
+          kind: Job
+          metadata:
+            labels:
+              app.kubernetes.io/managed-by: kbatch
+          spec:
+            template:
+              metadata:
+                labels:
+                  app.kubernetes.io/managed-by: kbatch
+              spec:
+                affinity:
+                  nodeAffinity:
+                    requiredDuringSchedulingIgnoredDuringExecution:
+                      nodeSelectorTerms:
+                        - matchExpressions:
+                            - key: hub.jupyter.org/node-purpose
+                              operator: In
+                              values:
+                                - user
+      profiles:
+        mountPath: /srv/profiles.yaml
+        data:
+          default:
+            resources:
+              requests:
+                cpu: "2"
+                memory: "8G"
+              limits:
+                cpu: "2"
+                memory: "8G"
+          big60:
+            resources:
+              requests:
+                cpu: "7"
+                memory: "60G"
+              limits:
+                cpu: "8"
+                memory: "60G"
+          big120:
+            resources:
+              requests:
+                cpu: "14"
+                memory: "120G"
+              limits:
+                cpu: "15"
+                memory: "120G"
+          big240:
+            resources:
+              requests:
+                cpu: "29"
+                memory: "240G"
+              limits:
+                cpu: "30"
+                memory: "240G"
+          huge:
+            resources:
+              requests:
+                cpu: "59"
+                memory: "480G"
+              limits:
+                cpu: "60"
+                memory: "480G"
+            node_affinity_required:
+              - matchExpressions:
+                  - key: gfts.destination-earth.eu/size
+                    operator: In
+                    values:
+                      - big512

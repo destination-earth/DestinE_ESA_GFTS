@@ -1,0 +1,31 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kbatch-role
+rules:
+  - apiGroups: ["batch"]
+    resources: ["jobs"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+  - apiGroups: [""]
+    resources: ["namespaces"]
+    verbs: ["create", "get", "list", "delete"]
+
+  - apiGroups: [""]
+    resources: ["pods", "pods/log", "configmaps"]
+    verbs: ["get", "watch", "list", "create", "delete", "patch"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: kbatch
+subjects:
+  - kind: User
+    name: system:serviceaccount:{{ .Release.Namespace }}:kbatch-proxy
+    apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: kbatch-role
+  apiGroup: rbac.authorization.k8s.io
