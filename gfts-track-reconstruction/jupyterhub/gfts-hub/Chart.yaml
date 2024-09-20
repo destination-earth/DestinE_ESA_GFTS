@@ -14,6 +14,11 @@ dependencies:
     version: "2024.1.0"
     repository: https://helm.dask.org/
 
+  # kbatch
+  - name: kbatch-proxy
+    version: "0.4.2"
+    repository: https://kbatch-dev.github.io/helm-chart
+
   # ingress
   - name: ingress-nginx
     version: "4.9.1"
