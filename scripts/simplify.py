@@ -49,13 +49,16 @@ def simplify(tag):
     # that can be dropped in the loop. If done in one step this will grow fast.
     dfs = []
     for time in data.time:
-        if len(dfs) % 25 == 0:
-            logger.debug(f"Working on time {tag} {time.values}")
         grp = data.where(data.time == time, drop=True)
         df = grp.to_dataframe().dropna().reset_index()
         del df["x"]
         del df["y"]
         df = df.sort_values("states", ascending=False)
+        if len(dfs) % 25 == 0:
+            logger.debug(
+                f"Finished {len(dfs) + 1} timesteps for {tag} currently at {time.values}"
+            )
+
         dfs.append(df[:NR_OF_CELLS_PER_TIMESLICE])
 
     return pd.concat(dfs)
@@ -78,20 +81,16 @@ def to_geojson(df, tag):
 
 def to_parquet(df, tag):
     logger.debug(f"Writing parquet file for {tag}")
-    pq = df.copy()
 
-    pq["longitude"] = (pq["longitude"] * 1e6).astype("int32")
-    pq["latitude"] = (pq["latitude"] * 1e6).astype("int32")
+    # Convert variables to integer for better compression
+    df["longitude"] = (df["longitude"] * 1e6).astype("int32")
+    df["latitude"] = (df["latitude"] * 1e6).astype("int32")
+    max_value = df["states"].max()
+    df["states"] = (df["states"] / max_value * 65535).astype("uint16")
 
-    # Convert probability to integer
-    max_value = pq["states"].max()
-    pq["states"] = (pq["states"] / max_value * 65535).astype("uint16")
+    df = df.set_index(["time", "longitude", "latitude"])
 
-    pq = pq.set_index(["time", "longitude", "latitude"])
-
-    pq.to_parquet(f"data/{tag}.parquet")
-
-    df.to_parquet(f"data/{tag}_orig.parquet")
+    df.to_parquet(f"data/{tag}.parquet")
 
 
 def list_tags():
