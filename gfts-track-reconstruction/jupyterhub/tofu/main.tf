@@ -54,6 +54,9 @@ locals {
     "gfts-reference-data",
     "destine-gfts-data-lake",
   ])
+  
+  # users must appear in only one of these sets
+  # because each user can have exactly one policy
   s3_readonly_users = toset([
     "_default",
   ])
@@ -68,7 +71,6 @@ locals {
     "keewis",
   ])
   s3_ifremer_users = toset([
-    "annefou",
     "jmdelouis",
     "mwoillez",
     "marinerandon",
@@ -155,7 +157,7 @@ resource "ovh_cloud_project_user_s3_policy" "s3_admins" {
 }
 
 resource "ovh_cloud_project_user_s3_policy" "s3_users" {
-  for_each     = local.s3_users
+  for_each     = local.s3_readonly_users
   service_name = local.service_name
   user_id      = ovh_cloud_project_user.s3_users[each.key].id
   policy = jsonencode({
@@ -180,6 +182,15 @@ resource "ovh_cloud_project_user_s3_policy" "s3_ifremer_users" {
   policy = jsonencode({
     "Statement" : [
       {
+        "Sid" : "read",
+        "Effect" : "Allow",
+        "Action" : local.s3_readonly_action,
+        "Resource" : [
+          "arn:aws:s3:::${aws_s3_bucket.gfts-data-lake.id}/*",
+          "arn:aws:s3:::${aws_s3_bucket.gfts-reference-data.id}/*",
+        ]
+      },
+      {
         "Sid" : "Admin",
         "Effect" : "Allow",
         "Action" : local.s3_admin_action,
@@ -197,6 +208,15 @@ resource "ovh_cloud_project_user_s3_policy" "s3_ifremer_developers" {
   user_id      = ovh_cloud_project_user.s3_users[each.key].id
   policy = jsonencode({
     "Statement" : [
+      {
+        "Sid" : "read",
+        "Effect" : "Allow",
+        "Action" : local.s3_readonly_action,
+        "Resource" : [
+          "arn:aws:s3:::${aws_s3_bucket.gfts-data-lake.id}/*",
+          "arn:aws:s3:::${aws_s3_bucket.gfts-reference-data.id}/*",
+        ]
+      },
       {
         "Sid" : "Admin",
         "Effect" : "Allow",
