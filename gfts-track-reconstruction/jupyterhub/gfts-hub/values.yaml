@@ -301,6 +301,7 @@ prometheus:
         - hosts:
             - prometheus.gfts.minrk.net
           secretName: tls-prometheus
+    retention: 356d
   kube-state-metrics:
     metricLabelsAllowlist:
       - pods=[app,component]
