@@ -1,18 +1,20 @@
+import io
 import logging
-
-import pandas as pd
-import geopandas as gpd
-import xarray as xr
-import boto3
-import s3fs
 from multiprocessing import Pool
+
+import boto3
+import geopandas as gpd
+import pandas as pd
+import s3fs
+import xarray as xr
 
 logging.basicConfig()
 
 logger = logging.getLogger("gfts")
 logger.setLevel(logging.DEBUG)
 ENDPOINT = "https://s3.gra.perf.cloud.ovh.net/"
-BUCKET = "gfts-ifremer"
+SOURCE_BUCKET = "gfts-ifremer"
+TARGET_BUCKET = "destine-gfts-visualisation-data"
 PREFIX = "tags/bargip/tracks_4/"
 PROFILE = "ovh_gfts"
 REGION = "gra"
@@ -23,10 +25,18 @@ POOL = 10
 boto3.setup_default_session(profile_name=PROFILE)
 
 
-def simplify(tag):
-    logger.debug(f"Opening tag {tag}")
+def simplify_timestep(data, time):
+    grp = data.copy().where(data.time == time, drop=True)
+    df = grp.to_dataframe().dropna().reset_index()
+    del df["x"]
+    del df["y"]
+    df = df.sort_values("states", ascending=False)
 
-    fsg = s3fs.S3FileSystem(
+    return df[:NR_OF_CELLS_PER_TIMESLICE]
+
+
+def get_filesystem():
+    return s3fs.S3FileSystem(
         anon=False,
         profile=PROFILE,
         client_kwargs={
@@ -34,9 +44,14 @@ def simplify(tag):
             "region_name": REGION,
         },
     )
+
+
+def simplify(tag):
+    logger.debug(f"Opening tag {tag}")
+
     store = s3fs.S3Map(
-        root=f"s3://{BUCKET}/{PREFIX}{tag}/states.zarr",
-        s3=fsg,
+        root=f"s3://{SOURCE_BUCKET}/{PREFIX}{tag}/states.zarr",
+        s3=get_filesystem(),
         check=False,
     )
     data = xr.open_zarr(store=store)
@@ -49,18 +64,13 @@ def simplify(tag):
     # that can be dropped in the loop. If done in one step this will grow fast.
     dfs = []
     for time in data.time:
-        grp = data.where(data.time == time, drop=True)
-        df = grp.to_dataframe().dropna().reset_index()
-        del df["x"]
-        del df["y"]
-        df = df.sort_values("states", ascending=False)
+        dfs.append(simplify_timestep(data, time))
         if len(dfs) % 25 == 0:
             logger.debug(
                 f"Finished {len(dfs) + 1} timesteps for {tag} currently at {time.values}"
             )
-
-        dfs.append(df[:NR_OF_CELLS_PER_TIMESLICE])
-
+        if len(dfs) == 2:
+            break
     return pd.concat(dfs)
 
 
@@ -76,7 +86,13 @@ def to_geojson(df, tag):
         geometry=geom,
         crs="EPSG:4326",
     )
-    track.to_file(f"data/{tag}.geojson", driver="GeoJSON")
+    with io.BytesIO() as buf:
+        track.to_file(buf, driver="GeoJSON")
+        buf.seek(0)
+        with get_filesystem().open(
+            f"s3://destine-gfts-visualisation-data/{PREFIX}{tag}/{tag}.geojson", "wb"
+        ) as fl:
+            fl.write(buf.read())
 
 
 def to_parquet(df, tag):
@@ -89,14 +105,18 @@ def to_parquet(df, tag):
     df["states"] = (df["states"] / max_value * 65535).astype("uint16")
 
     df = df.set_index(["time", "longitude", "latitude"])
-
-    df.to_parquet(f"data/{tag}.parquet")
+    with get_filesystem().open(
+        f"s3://destine-gfts-visualisation-data/{PREFIX}{tag}/{tag}.parquet", "wb"
+    ) as fl:
+        df.to_parquet(fl)
 
 
 def list_tags():
     s3 = boto3.resource(service_name="s3", endpoint_url=ENDPOINT)
 
-    folders = s3.meta.client.list_objects(Bucket=BUCKET, Prefix=PREFIX, Delimiter="/")
+    folders = s3.meta.client.list_objects(
+        Bucket=SOURCE_BUCKET, Prefix=PREFIX, Delimiter="/"
+    )
     tags = [dat["Prefix"].split("/")[-2] for dat in folders["CommonPrefixes"]]
     return tags
 
@@ -111,8 +131,12 @@ def main():
     logger.debug("Listing tags")
     tags = list_tags()
 
-    with Pool(POOL) as pl:
-        pl.map(process_tag, tags)
+    if POOL == 1:
+        for tag in tags:
+            process_tag(tag)
+    else:
+        with Pool(POOL) as pl:
+            pl.map(process_tag, tags)
 
 
 if __name__ == "__main__":
