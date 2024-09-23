@@ -54,19 +54,11 @@ locals {
     "gfts-reference-data",
     "destine-gfts-data-lake",
   ])
-  s3_users = toset([
-    "annefou",
-    "todaka",
-    "minrk",
-    "tinaok",
-    "jmdelouis",
-    "mwoillez",
-    "marinerandon",
-    "aderrien7",
-    "keewis",
+  
+  # users must appear in only one of these sets
+  # because each user can have exactly one policy
+  s3_readonly_users = toset([
     "_default",
-    "danielfdsilva",
-    "quentinmaz",
   ])
   s3_admins = toset([
     "annefou",
@@ -79,13 +71,25 @@ locals {
     "keewis",
   ])
   s3_ifremer_users = toset([
-    "annefou",
     "jmdelouis",
     "mwoillez",
     "marinerandon",
     "danielfdsilva",
     "quentinmaz",
   ])
+  s3_users = setunion(local.s3_readonly_users, local.s3_admins, local.s3_ifremer_developers, local.s3_ifremer_users)
+  # the s3 policy Action for read-only access
+  s3_readonly_action = [
+    "s3:GetObject", "s3:ListBucket", "s3:GetBucketLocation",
+  ]
+  # the s3 policy Action for FULL_CONTROL read/write access
+  s3_admin_action = [
+    "s3:GetObject", "s3:PutObject", "s3:ListBucket",
+    "s3:DeleteObject", "s3:GetObjectAcl", "s3:PutObjectAcl",
+    "s3:GetObjectTagging",
+    "s3:ListMultipartUploadParts", "s3:ListBucketMultipartUploads",
+    "s3:AbortMultipartUpload", "s3:GetBucketLocation",
+  ]
 }
 
 ####### s3 buckets #######
@@ -141,14 +145,9 @@ resource "ovh_cloud_project_user_s3_policy" "s3_admins" {
   policy = jsonencode({
     "Statement" : [
       {
-        "Sid" : "import-gfts-data",
+        "Sid" : "admin",
         "Effect" : "Allow",
-        "Action" : [
-          "s3:GetObject", "s3:PutObject", "s3:ListBucket",
-          "s3:DeleteObject",
-          "s3:ListMultipartUploadParts", "s3:ListBucketMultipartUploads",
-          "s3:AbortMultipartUpload", "s3:GetBucketLocation",
-        ],
+        "Action" : local.s3_admin_action,
         "Resource" : [
           "arn:aws:s3:::*",
         ]
@@ -158,7 +157,7 @@ resource "ovh_cloud_project_user_s3_policy" "s3_admins" {
 }
 
 resource "ovh_cloud_project_user_s3_policy" "s3_users" {
-  for_each     = local.s3_users
+  for_each     = local.s3_readonly_users
   service_name = local.service_name
   user_id      = ovh_cloud_project_user.s3_users[each.key].id
   policy = jsonencode({
@@ -166,12 +165,9 @@ resource "ovh_cloud_project_user_s3_policy" "s3_users" {
       {
         "Sid" : "read",
         "Effect" : "Allow",
-        "Action" : [
-          "s3:GetObject", "s3:ListBucket", "s3:GetBucketLocation",
-        ],
+        "Action" : local.s3_readonly_action,
         "Resource" : [
           "arn:aws:s3:::${aws_s3_bucket.gfts-data-lake.id}/*",
-          "arn:aws:s3:::${aws_s3_bucket.gfts-ifremer.id}/*",
           "arn:aws:s3:::${aws_s3_bucket.gfts-reference-data.id}/*",
         ]
       },
@@ -179,6 +175,60 @@ resource "ovh_cloud_project_user_s3_policy" "s3_users" {
   })
 }
 
+resource "ovh_cloud_project_user_s3_policy" "s3_ifremer_users" {
+  for_each     = local.s3_ifremer_users
+  service_name = local.service_name
+  user_id      = ovh_cloud_project_user.s3_users[each.key].id
+  policy = jsonencode({
+    "Statement" : [
+      {
+        "Sid" : "read",
+        "Effect" : "Allow",
+        "Action" : local.s3_readonly_action,
+        "Resource" : [
+          "arn:aws:s3:::${aws_s3_bucket.gfts-data-lake.id}/*",
+          "arn:aws:s3:::${aws_s3_bucket.gfts-reference-data.id}/*",
+        ]
+      },
+      {
+        "Sid" : "Admin",
+        "Effect" : "Allow",
+        "Action" : local.s3_admin_action,
+        "Resource" : [
+          "arn:aws:s3:::${aws_s3_bucket.gfts-ifremer.id}/*",
+        ]
+      },
+    ]
+  })
+}
+
+resource "ovh_cloud_project_user_s3_policy" "s3_ifremer_developers" {
+  for_each     = setunion(local.s3_ifremer_developers)
+  service_name = local.service_name
+  user_id      = ovh_cloud_project_user.s3_users[each.key].id
+  policy = jsonencode({
+    "Statement" : [
+      {
+        "Sid" : "read",
+        "Effect" : "Allow",
+        "Action" : local.s3_readonly_action,
+        "Resource" : [
+          "arn:aws:s3:::${aws_s3_bucket.gfts-data-lake.id}/*",
+          "arn:aws:s3:::${aws_s3_bucket.gfts-reference-data.id}/*",
+        ]
+      },
+      {
+        "Sid" : "Admin",
+        "Effect" : "Allow",
+        "Action" : local.s3_admin_action,
+        "Resource" : [
+          "arn:aws:s3:::${aws_s3_bucket.gfts-ifremer.id}/*",
+          "arn:aws:s3:::${aws_s3_bucket.gfts-reference-data.id}/*",
+        ]
+      },
+    ]
+  })
+}
 
 data "aws_canonical_user_id" "current" {}
 
