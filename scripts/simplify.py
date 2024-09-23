@@ -69,8 +69,6 @@ def simplify(tag):
             logger.debug(
                 f"Finished {len(dfs) + 1} timesteps for {tag} currently at {time.values}"
             )
-        if len(dfs) == 2:
-            break
     return pd.concat(dfs)
 
 
