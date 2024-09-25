@@ -3,6 +3,7 @@
 # to install with pip, use requirements.txt
 altair
 cdshealpix
+copernicusmarine
 dask-image
 eccodes>=2.35.0
 fastparquet
