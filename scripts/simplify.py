@@ -51,27 +51,7 @@ def get_filesystem():
     )
 
 
-def simplify(tag):
-    logger.debug(f"Opening tag {tag}")
-
-    store = s3fs.S3Map(
-        root=f"s3://{SOURCE_BUCKET}/{PREFIX}{tag}/states.zarr",
-        s3=get_filesystem(),
-        check=False,
-    )
-    fs = get_filesystem()
-    fs.open(f"s3://{SOURCE_BUCKET}/{PREFIX}{tag}/states.zarr")
-    data = xr.open_zarr(store)
-
-    # Prepare data for processing
-    vars_to_keep = ["states", "latitude", "longitude", "time"]
-    vars_to_drop = [var for var in data.variables if var not in vars_to_keep]
-    data = data.drop_vars(vars_to_drop)
-    data = data.stack(c=("x", "y"))
-    data = data.reset_index("c")
-    data = data.drop_vars(["x", "y"])
-    data = data.chunk({"time": 1, "c": -1})
-
+def get_template(data):
     array = np.zeros((data.sizes["time"], NR_OF_CELLS_PER_TIMESLICE))
     template = xr.Dataset(
         data_vars=dict(
@@ -81,7 +61,37 @@ def simplify(tag):
         ),
         coords={"time": data.time},
     )
-    template = template.chunk({"time": 1, "c": -1})
+    return template.chunk({"time": 1, "c": -1})
+
+
+def prepare_data(data):
+    vars_to_keep = ["states", "latitude", "longitude", "time"]
+    vars_to_drop = [var for var in data.variables if var not in vars_to_keep]
+    data = data.drop_vars(vars_to_drop)
+    data = data.stack(c=("x", "y"))
+    data = data.reset_index("c")
+    data = data.drop_vars(["x", "y"])
+    data = data.chunk({"time": 1, "c": -1})
+    return data
+
+
+def open_dataset(tag):
+    logger.debug(f"Opening tag {tag}")
+
+    store = s3fs.S3Map(
+        root=f"s3://{SOURCE_BUCKET}/{PREFIX}{tag}/states.zarr",
+        s3=get_filesystem(),
+        check=False,
+    )
+    fs = get_filesystem()
+    fs.open(f"s3://{SOURCE_BUCKET}/{PREFIX}{tag}/states.zarr")
+    return xr.open_zarr(store)
+
+
+def simplify(tag):
+    data = open_dataset(tag)
+    data = prepare_data(data)
+    template = get_template(data)
 
     top_values = data.map_blocks(get_top_values, template=template).compute()
 
