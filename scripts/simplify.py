@@ -1,6 +1,5 @@
 import io
 import logging
-from multiprocessing import Pool
 
 import boto3
 import geopandas as gpd
@@ -23,16 +22,6 @@ POOL = 1
 
 
 boto3.setup_default_session(profile_name=PROFILE)
-
-
-def simplify_timestep(data, time):
-    grp = data.where(data.time == time, drop=True)
-    df = grp.to_dataframe().dropna().reset_index()
-    del df["x"]
-    del df["y"]
-    df = df.sort_values("states", ascending=False)
-
-    return df[:NR_OF_CELLS_PER_TIMESLICE]
 
 
 def get_top_values(time_slice):
@@ -155,13 +144,8 @@ def process_tag(tag):
 def main():
     logger.debug("Listing tags")
     tags = list_tags()
-
-    if POOL == 1:
-        for tag in tags:
-            process_tag(tag)
-    else:
-        with Pool(POOL) as pl:
-            pl.map(process_tag, tags)
+    for tag in tags:
+        process_tag(tag)
 
 
 if __name__ == "__main__":
