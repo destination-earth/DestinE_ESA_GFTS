@@ -93,7 +93,7 @@ def simplify(tag):
     data = prepare_data(data)
     template = get_template(data)
 
-    top_values = data.map_blocks(get_top_values, template=template).compute()
+    top_values = data.map_blocks(get_top_values, template=template)
 
     return top_values.to_dataframe().dropna().reset_index()
 
