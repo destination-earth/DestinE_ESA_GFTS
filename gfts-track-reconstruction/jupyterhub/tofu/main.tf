@@ -485,9 +485,11 @@ resource "ovh_cloud_project_kube_nodepool" "user-big" {
   kube_id      = ovh_cloud_project_kube.cluster.id
   name         = "user-big-202405"
   # r3-512 is 64 core, 512 GB
-  # quota limits us to one of these
+  # current quota is 512 CPU, 4 TB RAM
+  # which is slightly less than 8 of these
+  # assuming nothing else is running
   flavor_name = "r3-512"
-  max_nodes   = 1
+  max_nodes   = 6
   min_nodes   = 0
   autoscale   = true
   template {
