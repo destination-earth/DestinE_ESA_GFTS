@@ -151,10 +151,25 @@ def process_tag(tag):
     to_parquet(df=df, tag=tag)
 
 
+def already_processed(tag):
+    return get_filesystem().exists(
+        f"s3://destine-gfts-visualisation-data/{PREFIX}{tag}/{tag}.geojson"
+    )
+
+
+def has_states(tag):
+    return get_filesystem().exists(f"s3://{SOURCE_BUCKET}/{PREFIX}{tag}/states.zarr")
+
+
 def main():
     logger.debug("Listing tags")
     tags = list_tags()
     for tag in tags:
+        if already_processed(tag):
+            continue
+        if not has_states(tag):
+            logger.debug(f"No states.zarr file found for {tag}")
+            continue
         process_tag(tag)
 
 
