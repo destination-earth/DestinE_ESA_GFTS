@@ -4,9 +4,9 @@ from multiprocessing import Pool
 
 import boto3
 import geopandas as gpd
-import pandas as pd
 import s3fs
 import xarray as xr
+import numpy as np
 
 logging.basicConfig()
 
@@ -19,20 +19,36 @@ PREFIX = "tags/bargip/tracks_4/"
 PROFILE = "ovh_gfts"
 REGION = "gra"
 NR_OF_CELLS_PER_TIMESLICE = 200
-POOL = 10
+POOL = 1
 
 
 boto3.setup_default_session(profile_name=PROFILE)
 
 
 def simplify_timestep(data, time):
-    grp = data.copy().where(data.time == time, drop=True)
+    grp = data.where(data.time == time, drop=True)
     df = grp.to_dataframe().dropna().reset_index()
     del df["x"]
     del df["y"]
     df = df.sort_values("states", ascending=False)
 
     return df[:NR_OF_CELLS_PER_TIMESLICE]
+
+
+def get_top_values(time_slice):
+    time_slice = time_slice.squeeze()
+    time_slice = time_slice.sortby("states", ascending=False)
+    size = time_slice.sizes["c"]
+    nodata_count = int(time_slice.states.isnull().sum().values)
+    # Ensure we always slice 200 cells, even if less than 100 have data in them.
+    if nodata_count + NR_OF_CELLS_PER_TIMESLICE > size:
+        target_slice = slice(size - NR_OF_CELLS_PER_TIMESLICE, size)
+    else:
+        target_slice = slice(nodata_count, nodata_count + NR_OF_CELLS_PER_TIMESLICE)
+    time_slice = time_slice.isel(c=target_slice)
+    time_slice = time_slice.reset_coords(["latitude", "longitude"])
+    time_slice = time_slice.expand_dims("time", axis=0)
+    return time_slice
 
 
 def get_filesystem():
@@ -54,22 +70,33 @@ def simplify(tag):
         s3=get_filesystem(),
         check=False,
     )
-    data = xr.open_zarr(store=store)
+    fs = get_filesystem()
+    fs.open(f"s3://{SOURCE_BUCKET}/{PREFIX}{tag}/states.zarr")
+    data = xr.open_zarr(store)
 
+    # Prepare data for processing
     vars_to_keep = ["states", "latitude", "longitude", "time"]
     vars_to_drop = [var for var in data.variables if var not in vars_to_keep]
     data = data.drop_vars(vars_to_drop)
+    data = data.stack(c=("x", "y"))
+    data = data.reset_index("c")
+    data = data.drop_vars(["x", "y"])
+    data = data.chunk({"time": 1, "c": -1})
 
-    # Do one by one to save memory. Most timestamps have a lot of nodata
-    # that can be dropped in the loop. If done in one step this will grow fast.
-    dfs = []
-    for time in data.time:
-        dfs.append(simplify_timestep(data, time))
-        if len(dfs) % 25 == 0:
-            logger.debug(
-                f"Finished {len(dfs) + 1} timesteps for {tag} currently at {time.values}"
-            )
-    return pd.concat(dfs)
+    array = np.zeros((data.sizes["time"], NR_OF_CELLS_PER_TIMESLICE))
+    template = xr.Dataset(
+        data_vars=dict(
+            states=(["time", "c"], array),
+            latitude=(["time", "c"], array),
+            longitude=(["time", "c"], array),
+        ),
+        coords={"time": data.time},
+    )
+    template = template.chunk({"time": 1, "c": -1})
+
+    top_values = data.map_blocks(get_top_values, template=template).compute()
+
+    return top_values.to_dataframe().dropna().reset_index()
 
 
 def to_geojson(df, tag):
