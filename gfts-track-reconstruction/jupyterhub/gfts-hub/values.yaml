@@ -89,6 +89,13 @@ jupyterhub:
                   mem_limit: 120e9
                   cpu_guarantee: 15
                   cpu_limit: 15
+              big160:
+                display_name: 160 GB / 20 CPU
+                kubespawner_override:
+                  mem_guarantee: 160e9
+                  mem_limit: 160e9
+                  cpu_guarantee: 20
+                  cpu_limit: 20
               big240:
                 display_name: 240 GB / 30 CPU
                 kubespawner_override:
