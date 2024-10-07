@@ -362,6 +362,11 @@ kbatch-proxy:
       JUPYTERHUB_SERVICE_NAME: kbatch
       KBATCH_JOB_TEMPLATE_FILE: /srv/job_template.yaml
       KBATCH_PROFILE_FILE: /srv/profiles.yaml
+      # the time before a job is deleted after finishing
+      # ideally, we use a mutating webhook
+      # to keep failures for longer than success
+      # default: 1 week
+      KBATCH_JOB_TTL_SECONDS_AFTER_FINISHED: 604800
     extraFiles:
       job_template:
         mountPath: /srv/job_template.yaml
@@ -372,11 +377,6 @@ kbatch-proxy:
             labels:
               app.kubernetes.io/managed-by: kbatch
           spec:
-            # the time before a job is deleted after finishing
-            # ideally, we use a mutating webhook
-            # to keep failures for longer than success
-            # default: 1 week
-            ttlSecondsAfterFinished: 604800
             template:
               metadata:
                 labels:
