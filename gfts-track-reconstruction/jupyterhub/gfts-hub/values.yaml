@@ -418,6 +418,14 @@ kbatch-proxy:
               limits:
                 cpu: "15"
                 memory: "120G"
+          big160:
+            resources:
+              requests:
+                cpu: "20"
+                memory: "160G"
+              limits:
+                cpu: "20"
+                memory: "160G"
           big240:
             resources:
               requests:
