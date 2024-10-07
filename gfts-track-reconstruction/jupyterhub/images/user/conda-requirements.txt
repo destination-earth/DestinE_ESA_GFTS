@@ -8,6 +8,7 @@ dask-image
 eccodes>=2.35.0
 fastparquet
 healpy
+jq
 papermill
 pixi
 pre-commit
