@@ -13,7 +13,7 @@ rules:
     verbs: ["create", "get", "list", "delete"]
 
   - apiGroups: [""]
-    resources: ["pods", "pods/log", "configmaps"]
+    resources: ["pods", "pods/log", "configmaps", "secrets"]
     verbs: ["get", "watch", "list", "create", "delete", "patch"]
 
 ---
