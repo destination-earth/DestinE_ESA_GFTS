@@ -365,6 +365,11 @@ kbatch-proxy:
             labels:
               app.kubernetes.io/managed-by: kbatch
           spec:
+            # the time before a job is deleted after finishing
+            # ideally, we use a mutating webhook
+            # to keep failures for longer than success
+            # default: 1 week
+            ttlSecondsAfterFinished: 604800
             template:
               metadata:
                 labels:
