@@ -226,6 +226,8 @@ jupyterhub:
           - "access:services!service=kbatch"
         users:
           - minrk
+          - annefou
+          - tinaok
     services:
       kbatch-proxy: {}
 
