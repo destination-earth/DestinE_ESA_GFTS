@@ -179,6 +179,7 @@ jupyterhub:
           - marinerandon
           - keewis
           - quentinmaz
+          - davidcasalsVLIZ
       KubeSpawner:
         pod_security_context:
           fsGroup: 100
