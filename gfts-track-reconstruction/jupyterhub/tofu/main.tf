@@ -50,6 +50,7 @@ locals {
   s3_region      = "gra"
   s3_endpoint    = "s3.gra.perf.cloud.ovh.net"
   s3_buckets = toset([
+    "gfts-vliz",
     "gfts-ifremer",
     "gfts-reference-data",
     "destine-gfts-data-lake",
@@ -77,7 +78,10 @@ locals {
     "danielfdsilva",
     "quentinmaz",
   ])
-  s3_users = setunion(local.s3_readonly_users, local.s3_admins, local.s3_ifremer_developers, local.s3_ifremer_users)
+  s3_vliz_users = toset([
+    "davidcasalsvliz",
+  ])
+  s3_users = setunion(local.s3_readonly_users, local.s3_admins, local.s3_vliz_users, local.s3_ifremer_developers, local.s3_ifremer_users)
   # the s3 policy Action for read-only access
   s3_readonly_action = [
     "s3:GetObject", "s3:ListBucket", "s3:GetBucketLocation",
@@ -254,6 +258,36 @@ resource "ovh_cloud_project_user_s3_policy" "s3_ifremer_developers" {
   })
 }
 
+resource "ovh_cloud_project_user_s3_policy" "s3_vliz_users" {
+  for_each     = local.s3_vliz_users
+  service_name = local.service_name
+  user_id      = ovh_cloud_project_user.s3_users[each.key].id
+  policy = jsonencode({
+    "Statement" : [
+      {
+        "Sid" : "read",
+        "Effect" : "Allow",
+        "Action" : local.s3_readonly_action,
+        "Resource" : [
+          "arn:aws:s3:::${aws_s3_bucket.gfts-data-lake.id}",
+          "arn:aws:s3:::${aws_s3_bucket.gfts-data-lake.id}/*",
+          "arn:aws:s3:::${aws_s3_bucket.gfts-reference-data.id}",
+          "arn:aws:s3:::${aws_s3_bucket.gfts-reference-data.id}/*",
+        ]
+      },
+      {
+        "Sid" : "Admin",
+        "Effect" : "Allow",
+        "Action" : local.s3_admin_action,
+        "Resource" : [
+          "arn:aws:s3:::${aws_s3_bucket.gfts-vliz.id}",
+          "arn:aws:s3:::${aws_s3_bucket.gfts-vliz.id}/*",
+        ]
+      },
+      local.s3_default_deny,
+    ]
+  })
+}
 data "aws_canonical_user_id" "current" {}
 
 
@@ -267,6 +301,10 @@ resource "aws_s3_bucket" "gfts-reference-data" {
 
 resource "aws_s3_bucket" "gfts-ifremer" {
   bucket = "gfts-ifremer"
+}
+
+resource "aws_s3_bucket" "gfts-vliz" {
+  bucket = "gfts-vliz"
 }
 
 resource "aws_s3_bucket_acl" "gfts-data-lake" {
@@ -332,6 +370,17 @@ resource "aws_s3_bucket_acl" "gfts-reference-data" {
       }
     }
 
+    dynamic "grant" {
+      for_each = local.s3_vliz_users
+      content {
+        grantee {
+          id   = "${local.os_tenant_name}:${ovh_cloud_project_user.s3_users[grant.value].username}"
+          type = "CanonicalUser"
+        }
+        permission = "READ"
+      }
+    }
+
     owner {
       id = data.aws_canonical_user_id.current.id
     }
@@ -370,6 +419,26 @@ resource "aws_s3_bucket_acl" "gfts-ifremer" {
   }
 }
 
+
+resource "aws_s3_bucket_acl" "gfts-vliz" {
+  bucket = aws_s3_bucket.gfts-vliz.id
+  access_control_policy {
+    dynamic "grant" {
+      for_each = setunion(local.s3_admins, local.s3_vliz_users)
+      content {
+        grantee {
+          id   = "${local.os_tenant_name}:${ovh_cloud_project_user.s3_users[grant.value].username}"
+          type = "CanonicalUser"
+        }
+        permission = "FULL_CONTROL"
+      }
+    }
+
+    owner {
+      id = data.aws_canonical_user_id.current.id
+    }
+  }
+}
 
 output "s3_credentials" {
   description = "s3 credentials for gfts import"
