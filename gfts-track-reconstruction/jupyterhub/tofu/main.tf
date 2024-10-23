@@ -613,6 +613,7 @@ provider "harbor" {
 
 resource "harbor_project" "registry" {
   name = "gfts"
+  public = true
 }
 
 resource "harbor_robot_account" "builder" {
