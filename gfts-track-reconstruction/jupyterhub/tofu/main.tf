@@ -288,6 +288,15 @@ resource "aws_s3_bucket_acl" "gfts-reference-data" {
       }
     }
 
+    # everyone authenticated can read reference data
+    grant {
+      grantee {
+        type = "Group"
+        uri  = "http://acs.amazonaws.com/groups/global/AuthenticatedUsers"
+      }
+      permission = "READ"
+    }
+
     dynamic "grant" {
       for_each = local.s3_ifremer_users
       content {
