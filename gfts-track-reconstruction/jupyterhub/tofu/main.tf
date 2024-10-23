@@ -67,6 +67,7 @@ locals {
     "tinaok",
     "minrk",
   ])
+
   s3_ifremer_developers = toset([
     "aderrien7",
     "keewis",
@@ -94,7 +95,19 @@ locals {
     "s3:ListMultipartUploadParts", "s3:ListBucketMultipartUploads",
     "s3:AbortMultipartUpload", "s3:GetBucketLocation",
   ]
-  
+
+  # everyone can read these buckets
+  s3_read_public = {
+    "Sid" : "Admin",
+    "Effect" : "Allow",
+    "Action" : local.s3_readonly_action,
+    "Resource" : [
+      "arn:aws:s3:::${aws_s3_bucket.gfts-data-lake.id}",
+      "arn:aws:s3:::${aws_s3_bucket.gfts-data-lake.id}/*",
+      "arn:aws:s3:::${aws_s3_bucket.gfts-reference-data.id}",
+      "arn:aws:s3:::${aws_s3_bucket.gfts-reference-data.id}/*",
+    ]
+  }
   # default-deny policy
   # disallows bucket creation
   s3_default_deny = {
@@ -106,6 +119,14 @@ locals {
     ],
     "Resource" : ["arn:aws:s3:::*"]
   }
+
+  # default policy:
+  # read access to data lake, reference data
+  # and deny creation
+  s3_default_policy = [
+    local.s3_read_public,
+    local.s3_default_deny,
+  ]
 }
 
 ####### s3 buckets #######
@@ -177,9 +198,7 @@ resource "ovh_cloud_project_user_s3_policy" "s3_users" {
   service_name = local.service_name
   user_id      = ovh_cloud_project_user.s3_users[each.key].id
   policy = jsonencode({
-    "Statement" : [
-      local.s3_default_deny,
-    ]
+    "Statement" : local.s3_default_policy,
   })
 }
 
@@ -188,7 +207,7 @@ resource "ovh_cloud_project_user_s3_policy" "s3_ifremer_users" {
   service_name = local.service_name
   user_id      = ovh_cloud_project_user.s3_users[each.key].id
   policy = jsonencode({
-    "Statement" : [
+    "Statement" : concat([
       {
         "Sid" : "Admin",
         "Effect" : "Allow",
@@ -198,8 +217,7 @@ resource "ovh_cloud_project_user_s3_policy" "s3_ifremer_users" {
           "arn:aws:s3:::${aws_s3_bucket.gfts-ifremer.id}/*",
         ]
       },
-      local.s3_default_deny,
-    ]
+    ], local.s3_default_policy)
   })
 }
 
@@ -208,7 +226,7 @@ resource "ovh_cloud_project_user_s3_policy" "s3_ifremer_developers" {
   service_name = local.service_name
   user_id      = ovh_cloud_project_user.s3_users[each.key].id
   policy = jsonencode({
-    "Statement" : [
+    "Statement" : concat([
       {
         "Sid" : "Admin",
         "Effect" : "Allow",
@@ -220,8 +238,7 @@ resource "ovh_cloud_project_user_s3_policy" "s3_ifremer_developers" {
           "arn:aws:s3:::${aws_s3_bucket.gfts-reference-data.id}/*",
         ]
       },
-      local.s3_default_deny,
-    ]
+    ], local.s3_default_policy)
   })
 }
 
@@ -230,7 +247,7 @@ resource "ovh_cloud_project_user_s3_policy" "s3_vliz_users" {
   service_name = local.service_name
   user_id      = ovh_cloud_project_user.s3_users[each.key].id
   policy = jsonencode({
-    "Statement" : [
+    "Statement" : concat([
       {
         "Sid" : "Admin",
         "Effect" : "Allow",
@@ -240,8 +257,7 @@ resource "ovh_cloud_project_user_s3_policy" "s3_vliz_users" {
           "arn:aws:s3:::${aws_s3_bucket.gfts-vliz.id}/*",
         ]
       },
-      local.s3_default_deny,
-    ]
+    ], local.s3_default_policy)
   })
 }
 data "aws_canonical_user_id" "current" {}
@@ -266,17 +282,6 @@ resource "aws_s3_bucket" "gfts-vliz" {
 resource "aws_s3_bucket_acl" "gfts-data-lake" {
   bucket = aws_s3_bucket.gfts-data-lake.id
   access_control_policy {
-    dynamic "grant" {
-      for_each = local.s3_admins
-      content {
-        grantee {
-          id   = "${local.os_tenant_name}:${ovh_cloud_project_user.s3_users[grant.value].username}"
-          type = "CanonicalUser"
-        }
-        permission = "FULL_CONTROL"
-      }
-    }
-
     # everyone authenticated can read
     grant {
       grantee {
@@ -295,17 +300,6 @@ resource "aws_s3_bucket_acl" "gfts-data-lake" {
 resource "aws_s3_bucket_acl" "gfts-reference-data" {
   bucket = aws_s3_bucket.gfts-reference-data.id
   access_control_policy {
-    dynamic "grant" {
-      for_each = setunion(local.s3_admins, local.s3_ifremer_developers)
-      content {
-        grantee {
-          id   = "${local.os_tenant_name}:${ovh_cloud_project_user.s3_users[grant.value].username}"
-          type = "CanonicalUser"
-        }
-        permission = "FULL_CONTROL"
-      }
-    }
-
     # everyone authenticated can read reference data
     grant {
       grantee {
@@ -313,71 +307,6 @@ resource "aws_s3_bucket_acl" "gfts-reference-data" {
         uri  = "http://acs.amazonaws.com/groups/global/AuthenticatedUsers"
       }
       permission = "READ"
-    }
-
-    dynamic "grant" {
-      for_each = local.s3_ifremer_users
-      content {
-        grantee {
-          id   = "${local.os_tenant_name}:${ovh_cloud_project_user.s3_users[grant.value].username}"
-          type = "CanonicalUser"
-        }
-        permission = "READ"
-      }
-    }
-
-    dynamic "grant" {
-      for_each = local.s3_vliz_users
-      content {
-        grantee {
-          id   = "${local.os_tenant_name}:${ovh_cloud_project_user.s3_users[grant.value].username}"
-          type = "CanonicalUser"
-        }
-        permission = "READ"
-      }
-    }
-
-    owner {
-      id = data.aws_canonical_user_id.current.id
-    }
-  }
-}
-
-
-resource "aws_s3_bucket_acl" "gfts-ifremer" {
-  bucket = aws_s3_bucket.gfts-ifremer.id
-  access_control_policy {
-
-    dynamic "grant" {
-      for_each = setunion(local.s3_admins, local.s3_ifremer_developers, local.s3_ifremer_users)
-      content {
-        grantee {
-          id   = "${local.os_tenant_name}:${ovh_cloud_project_user.s3_users[grant.value].username}"
-          type = "CanonicalUser"
-        }
-        permission = "FULL_CONTROL"
-      }
-    }
-
-    owner {
-      id = data.aws_canonical_user_id.current.id
-    }
-  }
-}
-
-
-resource "aws_s3_bucket_acl" "gfts-vliz" {
-  bucket = aws_s3_bucket.gfts-vliz.id
-  access_control_policy {
-    dynamic "grant" {
-      for_each = setunion(local.s3_admins, local.s3_vliz_users)
-      content {
-        grantee {
-          id   = "${local.os_tenant_name}:${ovh_cloud_project_user.s3_users[grant.value].username}"
-          type = "CanonicalUser"
-        }
-        permission = "FULL_CONTROL"
-      }
     }
 
     owner {
@@ -660,7 +589,7 @@ provider "harbor" {
 }
 
 resource "harbor_project" "registry" {
-  name = "gfts"
+  name   = "gfts"
   public = true
 }
 
