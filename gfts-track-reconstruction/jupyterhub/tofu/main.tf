@@ -55,7 +55,7 @@ locals {
     "gfts-reference-data",
     "destine-gfts-data-lake",
   ])
-  
+
   # users must appear in only one of these sets
   # because each user can have exactly one policy
   s3_readonly_users = toset([
@@ -94,6 +94,18 @@ locals {
     "s3:ListMultipartUploadParts", "s3:ListBucketMultipartUploads",
     "s3:AbortMultipartUpload", "s3:GetBucketLocation",
   ]
+  
+  # default-deny policy
+  # disallows bucket creation
+  s3_default_deny = {
+    "Sid" : "default-deny",
+    "Effect" : "Deny",
+    "Action" : [
+      "s3:CreateBucket",
+      "s3:DeleteBucket",
+    ],
+    "Resource" : ["arn:aws:s3:::*"]
+  }
 }
 
 ####### s3 buckets #######
@@ -171,10 +183,13 @@ resource "ovh_cloud_project_user_s3_policy" "s3_users" {
         "Effect" : "Allow",
         "Action" : local.s3_readonly_action,
         "Resource" : [
+          "arn:aws:s3:::${aws_s3_bucket.gfts-data-lake.id}",
           "arn:aws:s3:::${aws_s3_bucket.gfts-data-lake.id}/*",
+          "arn:aws:s3:::${aws_s3_bucket.gfts-reference-data.id}",
           "arn:aws:s3:::${aws_s3_bucket.gfts-reference-data.id}/*",
         ]
       },
+      local.s3_default_deny,
     ]
   })
 }
@@ -190,7 +205,9 @@ resource "ovh_cloud_project_user_s3_policy" "s3_ifremer_users" {
         "Effect" : "Allow",
         "Action" : local.s3_readonly_action,
         "Resource" : [
+          "arn:aws:s3:::${aws_s3_bucket.gfts-data-lake.id}",
           "arn:aws:s3:::${aws_s3_bucket.gfts-data-lake.id}/*",
+          "arn:aws:s3:::${aws_s3_bucket.gfts-reference-data.id}",
           "arn:aws:s3:::${aws_s3_bucket.gfts-reference-data.id}/*",
         ]
       },
@@ -199,9 +216,11 @@ resource "ovh_cloud_project_user_s3_policy" "s3_ifremer_users" {
         "Effect" : "Allow",
         "Action" : local.s3_admin_action,
         "Resource" : [
+          "arn:aws:s3:::${aws_s3_bucket.gfts-ifremer.id}",
           "arn:aws:s3:::${aws_s3_bucket.gfts-ifremer.id}/*",
         ]
       },
+      local.s3_default_deny,
     ]
   })
 }
@@ -217,7 +236,9 @@ resource "ovh_cloud_project_user_s3_policy" "s3_ifremer_developers" {
         "Effect" : "Allow",
         "Action" : local.s3_readonly_action,
         "Resource" : [
+          "arn:aws:s3:::${aws_s3_bucket.gfts-data-lake.id}",
           "arn:aws:s3:::${aws_s3_bucket.gfts-data-lake.id}/*",
+          "arn:aws:s3:::${aws_s3_bucket.gfts-reference-data.id}",
           "arn:aws:s3:::${aws_s3_bucket.gfts-reference-data.id}/*",
         ]
       },
@@ -226,10 +247,13 @@ resource "ovh_cloud_project_user_s3_policy" "s3_ifremer_developers" {
         "Effect" : "Allow",
         "Action" : local.s3_admin_action,
         "Resource" : [
+          "arn:aws:s3:::${aws_s3_bucket.gfts-ifremer.id}",
           "arn:aws:s3:::${aws_s3_bucket.gfts-ifremer.id}/*",
+          "arn:aws:s3:::${aws_s3_bucket.gfts-reference-data.id}",
           "arn:aws:s3:::${aws_s3_bucket.gfts-reference-data.id}/*",
         ]
       },
+      local.s3_default_deny,
     ]
   })
 }
@@ -320,6 +344,15 @@ resource "aws_s3_bucket_acl" "gfts-reference-data" {
         }
         permission = "FULL_CONTROL"
       }
+    }
+
+    # everyone authenticated can read reference data
+    grant {
+      grantee {
+        type = "Group"
+        uri  = "http://acs.amazonaws.com/groups/global/AuthenticatedUsers"
+      }
+      permission = "READ"
     }
 
     dynamic "grant" {
@@ -678,6 +711,7 @@ provider "harbor" {
 
 resource "harbor_project" "registry" {
   name = "gfts"
+  public = true
 }
 
 resource "harbor_robot_account" "builder" {
