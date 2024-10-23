@@ -178,17 +178,6 @@ resource "ovh_cloud_project_user_s3_policy" "s3_users" {
   user_id      = ovh_cloud_project_user.s3_users[each.key].id
   policy = jsonencode({
     "Statement" : [
-      {
-        "Sid" : "read",
-        "Effect" : "Allow",
-        "Action" : local.s3_readonly_action,
-        "Resource" : [
-          "arn:aws:s3:::${aws_s3_bucket.gfts-data-lake.id}",
-          "arn:aws:s3:::${aws_s3_bucket.gfts-data-lake.id}/*",
-          "arn:aws:s3:::${aws_s3_bucket.gfts-reference-data.id}",
-          "arn:aws:s3:::${aws_s3_bucket.gfts-reference-data.id}/*",
-        ]
-      },
       local.s3_default_deny,
     ]
   })
@@ -200,17 +189,6 @@ resource "ovh_cloud_project_user_s3_policy" "s3_ifremer_users" {
   user_id      = ovh_cloud_project_user.s3_users[each.key].id
   policy = jsonencode({
     "Statement" : [
-      {
-        "Sid" : "read",
-        "Effect" : "Allow",
-        "Action" : local.s3_readonly_action,
-        "Resource" : [
-          "arn:aws:s3:::${aws_s3_bucket.gfts-data-lake.id}",
-          "arn:aws:s3:::${aws_s3_bucket.gfts-data-lake.id}/*",
-          "arn:aws:s3:::${aws_s3_bucket.gfts-reference-data.id}",
-          "arn:aws:s3:::${aws_s3_bucket.gfts-reference-data.id}/*",
-        ]
-      },
       {
         "Sid" : "Admin",
         "Effect" : "Allow",
@@ -231,17 +209,6 @@ resource "ovh_cloud_project_user_s3_policy" "s3_ifremer_developers" {
   user_id      = ovh_cloud_project_user.s3_users[each.key].id
   policy = jsonencode({
     "Statement" : [
-      {
-        "Sid" : "read",
-        "Effect" : "Allow",
-        "Action" : local.s3_readonly_action,
-        "Resource" : [
-          "arn:aws:s3:::${aws_s3_bucket.gfts-data-lake.id}",
-          "arn:aws:s3:::${aws_s3_bucket.gfts-data-lake.id}/*",
-          "arn:aws:s3:::${aws_s3_bucket.gfts-reference-data.id}",
-          "arn:aws:s3:::${aws_s3_bucket.gfts-reference-data.id}/*",
-        ]
-      },
       {
         "Sid" : "Admin",
         "Effect" : "Allow",
@@ -264,17 +231,6 @@ resource "ovh_cloud_project_user_s3_policy" "s3_vliz_users" {
   user_id      = ovh_cloud_project_user.s3_users[each.key].id
   policy = jsonencode({
     "Statement" : [
-      {
-        "Sid" : "read",
-        "Effect" : "Allow",
-        "Action" : local.s3_readonly_action,
-        "Resource" : [
-          "arn:aws:s3:::${aws_s3_bucket.gfts-data-lake.id}",
-          "arn:aws:s3:::${aws_s3_bucket.gfts-data-lake.id}/*",
-          "arn:aws:s3:::${aws_s3_bucket.gfts-reference-data.id}",
-          "arn:aws:s3:::${aws_s3_bucket.gfts-reference-data.id}/*",
-        ]
-      },
       {
         "Sid" : "Admin",
         "Effect" : "Allow",
@@ -391,16 +347,6 @@ resource "aws_s3_bucket_acl" "gfts-reference-data" {
 resource "aws_s3_bucket_acl" "gfts-ifremer" {
   bucket = aws_s3_bucket.gfts-ifremer.id
   access_control_policy {
-    # dynamic "grant" {
-    #   for_each = local.s3_admins
-    #   content {
-    #     grantee {
-    #       id   = ovh_cloud_project_user.s3_users[grant.value].id
-    #       type = "CanonicalUser"
-    #     }
-    #     permission = "FULL_CONTROL"
-    #   }
-    # }
 
     dynamic "grant" {
       for_each = setunion(local.s3_admins, local.s3_ifremer_developers, local.s3_ifremer_users)
