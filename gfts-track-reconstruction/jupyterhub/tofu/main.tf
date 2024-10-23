@@ -269,7 +269,9 @@ resource "ovh_cloud_project_user_s3_policy" "s3_vliz_users" {
         "Effect" : "Allow",
         "Action" : local.s3_readonly_action,
         "Resource" : [
+          "arn:aws:s3:::${aws_s3_bucket.gfts-data-lake.id}",
           "arn:aws:s3:::${aws_s3_bucket.gfts-data-lake.id}/*",
+          "arn:aws:s3:::${aws_s3_bucket.gfts-reference-data.id}",
           "arn:aws:s3:::${aws_s3_bucket.gfts-reference-data.id}/*",
         ]
       },
@@ -278,9 +280,11 @@ resource "ovh_cloud_project_user_s3_policy" "s3_vliz_users" {
         "Effect" : "Allow",
         "Action" : local.s3_admin_action,
         "Resource" : [
+          "arn:aws:s3:::${aws_s3_bucket.gfts-vliz.id}",
           "arn:aws:s3:::${aws_s3_bucket.gfts-vliz.id}/*",
         ]
       },
+      local.s3_default_deny,
     ]
   })
 }
