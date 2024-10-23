@@ -42,12 +42,30 @@ The current list of authorized GFTS users can be found in [`gfts-track-reconstru
 
 ### Giving access to the GFTS Hub and S3 Buckets (Admin only)
 
-While everyone can initiate a Pull Request to add a new user, only a few administrators can grant access (especially write access) to S3 Buckets. Below are the steps to follow if you are an administrator:
+Everyone can initiate a Pull Request to add a new user with read-only access to `gfts-reference-data` and `destine-gfts-data-lake`.
+There is only one step:
 
-1. Add the new user (github username) in **lowercase** in `gfts-track-reconstruction/jupyterhub/gfts-hub/values.yaml`;
-2. Add the github username (lowercase) in `gfts-track-reconstruction/jupyterhub/tofu/main.tf`: adding the username to `s3_readonly_users` will grant readonly access to `gfts-reference-data` and `destine-gfts-data-lake` S3 buckets. If the user needs write access to the reference-data S3 bucket, add their username to `s3_ifremer_developers`. If the user only needs read access to reference-data but write access to `gfts-ifremer`, add their username to `s3_ifremer_users` instead.
-3. Run `tofu apply` to apply the S3 permissions. Ensure you are in the `gfts-track-reconstruction/jupyterhub/tofu` folder before executing the `tofu` command.
-4. Update `gfts-track-reconstruction/jupyterhub/secrets/config.yaml` with the output of the command `tofu outpout -json s3_credentials_json`. This command needs to be executed in the `tofu` folder after applying the S3 permissions with `tofu apply`. If the file contains binary content, it means you do not have the rights to add new users to the GFTS S3 buckets and will need to ask a GFTS admin for assistance.
+1. Add the new user (github username) in **lowercase** in `gfts-track-reconstruction/jupyterhub/gfts-hub/values.yaml`
+
+When the PR is merged, the github user will have read-only access to `gfts-reference-data` and `destine-gfts-data-lake` and will be able to:
+
+```python
+import s3fs
+s3 = s3fs.S3FileSystem(anon=False)
+s3.listdir("gfts-reference-data")
+```
+
+To grant read access to private data or write access, the user must be added to an s3 group in the `tofu` configuration,
+adding the following steps which can only be done by a GFTS Hub admin:
+
+2. Add the github username (lowercase) in one of the `s3_` groups in `gfts-track-reconstruction/jupyterhub/tofu/main.tf` for the following permissions:
+
+   - `s3_ifremer_developers`: write access to `gfts-ifremer` and `gfts-reference-data`
+   - `s3_ifremer_users`: write access to `gfts-ifremer` only
+   - `s3_admins`: admin access to all s3 buckets
+
+3. Run `tofu apply` to apply the S3 permissions. Ensure you are in the `gfts-track-reconstruction/jupyterhub/tofu` folder before executing the `tofu` command and have run `source secrets/ovh-creds.sh`.
+4. Update `gfts-track-reconstruction/jupyterhub/secrets/config.yaml` with the output of the command `tofu output -json s3_credentials_json`. This command needs to be executed in the `tofu` folder after applying the S3 permissions with `tofu apply`. If the file contains binary content, it means you do not have the rights to add new users to the GFTS S3 buckets and will need to ask a GFTS admin for assistance.
 5. Don't forget to commit and push your changes!
 
 Steps 3 and 4 are what actually grant the jupyterhub user s3 access.
@@ -62,7 +80,7 @@ The following packages need to be installed on your system:
 
 As an admin, you'll need to set up your environment. The GFTS maintainer will provide you with a key encrypted with your GitHub SSH key. Save the content sent by the GFTS maintainer into a file, and name it `ssh-vault.txt`. At the moment, the keys are known to [annefou](https://github.com/annefou) and [minrk](https://github.com/minrk).
 
-```
+```bash
 cat ssh-vault.txt | ssh-vault view | base64 --decode > keyfile && git-crypt unlock keyfile && rm keyfile
 ```
 
@@ -72,7 +90,7 @@ Thanks to the previous command, you should be able to `cat gfts-track-reconstruc
 
 Finally to initialize your environment and execute `tofu` commands, you need to change the directory to the `gfts-track-reconstruction/jupyterhub/tofu` folder and source `secrets/ovh-creds.sh` e.g.:
 
-```
+```bash
 source secrets/ovh-creds.sh
 tofu init
 tofu apply
