@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "strictNullChecks": true,
+    "baseUrl": "./",
+    "jsx": "react",
+    "paths": {
+      /* Specify a set of entries that re-map imports to additional lookup locations. */
+      "$components/*": ["./app/components/*"],
+      "$utils/*": ["./app/utils/*"],
+      "$styles/*": ["./app/styles/*"]
+    }
+  },
+  "exclude": [
+    ".git",
+    ".app-cache",
+    ".parcel-cache",
+    "parcel-bundle-reports",
+    ".npm",
+    ".npm-tmp",
+    "dist",
+    "dist*",
+    "node_modules",
+    "**/node_modules/*"
+  ]
+}
