@@ -593,6 +593,29 @@ resource "harbor_project" "registry" {
   public = true
 }
 
+resource "random_password" "harbor_felix" {
+  length  = 16
+  special = true
+}
+resource "harbor_user" "felix" {
+  username  = "felix"
+  full_name = "Felix Delattre"
+  email     = "felix@developmentseed.org"
+  password  = random_password.harbor_felix.result
+  lifecycle {
+    ignore_changes = [
+      # only set initial password, allow changes
+      password
+    ]
+  }
+}
+
+resource "harbor_project_member_user" "felix" {
+  project_id = harbor_project.registry.id
+  user_name  = harbor_user.felix.username
+  role       = "developer"
+}
+
 resource "harbor_robot_account" "builder" {
   name        = "builder"
   description = "Image builder: push new images"
@@ -674,6 +697,11 @@ output "registry_admin_login" {
 
 output "registry_admin_password" {
   value     = ovh_cloud_project_containerregistry_user.admin.password
+  sensitive = true
+}
+
+output "registry_user_felix" {
+  value     = "${harbor_user.felix.username}:${harbor_user.felix.password}"
   sensitive = true
 }
 
