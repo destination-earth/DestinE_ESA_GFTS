@@ -36,7 +36,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: c63eqfuv.c1.gra9.container-registry.ovh.net/webapp
+          images: c63eqfuv.c1.gra9.container-registry.ovh.net/gfts/webapp
           tags: |
             type=ref,event=branch
             type=sha,format=short
