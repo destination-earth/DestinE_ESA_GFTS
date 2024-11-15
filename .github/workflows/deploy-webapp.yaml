@@ -6,7 +6,6 @@ on:
   push:
     branches:
       - main
-      - develop
     paths:
       - frontend/**
       - .github/workflows/deploy-webapp.yaml
@@ -46,7 +45,17 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./webapp
-          file: ./webapp/Dockerfile
+          file: ./webapp/deploy/Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Deploy to Kubernetes via Helm
+        uses: "deliverybot/helm@v1"
+        with:
+          chart: ./webapp/deploy/helm
+          registry: "c63eqfuv.c1.gra9.container-registry.ovh.net"
+          image: "gfts/webapp"
+          namespace: "webapp"
+          install: true
+          upgrade: true
