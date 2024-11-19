@@ -30,7 +30,7 @@ jobs:
         uses: azure/k8s-set-context@v3
         with:
           method: kubeconfig
-          kubeconfig: ${{ cat gfts-track-reconstruction/jupyterhub/secrets/kubeconfig.yaml }}
+          kubeconfig: gfts-track-reconstruction/jupyterhub/secrets/kubeconfig.yaml
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
