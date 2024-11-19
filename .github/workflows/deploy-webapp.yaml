@@ -53,6 +53,7 @@ jobs:
       - name: Deploy to Kubernetes via Helm
         uses: vimeda/helm@v1.7.0
         with:
+          release: webapp
           chart: ./webapp/deploy/helm
           registry: "c63eqfuv.c1.gra9.container-registry.ovh.net"
           image: "gfts/webapp"
