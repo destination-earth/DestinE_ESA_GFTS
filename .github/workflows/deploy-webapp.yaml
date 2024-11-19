@@ -75,7 +75,7 @@ jobs:
           helm upgrade --install \
             --namespace webapp \
             webapp \
-            ./webapp/deploy/helm \
+            ./webapp/deploy/helm/gfts-webapp \
             --set image.repository=c63eqfuv.c1.gra9.container-registry.ovh.net/gfts/webapp \
             --set image.tag=$(echo "${{ steps.meta.outputs.tags }}" | head -n 1)
         env:
