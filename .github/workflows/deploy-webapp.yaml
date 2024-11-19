@@ -50,13 +50,28 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
-      - name: Deploy to Kubernetes via Helm
-        uses: vimeda/helm@v1.7.0
+      - name: Setup Kubernetes configuration
+        uses: azure/k8s-set-context@v3
         with:
-          release: webapp
-          chart: ./webapp/deploy/helm
-          registry: "c63eqfuv.c1.gra9.container-registry.ovh.net"
-          image: "gfts/webapp"
-          namespace: "webapp"
-          install: true
-          upgrade: true
+          method: kubeconfig
+          kubeconfig: ${{ secrets.KUBE_CONFIG }}
+
+      - name: Setup Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: 'latest'
+
+      - name: Update Helm dependencies
+        run: |
+          helm dependency update ./webapp/deploy/helm
+
+      - name: Deploy to Kubernetes
+        run: |
+          helm upgrade --install \
+            --namespace webapp \
+            webapp \
+            ./webapp/deploy/helm \
+            --set image.repository=c63eqfuv.c1.gra9.container-registry.ovh.net/gfts/webapp \
+            --set image.tag=$(echo "${{ steps.meta.outputs.tags }}" | head -n 1)
+        env:
+          KUBECONFIG: ${{ github.workspace }}/.kube/config
