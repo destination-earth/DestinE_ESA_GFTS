@@ -68,7 +68,7 @@ jobs:
 
       - name: Update Helm dependencies
         run: |
-          helm dependency update ./webapp/deploy/helm
+          helm dependency update ./webapp/deploy/helm/gfts-webapp
 
       - name: Deploy to Kubernetes
         run: |
