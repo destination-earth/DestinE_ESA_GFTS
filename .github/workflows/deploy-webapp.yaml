@@ -51,7 +51,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Deploy to Kubernetes via Helm
-        uses: "deliverybot/helm@v1"
+        uses: vimeda/helm@v1.7.0
         with:
           chart: ./webapp/deploy/helm
           registry: "c63eqfuv.c1.gra9.container-registry.ovh.net"
