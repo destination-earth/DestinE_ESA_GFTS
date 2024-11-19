@@ -79,4 +79,4 @@ jobs:
             --set image.repository=c63eqfuv.c1.gra9.container-registry.ovh.net/gfts/webapp \
             --set image.tag=$(echo "${{ steps.meta.outputs.tags }}" | head -n 1)
         env:
-          KUBECONFIG: ${{ github.workspace }}/.kube/config
+          KUBECONFIG: ${{ github.workspace }}/gfts-track-reconstruction/jupyterhub/secrets/kubeconfig.yaml
