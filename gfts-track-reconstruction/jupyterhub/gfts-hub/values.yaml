@@ -57,7 +57,19 @@ jupyterhub:
       KBATCH_S3_CODE_DIR: s3://gfts-ifremer/kbatch/{username}
       AWS_ENDPOINT_URL_S3: "https://s3.gra.perf.cloud.ovh.net"
       AWS_DEFAULT_REGION: gra
-      # JUPYTER_FS_BUCKETS: destine-gfts-data-lake,gfts-reference-data,gfts-ifremer
+
+      # rclone config (https://rclone.org/docs/#environment-variables)
+      RCLONE_CONFIG_GFTS_TYPE: s3
+      RCLONE_CONFIG_GFTS_PROVIDER: Other
+      RCLONE_CONFIG_GFTS_ENV_AUTH: "true"
+      RCLONE_CONFIG_GFTS_REGION: gra
+      RCLONE_CONFIG_GFTS_endpoint: https://s3.gra.perf.cloud.ovh.net
+
+      RCLONE_CONFIG_CMARINE_TYPE: s3
+      RCLONE_CONFIG_CMARINE_PROVIDER: Other
+      RCLONE_CONFIG_CMARINE_endpoint: https://s3.waw3-1.cloudferro.com
+      RCLONE_CONFIG_CMARINE_ACL: public-read
+
     profileList:
       - display_name: "GFTS environment"
         slug: default
@@ -133,21 +145,10 @@ jupyterhub:
             if [ -d /homedir/.ssh ]; then
               chmod -R og= /homedir/.ssh
             fi
-            mkdir -p /homedir/.config/rclone
-            cat <<EOF > /homedir/.config/rclone/rclone.conf
-            [cmarine]
-            type = s3
-            provider = Other
-            endpoint = https://s3.waw3-1.cloudferro.com
-            acl = public-read
-
-            [gfts]
-            type = s3
-            provider = Other
-            env_auth = true
-            region = gra
-            endpoint = https://s3.gra.perf.cloud.ovh.net
-            EOF
+            # fix permissions caused by earlier creation of rclone config file
+            if [ -d /homedir/.config ]; then
+              chown -R 1000:1000 /homedir/.config
+            fi
         volumeMounts:
           - mountPath: /homedir
             name: volume-{username}
