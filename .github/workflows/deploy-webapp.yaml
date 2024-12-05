@@ -68,14 +68,14 @@ jobs:
 
       - name: Update Helm dependencies
         run: |
-          helm dependency update ./webapp/deploy/helm/gfts-webapp
+          helm dependency update ./webapp/deploy/helm
 
       - name: Deploy to Kubernetes
         run: |
           helm upgrade --install \
             --namespace webapp \
             webapp \
-            ./webapp/deploy/helm/gfts-webapp \
+            ./webapp/deploy/helm \
             --set image.repository=c63eqfuv.c1.gra9.container-registry.ovh.net/gfts/webapp \
             --set image.tag=$(echo "${{ steps.meta.outputs.tags }}" | head -n 1)
         env:
