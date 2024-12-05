@@ -1,6 +1,7 @@
-FROM node:18-alpine
+FROM node:20-alpine
+RUN apk add --no-cache git
 WORKDIR /app
-COPY package.json /app
+RUN git clone https://github.com/developmentseed/gfts.git /app
 RUN yarn install
-COPY . /app
-CMD ["yarn", "run", "start"]
+EXPOSE 9000
+CMD ["yarn", "serve"]

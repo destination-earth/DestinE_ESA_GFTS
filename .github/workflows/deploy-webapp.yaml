@@ -7,7 +7,7 @@ on:
     branches:
       - main
     paths:
-      - frontend/**
+      - webapp/**
       - .github/workflows/deploy-webapp.yaml
 
 jobs:
@@ -64,7 +64,7 @@ jobs:
       - name: Setup Helm
         uses: azure/setup-helm@v3
         with:
-          version: 'latest'
+          version: "latest"
 
       - name: Update Helm dependencies
         run: |
