@@ -75,8 +75,6 @@ jobs:
           helm upgrade --install \
             --namespace webapp \
             webapp \
-            ./webapp/deploy/helm \
-            --set image.repository=c63eqfuv.c1.gra9.container-registry.ovh.net/gfts/webapp \
-            --set image.tag=$(echo "${{ steps.meta.outputs.tags }}" | head -n 1)
+            ./webapp/deploy/helm
         env:
           KUBECONFIG: ${{ github.workspace }}/gfts-track-reconstruction/jupyterhub/secrets/kubeconfig.yaml
