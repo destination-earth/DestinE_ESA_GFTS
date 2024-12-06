@@ -1,8 +1,7 @@
 replicaCount: 1
 image:
-  repository: c63eqfuv.c1.gra9.container-registry.ovh.net/gfts/webapp
+  repository: c63eqfuv.c1.gra9.container-registry.ovh.net/gfts/webapp:latest
   pullPolicy: IfNotPresent
-  tag: "latest"
 
 serviceAccount:
   create: true
