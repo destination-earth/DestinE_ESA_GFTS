@@ -20,9 +20,14 @@ ingress:
 
 ingress-nginx:
   controller:
-    ingressClass: "nginx"
+    ingressClass: "webapp-nginx"
     replicaCount: 1
-  fullnameOverride: "ingress-nginx"
+    ingressClassResource:
+      name: webapp-nginx
+      enabled: true
+      default: false
+      controllerValue: "k8s.io/webapp-ingress-nginx"  # default: k8s.io/ingress-nginx
+  fullnameOverride: "webapp-ingress-nginx"
   hosts:
     - host: gfts.developmentseed.org
       paths:
