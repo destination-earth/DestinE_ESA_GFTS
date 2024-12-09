@@ -9,6 +9,12 @@ serviceAccount:
   annotations: {}
   name: ""
 
+certManager:
+  enabled: true
+  namespace: webapp
+  installCRDs: true
+  prometheus.enabled: false
+
 service:
   type: ClusterIP
   port: 80
@@ -16,17 +22,23 @@ service:
 
 ingress:
   enabled: true
+  installController: true
   className: "webapp-nginx"
+  annotations:
+    cert-manager.io/issuer: letsencrypt-webapp
   hosts:
     - host: gfts.developmentseed.org
       paths:
         - path: /
           pathType: ImplementationSpecific
-  tls: []
-  # tls:
-  #   - secretName: chart-example-tls
-  #     hosts:
-  #       - gfts.developmentseed.org
+  tls:
+    - enabled: true
+      hosts:
+        - gfts.developmentseed.org
+      secretName: tls-webapp
+      certManager: true
+      certManagerIssuer: letsencrypt-webapp
+      certManagerEmail: info@developmentseed.org
 
 ingress-nginx:
   controller:
