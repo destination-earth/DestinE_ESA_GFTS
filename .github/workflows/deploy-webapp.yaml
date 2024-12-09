@@ -74,6 +74,7 @@ jobs:
         run: |
           helm upgrade --install \
             --namespace webapp \
+            --create-namespace \
             webapp \
             ./webapp/deploy/helm
         env:
