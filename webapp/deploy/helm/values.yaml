@@ -27,14 +27,14 @@ ingress:
   annotations:
     cert-manager.io/issuer: letsencrypt-webapp
   hosts:
-    - host: gfts.developmentseed.org
+    - host: gfts.centroi.de
       paths:
         - path: /
           pathType: ImplementationSpecific
   tls:
     - enabled: true
       hosts:
-        - gfts.developmentseed.org
+        - gfts.centroi.de
       secretName: tls-webapp
       certManager: true
       certManagerIssuer: letsencrypt-webapp
