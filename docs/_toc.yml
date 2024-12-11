@@ -14,9 +14,12 @@ parts:
       - file: tag_data
   - caption: Data preparation
     chapters:
+      - file: intro_data_preparation
       - file: s3_CMEMS_2D_kerchunk
       - file: s3_CMEMS_3D_kerchunk
       - file: s3chunked_parquet
+      - file: reference_model_creation
+      - file: tag_data_processing
       - file: cmems_catalog_creation
       - file: gfts_intake
       - file: pannel_plot_s3
