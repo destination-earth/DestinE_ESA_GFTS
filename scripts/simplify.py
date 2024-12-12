@@ -218,31 +218,5 @@ def main():
         process_tag(tag)
 
 
-def makeaverage():
-    logger.debug("Listing tags")
-    tags = list_tags()
-    result = None
-    timpesteps = 0
-    for tag in tags:
-        if not has_states(tag):
-            logger.debug(f"No states.zarr file found for {tag}")
-            continue
-
-        data = open_dataset(tag)
-        timpesteps += data.time.shape[0]
-
-        avg = data.sum("time")
-
-        if result is None:
-            result = avg
-        else:
-            result += avg
-
-    result = result / timpesteps
-
-    result.to_zarr("data/pollock_average.zarr")
-
-
 if __name__ == "__main__":
-    # main()
-    makeaverage()
+    main()
