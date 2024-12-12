@@ -3,9 +3,10 @@ import logging
 
 import boto3
 import geopandas as gpd
+import numpy as np
+import pandas as pd
 import s3fs
 import xarray as xr
-import numpy as np
 
 logging.basicConfig()
 
@@ -98,6 +99,45 @@ def simplify(tag):
     return top_values.to_dataframe().dropna().reset_index()
 
 
+def get_tag_timeseries(track, tag):
+    path = f"s3://gfts-ifremer/bargip/tag/formatted/{tag}/dst.csv"
+    fs = get_filesystem()
+
+    if not fs.exists(path):
+        raise ValueError(f"Track data for {tag} does not exist")
+
+    with fs.open(path) as fl:
+        ts = pd.read_csv(fl)
+    ts.time = pd.to_datetime(ts.time).dt.tz_localize(None)
+
+    # Compute time interval in most probable track
+    deltas = [
+        track.time.iloc[i + 1] - track.time.iloc[i] for i in range(len(track) - 1)
+    ]
+    if len(set(deltas)) > 1:
+        raise ValueError(f"Found more than 1 time interval in dataset {set(deltas)}")
+    delta = deltas[0]
+
+    # Average sensor measurements to the time step of the track
+    temperatures = []
+    pressures = []
+    temperatures_std = []
+    pressures_std = []
+    for time in track.time.values:
+        filtered = ts[(ts.time > time) & (ts.time < (time + delta))]
+        temperatures.append(filtered.temperature.mean())
+        pressures.append(filtered.pressure.mean())
+        temperatures_std.append(filtered.temperature.std())
+        pressures_std.append(filtered.pressure.std())
+
+    track["temperature"] = temperatures
+    track["pressure"] = pressures
+    track["temperature_std"] = temperatures_std
+    track["pressure_std"] = pressures_std
+
+    return track
+
+
 def to_geojson(df, tag):
     logger.debug(f"Writing geojson file for {tag}")
 
@@ -106,12 +146,17 @@ def to_geojson(df, tag):
 
     geom = gpd.points_from_xy(track.longitude, track.latitude)
     track = gpd.GeoDataFrame(
-        track[["time", "states"]],
+        track[["time"]],
         geometry=geom,
         crs="EPSG:4326",
     )
+
+    track = get_tag_timeseries(track, tag)
+
     with io.BytesIO() as buf:
-        track.to_file(buf, driver="GeoJSON")
+        track.to_file(
+            buf, driver="GeoJSON", SIGNIFICANT_FIGURES=5, COORDINATE_PRECISION=7
+        )
         buf.seek(0)
         with get_filesystem().open(
             f"s3://destine-gfts-visualisation-data/{PREFIX}{tag}/{tag}.geojson", "wb"
@@ -173,31 +218,5 @@ def main():
         process_tag(tag)
 
 
-def makeaverage():
-    logger.debug("Listing tags")
-    tags = list_tags()
-    result = None
-    timpesteps = 0
-    for tag in tags:
-        if not has_states(tag):
-            logger.debug(f"No states.zarr file found for {tag}")
-            continue
-
-        data = open_dataset(tag)
-        timpesteps += data.time.shape[0]
-
-        avg = data.sum("time")
-
-        if result is None:
-            result = avg
-        else:
-            result += avg
-
-    result = result / timpesteps
-
-    result.to_zarr("data/pollock_average.zarr")
-
-
 if __name__ == "__main__":
-    # main()
-    makeaverage()
+    main()
