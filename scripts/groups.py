@@ -1,3 +1,5 @@
+import xdggs
+
 from simplify import has_states, list_tags, logger, open_dataset
 
 
@@ -22,7 +24,7 @@ def main():
             }
         )
 
-        # data = xdggs.decode(data)
+        data = xdggs.decode(data)
 
         avg_by_quarter = data.groupby("time.quarter").sum("time")
 
