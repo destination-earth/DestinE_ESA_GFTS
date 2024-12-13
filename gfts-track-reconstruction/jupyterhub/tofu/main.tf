@@ -71,13 +71,14 @@ locals {
   s3_ifremer_developers = toset([
     "aderrien7",
     "keewis",
+    "quentinmaz",
+    "capetienne",
   ])
   s3_ifremer_users = toset([
     "jmdelouis",
     "mwoillez",
     "marinerandon",
     "danielfdsilva",
-    "quentinmaz",
   ])
   s3_vliz_users = toset([
     "davidcasalsvliz",
