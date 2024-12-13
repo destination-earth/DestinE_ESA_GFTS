@@ -20,6 +20,8 @@ parts:
       - file: s3chunked_parquet
       - file: reference_model_creation
       - file: tag_data_processing
+  - caption: Examples
+    chapters:
       - file: cmems_catalog_creation
       - file: gfts_intake
       - file: pannel_plot_s3
