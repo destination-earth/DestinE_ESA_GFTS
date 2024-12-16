@@ -164,6 +164,7 @@ cython_debug/
 charts
 tmpcharts
 .virtual_documents
+.vscode
 
 # Local data files for notebooks etc
 data/
