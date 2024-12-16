@@ -161,6 +161,7 @@ cython_debug/
 
 .DS_Store
 .terraform
+openrc.sh
 charts
 tmpcharts
 .virtual_documents
