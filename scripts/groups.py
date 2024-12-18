@@ -29,7 +29,7 @@ def main():
         )
         data = data.set_xindex("cell_ids", xdggs.DGGSIndex)
 
-        avg_by_quarter = data.groupby("time.quarter").sum("time")
+        avg_by_quarter = data.groupby("time.quarter").sum("time", skipna=True)
 
         if result is None:
             result = avg_by_quarter
@@ -40,9 +40,9 @@ def main():
 
     result.to_zarr("data/pollock_average.zarr")
 
-    # Normalize and sretch to uint16 range
+    # Also export normalized and sretched as uint16
     max_value = result.states.max()
-    avg_by_quarter.states = (avg_by_quarter.states / max_value * 65535).astype("uint16")
+    result.states = (result.states / max_value * 65535).astype("uint16")
 
     result.to_zarr("data/pollock_average_uint16.zarr")
 
