@@ -393,6 +393,44 @@ resource "ovh_cloud_project_kube" "cluster" {
   update_policy = "MINIMAL_DOWNTIME"
 }
 
+resource "ovh_cloud_project_ip" "ingress_ip" {
+  service_name = local.service_name
+  region       = local.region
+  description  = "Floating IP for webapp"
+}
+
+resource "kubernetes_service" "ingress" {
+  metadata {
+    name      = "webapp-ingress-nginx"
+    namespace = "webapp"
+    annotations = {
+      "loadbalancer.openstack.org/floating-network-id" = ovh_cloud_project_ip.ingress_ip.id
+      "kubernetes.io/ingress.class" = "webapp-nginx"
+    }
+  }
+  spec {
+    type = "LoadBalancer"
+    external_traffic_policy = "Local"
+    load_balancer_ip = ovh_cloud_project_ip.ingress_ip.ip
+    port {
+      name        = "http"
+      port        = 80
+      target_port = 80
+      protocol    = "TCP"
+    }
+    port {
+      name        = "https"
+      port        = 443
+      target_port = 443
+      protocol    = "TCP"
+    }
+    selector = {
+      "app.kubernetes.io/name" = "webapp-ingress-nginx"
+      "app.kubernetes.io/instance" = "webapp-ingress-nginx"
+    }
+  }
+}
+
 # ovh node flavors: https://www.ovhcloud.com/en/public-cloud/prices/
 
 resource "ovh_cloud_project_kube_nodepool" "core" {

@@ -40,15 +40,18 @@ ingress:
       certManagerIssuer: letsencrypt-webapp
       certManagerEmail: info@developmentseed.org
 
-ingress-nginx:
-  controller:
-    ingressClass: "webapp-nginx"
-    ingressClassResource:
-      name: webapp-nginx
-      enabled: true
-      default: false
-      controllerValue: "k8s.io/webapp-ingress-nginx"
-  fullnameOverride: "webapp-ingress-nginx"
+# ingress-nginx:
+#   controller:
+#     ingressClass: "webapp-nginx"
+#     ingressClassResource:
+#       name: webapp-nginx
+#       enabled: true
+#       default: false
+#       controllerValue: "k8s.io/webapp-ingress-nginx"
+#     service:
+#       externalTrafficPolicy: Local
+#       loadBalancerIP: 51.38.223.196
+#   fullnameOverride: "webapp-ingress-nginx"
 
 livenessProbe:
   httpGet:
