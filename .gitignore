@@ -162,6 +162,7 @@ cython_debug/
 .DS_Store
 .terraform
 charts
+/secrets
 tmpcharts
 .virtual_documents
 .vscode

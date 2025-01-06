@@ -66,6 +66,7 @@ locals {
     "todaka",
     "tinaok",
     "minrk",
+    "felix",
   ])
 
   s3_ifremer_developers = toset([
