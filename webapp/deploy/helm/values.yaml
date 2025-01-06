@@ -22,7 +22,8 @@ service:
 
 ingress:
   enabled: true
-  installController: true
+  namespace: webapp
+  installController: false
   className: "webapp-nginx"
   annotations:
     cert-manager.io/issuer: letsencrypt-webapp

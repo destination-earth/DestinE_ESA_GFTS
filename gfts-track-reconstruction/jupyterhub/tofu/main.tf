@@ -408,20 +408,20 @@ resource "kubernetes_service" "ingress" {
     }
   }
   spec {
-    type = "loadbalancer"
-    external_traffic_policy = "local"
+    type = "LoadBalancer"
+    external_traffic_policy = "Local"
     load_balancer_ip = openstack_networking_floatingip_v2.floating_ip.address
     port {
       name        = "http"
       port        = 80
       target_port = 80
-      protocol    = "tcp"
+      protocol    = "TCP"
     }
     port {
       name        = "https"
       port        = 443
       target_port = 443
-      protocol    = "tcp"
+      protocol    = "TCP"
     }
     selector = {
       "app.kubernetes.io/name" = "webapp-ingress-nginx"
