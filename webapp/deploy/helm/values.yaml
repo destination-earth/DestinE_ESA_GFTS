@@ -23,7 +23,7 @@ service:
 ingress:
   enabled: true
   namespace: webapp
-  installController: false
+  installController: true
   className: "webapp-nginx"
   annotations:
     cert-manager.io/issuer: letsencrypt-webapp
@@ -40,6 +40,22 @@ ingress:
       certManager: true
       certManagerIssuer: letsencrypt-webapp
       certManagerEmail: info@developmentseed.org
+
+ingress-nginx:
+  controller:
+    ingressClass: "webapp-nginx"
+    ingressClassResource:
+      name: webapp-nginx
+      enabled: true
+      default: false
+      controllerValue: "k8s.io/webapp-ingress-nginx"
+    service:
+      loadBalancerIP: "91.134.65.21"
+      annotations:
+        loadbalancer.openstack.org/floating-network-id: "Ext-Net"
+        loadbalancer.ovhcloud.com/class: "iolb"
+      externalTrafficPolicy: Local
+  fullnameOverride: "webapp-ingress-nginx"
 
 livenessProbe:
   httpGet:
