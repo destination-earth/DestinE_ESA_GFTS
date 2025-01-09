@@ -53,7 +53,8 @@ ingress-nginx:
       loadBalancerIP: "91.134.65.21"
       annotations:
         loadbalancer.openstack.org/floating-network-id: "Ext-Net"
-        loadbalancer.ovhcloud.com/class: "iolb"
+        loadbalancer.ovhcloud.com/class: "octavia"
+        loadbalancer.openstack.org/keep-floatingip: "true"
       externalTrafficPolicy: Local
   fullnameOverride: "webapp-ingress-nginx"
 
