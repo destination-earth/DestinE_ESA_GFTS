@@ -39,7 +39,7 @@ terraform {
 
 provider "ovh" {
   endpoint = "ovh-eu"
-  # credentials loaded via source ./secrets/ovh-creds.sh
+  # credentials loaded via source ./deploy/secrets/ovh-creds.sh
 }
 
 locals {
@@ -508,7 +508,7 @@ output "kubeconfig" {
   sensitive   = true
   description = <<EOF
     # save output with:
-    export KUBECONFIG=$PWD/../jupyterhub/secrets/kubeconfig.yaml
+    export KUBECONFIG=$PWD/../../deploy/secrets/kubeconfig.yaml
     tofu output -raw kubeconfig > $KUBECONFIG
     chmod 600 $KUBECONFIG
     kubectl config rename-context kubernetes-admin@gfts gfts

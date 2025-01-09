@@ -15,7 +15,7 @@ import click
 
 jupyterhub = Path(__file__).parent.absolute()
 tofu = jupyterhub / "tofu"
-kube_config = jupyterhub / "secrets" / "kubeconfig.yaml"
+kube_config = jupyterhub.parent.parent / "deploy" / "secrets" / "kubeconfig.yaml"
 
 
 def sh(cmd: list[str], **kwargs):

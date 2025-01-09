@@ -9,8 +9,8 @@ As much as possible, deployment uses automation via [OpenTofu][], [helm][], but 
 
 Initial manual steps:
 
-1. create bucket for storing tofu state. Create user and store in `secrets/ovh-creds.sh`, and put bucket name in s3 backend configuration
-2. create API token for OVH API, store in `secrets/ovh-creds.sh`
+1. create bucket for storing tofu state. Create user and store in `/deploy/secrets/ovh-creds.sh`, and put bucket name in s3 backend configuration
+2. create API token for OVH API, store in `/deploy/secrets/ovh-creds.sh`
 
 Next, run tofu, which will create the kubernetes cluster
 
@@ -23,7 +23,7 @@ tofu apply
 At this point, we have a kubernetes cluster. Export the kubernetes cluster config:
 
 ```bash
-export KUBECONFIG=$PWD/../jupyterhub/secrets/kubeconfig.yaml
+export KUBECONFIG=$PWD/../../deploy/secrets/kubeconfig.yaml
 tofu output -raw kubeconfig > $KUBECONFIG
 chmod 600 $KUBECONFIG
 kubectl config rename-context kubernetes-admin@gfts gfts
