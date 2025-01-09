@@ -14,7 +14,7 @@ from pathlib import Path
 import click
 
 jupyterhub = Path(__file__).parent.absolute()
-tofu = jupyterhub / "tofu"
+tofu = jupyterhub.parent.parent / "deploy" / "tf"
 kube_config = jupyterhub / "secrets" / "kubeconfig.yaml"
 
 

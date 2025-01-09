@@ -12,7 +12,7 @@ Initial manual steps:
 1. create bucket for storing tofu state. Create user and store in `secrets/ovh-creds.sh`, and put bucket name in s3 backend configuration
 2. create API token for OVH API, store in `secrets/ovh-creds.sh`
 
-Next, run tofu, which will create the kubernetes cluster
+Next, run tofu within the `/deploy/tf` directory, which will create the kubernetes cluster
 
 ```bash
 tofu init
