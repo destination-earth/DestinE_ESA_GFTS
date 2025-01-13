@@ -25,6 +25,10 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 4.0"
     }
+    openstack = {
+       source  = "terraform-provider-openstack/openstack"
+       version = "~> 3.0.0"
+    }
   }
   # store state on gcs, like other clusters
   backend "s3" {
