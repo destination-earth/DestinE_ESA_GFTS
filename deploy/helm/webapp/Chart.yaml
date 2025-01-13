@@ -32,3 +32,7 @@ dependencies:
     version: ~v1.16.2
     repository: "https://charts.jetstack.io"
     condition: certManager.enabled
+  - name: oauth2-proxy
+    version: ~7.9.2
+    repository: "https://oauth2-proxy.github.io/manifests"
+    condition: oauth2Proxy.enabled
