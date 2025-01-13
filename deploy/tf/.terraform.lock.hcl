@@ -6,6 +6,7 @@ provider "registry.opentofu.org/bestseller/harbor" {
   constraints = "~> 3.7"
   hashes = [
     "h1:XW7zSXsBDjrkwcgRVe1vckQTq0mNHFbYdov8JumKa3E=",
+    "h1:vcFZ3NX7tNPWvBn1aulqzAoJZFI+DgvllaMLBvllD8w=",
     "zh:10d31909aa3f0324413821b15fe069aeb449b3fb56a27017b78f14353f917008",
     "zh:1e277ab2da97fbef4f973e0a61c6fb91728785d112be49842f9d2c227a605805",
     "zh:2b4a1cbaab1fb0eda53321979021284d7037d4b2b14d36ba247d0e62f813e489",
@@ -48,6 +49,7 @@ provider "registry.opentofu.org/hashicorp/helm" {
   constraints = "~> 2.12"
   hashes = [
     "h1:69PnHoYrrDrm7C8+8PiSvRGPI55taqL14SvQR/FGM+g=",
+    "h1:ShIag7wqd5Rs+zYpVMpjAh+T0ozr4XGYfSTKWqceQBY=",
     "zh:02690815e35131a42cb9851f63a3369c216af30ad093d05b39001d43da04b56b",
     "zh:27a62f12b29926387f4d71aeeee9f7ffa0ccb81a1b6066ee895716ad050d1b7a",
     "zh:2d0a5babfa73604b3fefc9dab9c87f91c77fce756c2e32b294e9f1290aed26c0",
@@ -65,6 +67,7 @@ provider "registry.opentofu.org/hashicorp/kubernetes" {
   version     = "2.35.1"
   constraints = "~> 2.25"
   hashes = [
+    "h1:3kVDveERi2qDyLY8zCz/rGmxlGiCAUyJEQR/QiZEIsA=",
     "h1:HvgGiweJx159xJsHIgkMQl1eVTcISwGvd8ADXFU46Rk=",
     "zh:0a569918d9e81755bdacb2380e70ed304c442e957a029984cbcd9ec88e5d3635",
     "zh:1d4d1241cf51d7d4a036c774add1384bb1ba9ca16146334d17c730e1b41ad3e0",
@@ -82,6 +85,7 @@ provider "registry.opentofu.org/hashicorp/kubernetes" {
 provider "registry.opentofu.org/hashicorp/openstack" {
   version = "3.0.0"
   hashes = [
+    "h1:5LLYtkab+Vdg8CE9pI1O8ufh3sTXqWlY3uKxko/y3X8=",
     "h1:sxq+0vFl4SfV9dlut5liwaH4FejyNIf4ClAjRgowxv8=",
     "zh:01718f229597b34ed430236a230a407dacd6289543556d33910e151462e8cb8a",
     "zh:2424c5347d35fe0de778d1c40dbe8d9b1278309c4d65cce31709e6fcbec139df",
@@ -104,6 +108,7 @@ provider "registry.opentofu.org/hashicorp/random" {
   version     = "3.6.3"
   constraints = "~> 3.6"
   hashes = [
+    "h1:32/UZofQoXk8zPj9vpIDiSEmERA3Mx2VPvk1lHTTHvw=",
     "h1:Ry0Lr0zaoicslZlcUR4rAySPpl/a7QupfMfuAxhW3fw=",
     "zh:1bfd2e54b4eee8c761a40b6d99d45880b3a71abc18a9a7a5319204da9c8363b2",
     "zh:21a15ac74adb8ba499aab989a4248321b51946e5431219b56fc827e565776714",
@@ -144,6 +149,7 @@ provider "registry.opentofu.org/terraform-provider-openstack/openstack" {
   version     = "3.0.0"
   constraints = "~> 3.0.0"
   hashes = [
+    "h1:5LLYtkab+Vdg8CE9pI1O8ufh3sTXqWlY3uKxko/y3X8=",
     "h1:sxq+0vFl4SfV9dlut5liwaH4FejyNIf4ClAjRgowxv8=",
     "zh:01718f229597b34ed430236a230a407dacd6289543556d33910e151462e8cb8a",
     "zh:2424c5347d35fe0de778d1c40dbe8d9b1278309c4d65cce31709e6fcbec139df",

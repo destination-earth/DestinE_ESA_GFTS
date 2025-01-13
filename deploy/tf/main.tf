@@ -46,6 +46,12 @@ provider "ovh" {
   # credentials loaded via source ./secrets/ovh-creds.sh
 }
 
+provider "openstack" {
+  auth_url = "https://auth.cloud.ovh.net/v3"
+  tenant_id = local.service_name
+  tenant_name = local.os_tenant_name
+}
+
 locals {
   service_name   = "2a0ebfcd5a8d46a797b921841717b052"
   os_tenant_name = "4396734720592405"
