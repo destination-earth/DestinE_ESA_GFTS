@@ -163,6 +163,7 @@ cython_debug/
 .terraform
 charts
 /secrets
+ssh-vault.txt
 tmpcharts
 .virtual_documents
 .vscode
