@@ -20,11 +20,31 @@ service:
   port: 80
   targetPort: 9000
 
+oauth2Proxy:
+  enabled: true
+
+oauth2-proxy:
+  namespaceOverride: webapp
+  ingress:
+    enabled: true
+    className: webapp-nginx
+    pathType: Prefix
+    path: /oauth2
+    hosts:
+      - gfts.developmentseed.org
+  config:
+    clientID: "gfts-public"
+    clientSecret: "${OAUTH2_PROXY_CLIENT_SECRET}"
+    cookieSecret: "${OAUTH2_PROXY_COOKIE_SECRET}"
+  extraArgs:
+    provider: oidc
+    oidc-issuer-url: "https://iam.e2e-2.desp.space/realms/desp"
+
 ingress:
   enabled: true
   namespace: webapp
   installController: true
-  className: "webapp-nginx"
+  className: webapp-nginx
   annotations:
     cert-manager.io/issuer: letsencrypt-webapp
   hosts:
@@ -43,7 +63,7 @@ ingress:
 
 ingress-nginx:
   controller:
-    ingressClass: "webapp-nginx"
+    ingressClass: webapp-nginx
     ingressClassResource:
       name: webapp-nginx
       enabled: true
@@ -56,7 +76,7 @@ ingress-nginx:
         loadbalancer.ovhcloud.com/class: "octavia"
         loadbalancer.openstack.org/keep-floatingip: "true"
       externalTrafficPolicy: Local
-  fullnameOverride: "webapp-ingress-nginx"
+  fullnameOverride: webapp-ingress-nginx
 
 livenessProbe:
   httpGet:
