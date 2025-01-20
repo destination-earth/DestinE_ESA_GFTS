@@ -72,7 +72,7 @@ jobs:
 
       - name: Generate values file
         run: |
-          envsubst < values-template.yaml > values.yaml
+          envsubst < ./deploy/helm/webapp/values-template.yaml > ./deploy/helm/webapp/values.yaml
 
       - name: Deploy to Kubernetes
         run: |
