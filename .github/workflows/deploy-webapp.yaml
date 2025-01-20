@@ -70,6 +70,10 @@ jobs:
         run: |
           helm dependency update ./deploy/helm/webapp
 
+      - name: Generate values file
+        run: |
+          envsubst < values-template.yaml > values.yaml
+
       - name: Deploy to Kubernetes
         run: |
           helm upgrade --install \
