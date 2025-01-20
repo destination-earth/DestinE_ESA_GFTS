@@ -23,6 +23,10 @@ service:
 oauth2Proxy:
   enabled: true
 
+global:
+  redis:
+    password: "${OAUTH2_PROXY_REDIS_SECRET}"
+
 oauth2-proxy:
   namespaceOverride: webapp
   ingress:
@@ -36,9 +40,17 @@ oauth2-proxy:
     clientID: "gfts-public"
     clientSecret: "${OAUTH2_PROXY_CLIENT_SECRET}"
     cookieSecret: "${OAUTH2_PROXY_COOKIE_SECRET}"
+  redis:
+    enabled: true
+  sessionStorage:
+    type: redis
   extraArgs:
-    provider: oidc
+    provider: keycloak-oidc
     oidc-issuer-url: "https://iam.e2e-2.desp.space/realms/desp"
+    redirect-url: "https://gfts.developmentseed.org/oauth2/callback"
+    upstream: "https://gfts.developmentseed.org:443"
+    email-domain: "*"
+    code-challenge-method: "S256"
 
 ingress:
   enabled: true
@@ -47,6 +59,8 @@ ingress:
   className: webapp-nginx
   annotations:
     cert-manager.io/issuer: letsencrypt-webapp
+    nginx.ingress.kubernetes.io/auth-signin: "https://gfts.development.org/oauth2/start?rd=$escaped_request_uri"
+    nginx.ingress.kubernetes.io/auth-url: "http://webapp-oauth2-proxy.webapp.svc.cluster.local/oauth2/auth"
   hosts:
     - host: gfts.developmentseed.org
       paths:
