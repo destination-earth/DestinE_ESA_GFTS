@@ -55,13 +55,6 @@ def regrid_to_rotate(data, cell_ids_rotated, ids_weight, weight):
     return data
 
 
-def top_values(x):
-    time_slice = x.fillna(0).isel(time=0)
-    sorted_dataset = time_slice.sortby("states", ascending=False)
-    filtered_dataset = sorted_dataset.isel(cell=slice(0, NR_OF_CELLS_PER_TIMESLICE))
-    return filtered_dataset.expand_dims(time=[x.time.values[0]])
-
-
 def rotate_data(ds):
     logger.debug("Rotating tag data")
 
@@ -97,7 +90,9 @@ def rotate_data(ds):
     theta = (90 - data.lat_good.compute()) / 180 * np.pi
     ph = (data.lon_good.compute() + 180) / 180 * np.pi
     ph = np.fmod(ph, np.pi * 2)
-    cell_id_new = hp.ang2pix(NSIDE, theta, ph, nest=NEST)
+    cell_id_new = hp.ang2pix(
+        NSIDE, data.lon_good, data.lat_good, nest=NEST, lonlat=True
+    )
     data["cell_ids"] = cell_id_new
     ph_rotated = ph + rotated_angle_lon / 180 * np.pi
     ids_weight, weight = hp.get_interp_weights(NSIDE, theta, ph_rotated, nest=NEST)
@@ -126,6 +121,13 @@ def rotate_data(ds):
     data = data.drop_vars(vars_to_drop)
 
     return data
+
+
+def top_values(x):
+    time_slice = x.fillna(0).isel(time=0)
+    sorted_dataset = time_slice.sortby("states", ascending=False)
+    filtered_dataset = sorted_dataset.isel(cell=slice(0, NR_OF_CELLS_PER_TIMESLICE))
+    return filtered_dataset.expand_dims(time=[x.time.values[0]])
 
 
 def filter_top_values(data):
@@ -236,6 +238,7 @@ def has_states(tag):
 
 def filter_tags(tags):
     logger.debug("Filtering tags")
+    # return [tag for tag in tags if not already_processed(tag) and has_states(tag)]
     return [tag for tag in tags if has_states(tag)]
 
 
