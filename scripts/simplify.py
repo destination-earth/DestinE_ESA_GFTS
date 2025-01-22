@@ -1,5 +1,4 @@
 import logging
-from multiprocessing import Pool
 
 import boto3
 import healpy as hp
@@ -57,17 +56,16 @@ def regrid_to_rotate(data, cell_ids_rotated, ids_weight, weight):
 
 
 def top_values(x):
-    x = x.stack(cell_time=("cell", "time"))
-    x = x.dropna("cell_time")
-    x = x.sortby("states", ascending=False)
-    x = x.isel(cell_time=slice(0, NR_OF_CELLS_PER_TIMESLICE))
-    x = x.unstack("cell_time")
-    return x
+    time_slice = x.fillna(0).isel(time=0)
+    sorted_dataset = time_slice.sortby("states", ascending=False)
+    filtered_dataset = sorted_dataset.isel(cell=slice(0, NR_OF_CELLS_PER_TIMESLICE))
+    return filtered_dataset.expand_dims(time=[x.time.values[0]])
 
 
 def rotate_data(ds):
+    logger.debug("Rotating tag data")
+
     data = (
-        # ds.isel(time=slice(0, 25))  ## i keep only this for testing fast.
         ds.rename_vars({"latitude": "lat_good", "longitude": "lon_good"}).stack(
             cell=["x", "y"], create_index=False
         )
@@ -104,6 +102,9 @@ def rotate_data(ds):
     ph_rotated = ph + rotated_angle_lon / 180 * np.pi
     ids_weight, weight = hp.get_interp_weights(NSIDE, theta, ph_rotated, nest=NEST)
 
+    data = data.chunk({"time": 1, "cell": -1})
+
+    logger.debug("Applying ufunc for regridding")
     data["states"][:, :] = xr.apply_ufunc(
         regrid_to_rotate,
         data.states_rotated,
@@ -120,37 +121,27 @@ def rotate_data(ds):
         output_dtypes=[data.states.dtype],
     )
 
-    data.cell_ids.attrs = {
-        "grid_name": "healpix",
-        "nside": NSIDE,
-        "nest": NEST,
-    }
-    data = data.pipe(xdggs.decode)
-
     vars_to_keep = ["states", "cell_ids", "time"]
     vars_to_drop = [var for var in data.variables if var not in vars_to_keep]
     data = data.drop_vars(vars_to_drop)
 
-    filtered_data = data.groupby("time").map(lambda f: top_values(f))
+    return data
 
-    filtered_data.cell_ids.attrs = {
-        "grid_name": "healpix",
-        "nside": NSIDE,
-        "nest": NEST,
-    }
-    filtered_data_xddgs = filtered_data.pipe(xdggs.decode)
 
-    filtered_data = filtered_data.assign_coords(
-        filtered_data_xddgs.dggs.cell_centers().coords
+def filter_top_values(data):
+    logger.debug("Extracting top values for each time")
+    template = data.isel(cell=slice(0, NR_OF_CELLS_PER_TIMESLICE))
+    filtered_data = (
+        data.chunk({"time": 1, "cell": -1})
+        .map_blocks(top_values, template=template)
+        .compute()
     )
-    filtered_data["longitude"] -= 180
 
-    return filtered_data.to_dataframe().dropna().reset_index()
+    return filtered_data
 
 
 def open_dataset(tag):
     logger.debug(f"Opening tag {tag}")
-
     store = s3fs.S3Map(
         root=f"s3://{SOURCE_BUCKET}/{PREFIX}{tag}/states.zarr",
         s3=get_filesystem(),
@@ -160,8 +151,7 @@ def open_dataset(tag):
 
 
 def add_pressure_and_temperature(df, tag):
-    del df["longitude"]
-    del df["latitude"]
+    logger.debug(f"Adding pressure and temperature {tag}")
 
     path = f"s3://gfts-ifremer/bargip/tag/formatted/{tag}/dst.csv"
     fs = get_filesystem()
@@ -206,12 +196,15 @@ def to_parquet(df, tag):
     df = df.set_index(["time", "cell_ids"])
 
     with get_filesystem().open(
-        f"s3://destine-gfts-visualisation-data/{PREFIX}{tag}/{tag}.parquet", "wb"
+        f"s3://destine-gfts-visualisation-data/{PREFIX}{tag}/{tag}_healpix.parquet",
+        "wb",
     ) as fl:
         df.to_parquet(fl)
 
 
 def list_tags():
+    logger.debug("Listing tags")
+
     s3 = boto3.resource(service_name="s3", endpoint_url=ENDPOINT)
 
     folders = s3.meta.client.list_objects(
@@ -224,6 +217,8 @@ def list_tags():
 def process_tag(tag):
     data = open_dataset(tag)
     result = rotate_data(data)
+    result = filter_top_values(result)
+    result = result.to_dataframe().dropna().reset_index()
     result_with_temp = add_pressure_and_temperature(result, tag)
 
     to_parquet(df=result_with_temp, tag=tag)
@@ -231,7 +226,7 @@ def process_tag(tag):
 
 def already_processed(tag):
     return get_filesystem().exists(
-        f"s3://destine-gfts-visualisation-data/{PREFIX}{tag}/{tag}.geojson"
+        f"s3://destine-gfts-visualisation-data/{PREFIX}{tag}/{tag}_healpix.parquet"
     )
 
 
@@ -240,16 +235,15 @@ def has_states(tag):
 
 
 def filter_tags(tags):
-    return [tag for tag in tags if not already_processed(tag) and has_states(tag)]
+    logger.debug("Filtering tags")
+    return [tag for tag in tags if has_states(tag)]
 
 
 def main():
-    logger.debug("Listing tags")
     tags = list_tags()
     tags = filter_tags(tags)
-
-    with Pool(6) as p:
-        p.map(process_tag, tags)
+    for tag in tags:
+        process_tag(tag)
 
 
 if __name__ == "__main__":
