@@ -1,50 +1,59 @@
-import xdggs
+import xarray as xr
+import numpy as np
 
-from simplify import has_states, list_tags, logger, open_dataset
+from simplify import (
+    has_states,
+    list_tags,
+    logger,
+    open_dataset,
+    rotate_data,
+    get_filesystem,
+)
 
 NSIDE = 4096
 
 
+def rotate_group():
+    data = xr.open_zarr("data/pollock_average.zarr")
+    rotated = rotate_data(data.rename_dims({"quarter": "time"}))
+    rotated.to_zarr("data/pollock_average_rotated.zarr", mode="w")
+
+
 def main():
-    logger.debug("Listing tags")
     tags = list_tags()
+
     result = None
     timpesteps = 0
-    for tag in tags:
+    for idx, tag in enumerate(tags):
         if not has_states(tag):
             logger.debug(f"No states.zarr file found for {tag}")
             continue
+        logger.debug(f"Processing tag {tag} ({idx + 1}/{len(tags)})")
 
         data = open_dataset(tag)
         timpesteps += data.time.shape[0]
+        data = data.fillna(0)
 
-        data.cell_ids.attrs = {
-            "grid_name": "healpix",
-            "nside": NSIDE,
-            "nest": True,
-        }
-
-        data = data.drop_vars(["latitude", "longitude"]).stack(
-            cell=["x", "y"], create_index=False
-        )
-        data = data.set_xindex("cell_ids", xdggs.DGGSIndex)
-
-        avg_by_quarter = data.groupby("time.quarter").sum("time", skipna=True)
+        avg_by_quarter = data.groupby("time.quarter").sum("time").compute()
 
         if result is None:
             result = avg_by_quarter
         else:
             result += avg_by_quarter
 
+        result = result.fillna(0)
+        result = result.compute()
+
     result = result / timpesteps
 
-    result.to_zarr("data/pollock_average.zarr")
+    result = result.where(result != 0, other=np.nan)
 
-    # Also export normalized and sretched as uint16
-    max_value = result.states.max()
-    result.states = (result.states / max_value * 65535).astype("uint16")
+    result.to_zarr("data/pollock_average.zarr", mode="w")
 
-    result.to_zarr("data/pollock_average_uint16.zarr")
+    store = get_filesystem().get_mapper(
+        "s3://destine-gfts-visualisation-data/groups/pollock_average.zarr"
+    )
+    result.to_zarr(store=store, mode="w", consolidated=True, compute=True)
 
 
 if __name__ == "__main__":
