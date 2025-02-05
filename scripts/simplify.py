@@ -1,6 +1,7 @@
 import logging
 
 import boto3
+import click
 import healpy as hp
 import numpy as np
 import pandas as pd
@@ -20,7 +21,7 @@ PREFIX = "tags/bargip/tracks_4/"
 PROFILE = "ovh_gfts"
 REGION = "gra"
 
-NR_OF_CELLS_PER_TIMESLICE = 200
+NR_OF_CELLS_PER_TIMESLICE = 800
 NSIDE = 4096
 NEST = True
 UINT16_MAX = 65535
@@ -126,24 +127,25 @@ def rotate_data(ds):
 def top_values(x):
     time_slice = x.fillna(0).isel(time=0)
     sorted_dataset = time_slice.sortby("states", ascending=False)
-    filtered_dataset = sorted_dataset.isel(cell=slice(0, NR_OF_CELLS_PER_TIMESLICE))
-    return filtered_dataset.expand_dims(time=[x.time.values[0]])
+    threshold = sorted_dataset.isel(cell=200)
+    filtered_dataset = x.where(x.states > threshold.states, 0)
+    return filtered_dataset
 
 
 def filter_top_values(data):
     logger.debug("Extracting top values for each time")
-    template = data.isel(cell=slice(0, NR_OF_CELLS_PER_TIMESLICE))
     filtered_data = (
         data.chunk({"time": 1, "cell": -1})
-        .map_blocks(top_values, template=template)
+        .map_blocks(top_values, template=data)
         .compute()
     )
-
+    filtered_data = filtered_data.where(filtered_data != 0).dropna("cell", how="all")
     return filtered_data
 
 
 def open_dataset(tag):
     logger.debug(f"Opening tag {tag}")
+
     store = s3fs.S3Map(
         root=f"s3://{SOURCE_BUCKET}/{PREFIX}{tag}/states.zarr",
         s3=get_filesystem(),
@@ -236,15 +238,21 @@ def has_states(tag):
     return get_filesystem().exists(f"s3://{SOURCE_BUCKET}/{PREFIX}{tag}/states.zarr")
 
 
-def filter_tags(tags):
-    logger.debug("Filtering tags")
-    # return [tag for tag in tags if not already_processed(tag) and has_states(tag)]
-    return [tag for tag in tags if has_states(tag)]
+def filter_tags(tags, start, end):
+    logger.debug(f"Filtering tags from start {start} to end {end}")
+    if start is not None:
+        tags = tags[start:end]
+    return [tag for tag in tags if not already_processed(tag) and has_states(tag)]
+    # return [tag for tag in tags if has_states(tag)]
 
 
-def main():
+@click.command()
+@click.option("--start", default=None, help="Start index for tags.", type=int)
+@click.option("--end", default=None, help="End index for tags", type=int)
+def main(start, end):
     tags = list_tags()
-    tags = filter_tags(tags)
+    tags = filter_tags(tags, start, end)
+
     for tag in tags:
         process_tag(tag)
 
