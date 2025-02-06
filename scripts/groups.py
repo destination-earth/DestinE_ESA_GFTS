@@ -14,12 +14,18 @@ NSIDE = 4096
 
 
 def rotate_group():
-    data = xr.open_zarr("data/pollock_average.zarr")
+    data = xr.open_zarr("data/sea_bass_average_with_shift.zarr")
     rotated = rotate_data(data.rename_dims({"quarter": "time"}))
-    rotated.to_zarr("data/pollock_average_rotated.zarr", mode="w")
+    rotated = rotated.rename_dims({"time": "quarter"})
+    rotated.to_zarr("data/sea_bass_average.zarr", mode="w")
+
+    store = get_filesystem().get_mapper(
+        "s3://destine-gfts-visualisation-data/groups/sea_bass_average.zarr"
+    )
+    rotated.to_zarr(store=store, mode="w", consolidated=True, compute=True)
 
 
-def main():
+def create_groups():
     tags = list_tags()
 
     result = None
@@ -48,13 +54,14 @@ def main():
 
     result = result.where(result != 0, other=np.nan)
 
-    result.to_zarr("data/pollock_average.zarr", mode="w")
+    result.to_zarr("data/sea_bass_average_with_shift.zarr", mode="w")
 
     store = get_filesystem().get_mapper(
-        "s3://destine-gfts-visualisation-data/groups/pollock_average.zarr"
+        "s3://destine-gfts-visualisation-data/groups/pollock_average_with_shift.zarr"
     )
     result.to_zarr(store=store, mode="w", consolidated=True, compute=True)
 
 
 if __name__ == "__main__":
-    main()
+    create_groups()
+    rotate_group()
