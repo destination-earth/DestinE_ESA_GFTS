@@ -62,7 +62,7 @@ def create_groups():
     result.to_zarr("data/sea_bass_average_with_shift.zarr", mode="w")
 
     store = get_filesystem().get_mapper(
-        "s3://destine-gfts-visualisation-data/groups/pollock_average_with_shift.zarr"
+        "s3://destine-gfts-visualisation-data/groups/sea_bass_average_with_shift.zarr"
     )
     result.to_zarr(store=store, mode="w", consolidated=True, compute=True)
 
