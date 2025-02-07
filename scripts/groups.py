@@ -13,6 +13,30 @@ from simplify import (
 NSIDE = 4096
 
 
+def convert_to_parquet():
+    data = xr.open_zarr("data/sea_bass_average.zarr")
+    data = (
+        data.to_dataframe()
+        .reset_index()
+        .set_index(["cell_ids", "quarter"])
+        .unstack("quarter")
+    )
+    del data["cell"]
+    data = data.reset_index()
+    data.columns = ["cell_ids"] + [f"quarter_{i}" for i in range(1, 5)]
+
+    for i in range(1, 5):
+        quarter = data[["cell_ids", f"quarter_{i}"]]
+        quarter = quarter[quarter > 1e-7].dropna()
+        logger.info(f"Writing parquet file for quarter {i}")
+        quarter.to_parquet(f"data/sea_bass_average_q{i}.parquet", index=False)
+        with get_filesystem().open(
+            f"s3://destine-gfts-visualisation-data/groups/sea_bass_average_q{i}.parquet",
+            "wb",
+        ) as fl:
+            quarter.to_parquet(fl)
+
+
 def rotate_group():
     data = xr.open_zarr("data/sea_bass_average_with_shift.zarr")
     rotated = rotate_data(data.rename_dims({"quarter": "time"}))
@@ -70,3 +94,4 @@ def create_groups():
 if __name__ == "__main__":
     create_groups()
     rotate_group()
+    convert_to_parquet()
