@@ -17,8 +17,8 @@ def rotate_group():
     data = xr.open_zarr("data/sea_bass_average_with_shift.zarr")
     rotated = rotate_data(data.rename_dims({"quarter": "time"}))
     rotated = rotated.rename_dims({"time": "quarter"})
-    rotated.to_zarr("data/sea_bass_average.zarr", mode="w")
 
+    rotated.to_zarr("data/sea_bass_average.zarr", mode="w")
     store = get_filesystem().get_mapper(
         "s3://destine-gfts-visualisation-data/groups/sea_bass_average.zarr"
     )
@@ -45,7 +45,12 @@ def create_groups():
         if result is None:
             result = avg_by_quarter
         else:
-            result += avg_by_quarter
+            # Combine both datasets and sum by quarter
+            result = xr.concat(
+                [avg_by_quarter, result],
+                dim="quarter",
+            )
+            result = result.groupby("quarter").sum("quarter")
 
         result = result.fillna(0)
         result = result.compute()
