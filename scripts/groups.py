@@ -15,26 +15,24 @@ NSIDE = 4096
 
 def convert_to_parquet():
     data = xr.open_zarr("data/sea_bass_average.zarr")
-    data = (
-        data.to_dataframe()
-        .reset_index()
-        .set_index(["cell_ids", "quarter"])
-        .unstack("quarter")
-    )
-    del data["cell"]
-    data = data.reset_index()
-    data.columns = ["cell_ids"] + [f"quarter_{i}" for i in range(1, 5)]
-
-    for i in range(1, 5):
-        quarter = data[["cell_ids", f"quarter_{i}"]]
-        quarter = quarter[quarter > 1e-7].dropna()
-        logger.info(f"Writing parquet file for quarter {i}")
-        quarter.to_parquet(f"data/sea_bass_average_q{i}.parquet", index=False)
+    for quarter, group in data.groupby("quarter"):
+        logger.info(f"Writing parquet file for quarter {quarter}")
+        subset = (
+            group.to_dataframe()
+            .reset_index()
+            .set_index(["cell_ids", "quarter"])
+            .unstack("quarter")
+        )
+        del subset["cell"]
+        subset = subset.reset_index()
+        subset.columns = ["cell_ids", "states"]
+        subset = subset[subset > 1e-7].dropna()
+        subset.to_parquet(f"data/sea_bass_average_q{quarter}.parquet", index=False)
         with get_filesystem().open(
-            f"s3://destine-gfts-visualisation-data/groups/sea_bass_average_q{i}.parquet",
+            f"s3://destine-gfts-visualisation-data/groups/sea_bass_average_q{quarter}.parquet",
             "wb",
         ) as fl:
-            quarter.to_parquet(fl)
+            subset.to_parquet(fl, index=False)
 
 
 def rotate_group():
@@ -92,6 +90,6 @@ def create_groups():
 
 
 if __name__ == "__main__":
-    create_groups()
-    rotate_group()
+    # create_groups()
+    # rotate_group()
     convert_to_parquet()
