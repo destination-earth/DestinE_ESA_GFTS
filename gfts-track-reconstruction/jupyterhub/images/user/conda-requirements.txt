@@ -7,8 +7,11 @@ copernicusmarine
 dask-image
 eccodes>=2.35.0
 fastparquet
+h3ronpy
 healpy
+imageio-ffmpeg
 jq
+movingpandas
 papermill
 pixi
 pre-commit
