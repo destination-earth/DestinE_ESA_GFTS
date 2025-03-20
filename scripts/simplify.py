@@ -26,6 +26,23 @@ NSIDE = 4096
 NEST = True
 UINT16_MAX = 65535
 
+# FISH-INTEL Pollock settings
+TAG_ROOT = "https://data-taos.ifremer.fr/data_tmp/cleaned/tag/"
+TAG_ROOT_STORAGE_OPTIONS = {}
+PREFIX = "bar_taos/run/quentinmaz/pollock/"
+
+# FISH-INTEL Seabass settings
+TAG_ROOT = "bar_taos/formatted/"
+TAG_ROOT_STORAGE_OPTIONS = {
+    "anon": False,
+    "profile": PROFILE,
+    "client_kwargs": {
+        "endpoint_url": "https://s3.gra.perf.cloud.ovh.net/",
+        "region_name": "gra",
+    },
+}
+PREFIX = "NO DATA YET"
+
 
 boto3.setup_default_session(profile_name=PROFILE)
 
@@ -56,7 +73,7 @@ def regrid_to_rotate(data, cell_ids_rotated, ids_weight, weight):
     return data
 
 
-def rotate_data(ds):
+def _rotate_data(ds):
     logger.debug("Rotating tag data")
 
     data = (
@@ -124,6 +141,22 @@ def rotate_data(ds):
     return data
 
 
+def rotate_data(ds: xr.Dataset):
+    if "cells" in ds.dims:
+        logger.debug("ds is already a HEALPix grid")
+        vars_to_keep = ["states", "cell_ids", "time"]
+        vars_to_drop = [var for var in ds.variables if var not in vars_to_keep]
+        return (
+            ds.drop_vars(vars_to_drop)
+            .rename({"cells": "cell"})
+            .chunk({"time": 1, "cell": -1})
+        )
+    elif all(d in ds.dims for d in ["x", "y"]):
+        return _rotate_data(ds)
+    else:
+        raise ValueError('ds\'s dimensions must either include "cells" or ["x", "y"].')
+
+
 def top_values(x):
     time_slice = x.fillna(0).isel(time=0)
     sorted_dataset = time_slice.sortby("states", ascending=False)
@@ -154,20 +187,27 @@ def open_dataset(tag):
     return xr.open_zarr(store)
 
 
-def add_pressure_and_temperature(df, tag):
+def open_dst(root: str, tag_name: str, storage_options={}):
+    if not root.endswith("/"):
+        root += "/"
+
+    if storage_options == {}:
+        path = f"{root}{tag_name}/dst.csv"
+    else:
+        path = f"s3://{SOURCE_BUCKET}/{root}{tag_name}/dst.csv"
+
+    return pd.read_csv(path, storage_options=storage_options)[
+        ["time", "temperature", "pressure"]
+    ]
+
+
+def add_pressure_and_temperature(df, tag) -> pd.DataFrame:
+    """Adds temperature and pression columns to df.
+    The values are added only to the most probable daily cell/cell_ids for each time.
+    """
     logger.debug(f"Adding pressure and temperature {tag}")
 
-    path = f"s3://gfts-ifremer/bargip/tag/formatted/{tag}/dst.csv"
-    fs = get_filesystem()
-
-    if not fs.exists(path):
-        raise ValueError(f"Track data for {tag} does not exist")
-
-    with fs.open(path) as fl:
-        ts = pd.read_csv(fl)
-
-    # Remove stale column
-    del ts["Unnamed: 0"]
+    ts = open_dst(TAG_ROOT, tag, TAG_ROOT_STORAGE_OPTIONS)
 
     ts.time = pd.to_datetime(ts.time).dt.tz_localize(None)
 
@@ -252,6 +292,8 @@ def filter_tags(tags, start, end):
 def main(start, end):
     tags = list_tags()
     tags = filter_tags(tags, start, end)
+
+    logger.debug(f"About to process {len(tags)} tags...")
 
     for tag in tags:
         process_tag(tag)
