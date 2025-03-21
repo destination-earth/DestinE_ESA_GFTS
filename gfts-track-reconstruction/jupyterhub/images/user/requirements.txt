@@ -8,5 +8,5 @@ jupyter-keepalive
 jupyterhub==4.1.6
 kbatch==0.5.0a2
 kbatch-papermill==0.1.0a1
-pangeo-fish==2025.03.1
-xarray-healpy @ git+https://github.com/iaocea/xarray-healpy.git@9d036a1b221f1b052cc4b1d09d45ac0e5166e403
+pangeo-fish==2025.3.1
+xarray-healpy==2025.3.2
