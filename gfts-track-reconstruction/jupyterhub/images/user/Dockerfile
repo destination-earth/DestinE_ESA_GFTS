@@ -1,5 +1,4 @@
-# trigger rebuild: 2024-11-22
-FROM quay.io/pangeo/pangeo-notebook:2024.08.18
+FROM quay.io/pangeo/pangeo-notebook:2025.01.24
 # Install fusermount3 command and open GL library
 USER root
 RUN apt-get update && apt-get install -y fuse3 libgl1 xvfb

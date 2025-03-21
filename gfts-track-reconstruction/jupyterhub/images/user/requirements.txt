@@ -6,8 +6,7 @@ gh-scoped-creds
 isort
 jupyter-keepalive
 jupyterhub==4.1.6
-kbatch @ git+https://github.com/kbatch-dev/kbatch@1c18c485d5482fa8878dfedf922201b5e8556528#subdirectory=kbatch
-kbatch-papermill @ git+https://github.com/minrk/kbatch-papermill
-# git+https://github.com/iaocea/pangeo-fish#egg=pangeo-fish
-#git+https://github.com/iaocea/xarray-regridding#egg=xarray-regridding
-xarray-healpy @ git+https://github.com/iaocea/xarray-regridding.git@0ffca6058f4008f4f22f076e2d60787fcf32ac82
+kbatch==0.5.0a2
+kbatch-papermill==0.1.0a1
+pangeo-fish==2025.3.1
+xarray-healpy==2025.3.2
