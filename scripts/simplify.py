@@ -226,6 +226,19 @@ def add_pressure_and_temperature(df, tag) -> pd.DataFrame:
     mpc_with_temp = mpc_with_temp.set_index(["time", "cell_ids"])
 
     df = df.set_index(["time", "cell_ids"])
+    # detects hourly-indexed `df`
+    # better to do it before re-indexing?
+    # pd.DatetimeIndex(pd.to_datetime(df["time"]).drop_duplicates()).inferred_freq
+    freq = df.index.get_level_values(0).drop_duplicates().inferred_freq
+    if freq is None:
+        msg = f"The time frequency of the location estimations of tag {tag} could not be inferred."
+        logger.debug(msg)
+
+    if freq.lower() == "h":
+        logger.debug("Aggregating `df` daily...")
+        # TODO: is `mean` a reasonable aggregation function?
+        df = df.groupby([pd.Grouper(level="time", freq="D"), "cell_ids"]).mean()
+        df["cell"] = df["cell"].astype("Int64")
 
     daily_with_mpc_temp = df.merge(
         mpc_with_temp, left_index=True, right_index=True, how="left"
