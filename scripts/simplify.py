@@ -8,46 +8,77 @@ import pandas as pd
 import s3fs
 import xarray as xr
 import xdggs
+import os
+import json
 
 logging.basicConfig()
 
 logger = logging.getLogger("gfts")
 logger.setLevel(logging.DEBUG)
 
-ENDPOINT = "https://s3.gra.perf.cloud.ovh.net/"
-SOURCE_BUCKET = "gfts-ifremer"
-TARGET_BUCKET = "destine-gfts-visualisation-data"
-PREFIX = "tags/bargip/tracks_4/"
-PROFILE = "ovh_gfts"
-REGION = "gra"
-
 NR_OF_CELLS_PER_TIMESLICE = 800
 NSIDE = 4096
 NEST = True
 UINT16_MAX = 65535
 
-# FISH-INTEL Pollock settings
-TAG_ROOT = "https://data-taos.ifremer.fr/data_tmp/cleaned/tag/"
-TAG_ROOT_STORAGE_OPTIONS = {}
-PREFIX = "bar_taos/run/quentinmaz/pollock/"
+# remote access
+ENDPOINT = "https://s3.gra.perf.cloud.ovh.net/"
+PROFILE = "ovh_gfts"
+REGION = "gra"
 
-# FISH-INTEL Seabass settings
-TAG_ROOT = "bar_taos/formatted/"
-TAG_ROOT_STORAGE_OPTIONS = {
-    "anon": False,
-    "profile": PROFILE,
-    "client_kwargs": {
-        "endpoint_url": "https://s3.gra.perf.cloud.ovh.net/",
-        "region_name": "gra",
-    },
-}
-PREFIX = "NO DATA YET"
+# I/O variables
+# .zarr files are expected to be {SOURCE_BUCKET}/{SOURCE_PREFIX}{tag}/{SOURCE_SUFFIX}states.zarr
+# .parquet files are stored to {TARGET_BUCKET}/{TARGET_PREFIX}{tag}/{tag}_healpix.parquet
+
+SOURCE_BUCKET = os.environ.get("SOURCE_BUCKET", "gfts-ifremer")
+TARGET_BUCKET = os.environ.get("TARGET_BUCKET", "destine-gfts-visualisation-data")
+TAG_ROOT = os.environ.get("TAG_ROOT")
+TAG_ROOT_STORAGE_OPTIONS = json.loads(os.environ.get("TAG_ROOT_STORAGE_OPTIONS", "{}"))  # type: dict
+SOURCE_PREFIX = os.environ.get("SOURCE_PREFIX")
+SOURCE_SUFFIX = os.environ.get("SOURCE_SUFFIX", "")
+TARGET_PREFIX = os.environ.get("TARGET_PREFIX")
+
+# BARGIP campaign settings
+# TAG_ROOT = "bargip/tag/formatted/"
+# TAG_ROOT_STORAGE_OPTIONS = {
+#     "anon": False,
+#     "profile": PROFILE,
+#     "client_kwargs": {
+#         "endpoint_url": ENDPOINT,
+#         "region_name": REGION,
+#     },
+# }
+# SOURCE_PREFIX = "tags/bargip/tracks_4/"
+# SOURCE_SUFFIX = ""
+# TARGET_PREFIX = "bargip_sea_bass/"
+
+# FISH-INTEL Pollock settings
+# TAG_ROOT = "https://data-taos.ifremer.fr/data_tmp/cleaned/tag/"
+# TAG_ROOT_STORAGE_OPTIONS = {}
+# SOURCE_PREFIX = "bar_taos/run/quentinmaz/pollock/"
+# SOURCE_SUFFIX = ""
+# TARGET_PREFIX = "taos_pollock/"
+
+# FISH-INTEL Sea bass settings
+# TAG_ROOT = "bar_taos/formatted/"
+# TAG_ROOT_STORAGE_OPTIONS = {
+#     "anon": False,
+#     "profile": PROFILE,
+#     "client_kwargs": {
+#         "endpoint_url": ENDPOINT,
+#         "region_name": REGION,
+#     },
+# }
+# SOURCE_PREFIX = "NO DATA YET"
+# SOURCE_SUFFIX = ""
+# TARGET_PREFIX = "taos_sea_bass/"
 
 
 boto3.setup_default_session(profile_name=PROFILE)
 
 
 def get_filesystem():
+    """return a S3FileSystem based on global settings."""
     return s3fs.S3FileSystem(
         anon=False,
         profile=PROFILE,
@@ -73,7 +104,7 @@ def regrid_to_rotate(data, cell_ids_rotated, ids_weight, weight):
     return data
 
 
-def _rotate_data(ds):
+def _rotate_data(ds: xr.Dataset) -> xr.Dataset:
     logger.debug("Rotating tag data")
 
     data = (
@@ -157,7 +188,7 @@ def rotate_data(ds: xr.Dataset):
         raise ValueError('ds\'s dimensions must either include "cells" or ["x", "y"].')
 
 
-def top_values(x):
+def top_values(x: xr.Dataset):
     time_slice = x.fillna(0).isel(time=0)
     sorted_dataset = time_slice.sortby("states", ascending=False)
     threshold = sorted_dataset.isel(cell=200)
@@ -165,7 +196,7 @@ def top_values(x):
     return filtered_dataset
 
 
-def filter_top_values(data):
+def filter_top_values(data: xr.Dataset):
     logger.debug("Extracting top values for each time")
     filtered_data = (
         data.chunk({"time": 1, "cell": -1})
@@ -177,10 +208,11 @@ def filter_top_values(data):
 
 
 def open_dataset(tag):
+    """open a remote states.zarr array."""
     logger.debug(f"Opening tag {tag}")
 
     store = s3fs.S3Map(
-        root=f"s3://{SOURCE_BUCKET}/{PREFIX}{tag}/states.zarr",
+        root=f"s3://{SOURCE_BUCKET}/{SOURCE_PREFIX}{tag}/{SOURCE_SUFFIX}states.zarr",
         s3=get_filesystem(),
         check=False,
     )
@@ -201,7 +233,7 @@ def open_dst(root: str, tag_name: str, storage_options={}):
     ]
 
 
-def add_pressure_and_temperature(df, tag) -> pd.DataFrame:
+def add_pressure_and_temperature(df: pd.DataFrame, tag: str) -> pd.DataFrame:
     """Adds temperature and pression columns to df.
     The values are added only to the most probable daily cell/cell_ids for each time.
     """
@@ -236,7 +268,6 @@ def add_pressure_and_temperature(df, tag) -> pd.DataFrame:
 
     if freq.lower() == "h":
         logger.debug("Aggregating `df` daily...")
-        # TODO: is `mean` a reasonable aggregation function?
         df = df.groupby([pd.Grouper(level="time", freq="D"), "cell_ids"]).mean()
         df["cell"] = df["cell"].astype("Int64")
 
@@ -247,13 +278,13 @@ def add_pressure_and_temperature(df, tag) -> pd.DataFrame:
     return daily_with_mpc_temp.reset_index()
 
 
-def to_parquet(df, tag):
+def to_parquet(df: pd.DataFrame, tag: str):
     logger.debug(f"Writing parquet file for {tag}")
 
     df = df.set_index(["time", "cell_ids"])
 
     with get_filesystem().open(
-        f"s3://destine-gfts-visualisation-data/{PREFIX}{tag}/{tag}_healpix.parquet",
+        f"s3://{TARGET_BUCKET}/{TARGET_PREFIX}{tag}/{tag}_healpix.parquet",
         "wb",
     ) as fl:
         df.to_parquet(fl)
@@ -265,13 +296,13 @@ def list_tags():
     s3 = boto3.resource(service_name="s3", endpoint_url=ENDPOINT)
 
     folders = s3.meta.client.list_objects(
-        Bucket=SOURCE_BUCKET, Prefix=PREFIX, Delimiter="/"
+        Bucket=SOURCE_BUCKET, Prefix=SOURCE_PREFIX, Delimiter="/"
     )
     tags = [dat["Prefix"].split("/")[-2] for dat in folders["CommonPrefixes"]]
     return tags
 
 
-def process_tag(tag):
+def process_tag(tag: str):
     data = open_dataset(tag)
     result = rotate_data(data)
     result = filter_top_values(result)
@@ -281,17 +312,19 @@ def process_tag(tag):
     to_parquet(df=result_with_temp, tag=tag)
 
 
-def already_processed(tag):
+def already_processed(tag: str):
     return get_filesystem().exists(
-        f"s3://destine-gfts-visualisation-data/{PREFIX}{tag}/{tag}_healpix.parquet"
+        f"s3://{TARGET_BUCKET}/{SOURCE_PREFIX}{tag}/{tag}_healpix.parquet"
     )
 
 
-def has_states(tag):
-    return get_filesystem().exists(f"s3://{SOURCE_BUCKET}/{PREFIX}{tag}/states.zarr")
+def has_states(tag: str):
+    return get_filesystem().exists(
+        f"s3://{SOURCE_BUCKET}/{SOURCE_PREFIX}{tag}/states.zarr"
+    )
 
 
-def filter_tags(tags, start, end):
+def filter_tags(tags: list[str], start: int, end: int):
     logger.debug(f"Filtering tags from start {start} to end {end}")
     if start is not None:
         tags = tags[start:end]
