@@ -303,6 +303,8 @@ prometheus:
     create: true
   server:
     nodeSelector: *coreNodeSelector
+    persistentVolume:
+      size: 64Gi
     podLabels:
       hub.jupyter.org/network-access-hub: "true"
     ingress:
