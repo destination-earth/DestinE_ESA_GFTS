@@ -232,6 +232,7 @@ jupyterhub:
           - annefou
           - tinaok
           - quentinmaz
+          - capetienne
     services:
       kbatch-proxy: {}
 
