@@ -14,28 +14,32 @@ parts:
   - caption: Workflow
     chapters:
       # step 1
-      - file: input_data_preparation
+      - file: workflow/input_data_preparation
         sections:
-          - file: tag_data_processing
-          - file: reference_model_creation
+          - file: workflow/tag_data_processing
+          - file: workflow/reference_model_creation
       # step 2
-      - file: geolocation_model_execution
+      - file: workflow/geolocation_model_execution
         sections:
-          - file: papermill_launcher2
-        #TODO: computing necessary (html/mp4) files for the "execution monitoring" panel
+          - file: workflow/papermill_launcher2
       # step 3
-      - file: scientific_validation
+      - file: workflow/scientific_validation
         sections:
-          - file: pannel_plot_s3
-          - file: plot_results_in_html
-      # step 4
-      # ...
+          - file: workflow/compute_scientific_html
+          - file: workflow/launch_scientific_html
+          - file: workflow/panel_scientific_validation
+      - file: workflow/result_publication
+        sections:
+          - file: workflow/regroup_results
+          - file: workflow/simplify_individual_results
+          - file: workflow/contact_gfts_service
   - caption: Miscellaneous Examples
     chapters:
       - file: other_examples_overview
       # detailed inspection of the input data
       - file: CopernicusMarine
       - file: tag_data
+      - file: tag_data_summary
       # another way to build reference models
       - file: s3_CMEMS_2D_kerchunk
       - file: s3_CMEMS_3D_kerchunk

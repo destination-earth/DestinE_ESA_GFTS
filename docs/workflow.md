@@ -7,10 +7,11 @@ As mentioned in the previous section, this project will use [`pangeo-fish`](http
 ## Steps
 
 The GFTS Workflow can be described as a vertical pipeline, whose main steps are the following:
-**1. Data Preparation:** preparation of the input data for `pangeo-fish`.
-**2. Execution:** run of the geolocation model implemented by `pangeo-fish` on all the biologging data.
-**3. Scientific Validation:** in-depth analysis of the results and data validation (assumed to be partly done with `pangeo-fish`).
-**4. Result Publication:** preparation and submission of the results to the GFTS Service.
+
+1. **Data Preparation:** preparation of the input data for `pangeo-fish`.
+2. **Execution:** run of the geolocation model implemented by `pangeo-fish` on all the biologging data.
+3. **Scientific Validation:** in-depth analysis of the results and data validation (assumed to be partly done with `pangeo-fish`).
+4. **Result Publication:** preparation and submission of the results to the GFTS Service.
 
 In the next chapter, we go through these steps in more details.
 
@@ -36,4 +37,4 @@ your_tag_folder
 ```
 
 This organization is easy to automatically implement and follow with `pangeo_fish`'s I/O operations.
-With some practice, you will quickly be familiar this file structure!
+With some practice, you will quickly be familiar with this file structure!
