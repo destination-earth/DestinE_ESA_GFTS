@@ -1,0 +1,937 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Plot for scientific validation &#8212; Global Fish Tracking System (GFTS) - DestinE Platform use case</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/exercise.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'workflow/compute_scientific_html';</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Launching the scientific plotting notebooks as jobs" href="launch_scientific_html.html" />
+    <link rel="prev" title="3. Scientific Validation of the results" href="scientific_validation.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/gfts.png" class="logo__image only-light" alt="Global Fish Tracking System (GFTS) - DestinE Platform use case - Home"/>
+    <script>document.write(`<img src="../_static/gfts.png" class="logo__image only-dark" alt="Global Fish Tracking System (GFTS) - DestinE Platform use case - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Global Fish Tracking System
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">About</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../GFTS_Use_Case_Description.html">The GFTS Use Case</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribute.html">How to contribute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code_of_conduct.html">Contributor Covenant Code of Conduct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rule_of_participation.html">Introduction</a></li>
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Onboarding new users</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../new2gfts.html">GFTS Presentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../workflow.html">GFTS Workflow</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Workflow</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="input_data_preparation.html">1. Data Preparation for <code class="docutils literal notranslate"><span class="pre">pangeo_fish</span></code></a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="tag_data_processing.html">Tag Data Preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference_model_creation.html">Create a Reference Model with <code class="docutils literal notranslate"><span class="pre">virtualizarr</span></code></a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="geolocation_model_execution.html">2. Estimation of fish locations</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="papermill_launcher2.html">Tutorial: processing several tags with <code class="docutils literal notranslate"><span class="pre">kbatch_papermill</span></code></a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="scientific_validation.html">3. Scientific Validation of the results</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Plot for scientific validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="launch_scientific_html.html">Launching the scientific plotting notebooks as jobs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="panel_scientific_validation.html">Result Visualization with a <code class="docutils literal notranslate"><span class="pre">panel</span></code> application</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="result_publication.html">4. Result Publication</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="regroup_results.html">Data Reduction: Quarters</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="simplify_individual_results.html">Data Reduction: Individual Tags</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="contact_gfts_service.html">Sending Results to the GFTS Service</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Miscellaneous Examples</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../other_examples_overview.html">Example Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CopernicusMarine.html">Copernicus Marine for GFTS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tag_data.html">Intro to Biologging data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tag_data_summary.html">Tool: How to summarize the tag data</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../s3_CMEMS_2D_kerchunk.html">Create Kerchunk catalog for CMEMS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../s3_CMEMS_3D_kerchunk.html">Create Kerchunk catalog for CMEMS 3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../s3chunked_parquet.html">Read parquet kerchunk catalog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmems_catalog_creation.html">Copernicus data exploration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gfts_intake.html">Reading CMEMS Copernicus data from GFTS s3 bucket</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Compute_3D_pdf.html">Computing 3D PDF from State matrix and tag pressure information</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ClimateDT-zarr-2D-3D.html">Extract selected area from DestinE Climate Twin in Healpix to Zarr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../visu3Dvista.html">Visualize bathymetry with pyvista</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reporting &amp; Outreach</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../deliverables.html">Project deliverables and reports</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../outreach.html">Conferences and other events</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">The GFTS Hub</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../admin_hub.html">Setup instructions and User Access</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://notebooks.gesis.org/binder/v2/gh/destination-earth/DestinE_ESA_GFTS/main?urlpath=lab/tree/docs/workflow/compute_scientific_html.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Binder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Binder logo" src="../_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="http://pangeo-eosc.vm.fedcloud.eu/jupyterhub/hub/user-redirect/git-pull?repo=https%3A//github.com/destination-earth/DestinE_ESA_GFTS&urlpath=lab/tree/DestinE_ESA_GFTS/docs/workflow/compute_scientific_html.ipynb&branch=main" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on JupyterHub"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="JupyterHub logo" src="../_static/images/logo_jupyterhub.svg">
+  </span>
+<span class="btn__text-container">JupyterHub</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/destination-earth/DestinE_ESA_GFTS" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/destination-earth/DestinE_ESA_GFTS/issues/new?title=Issue%20on%20page%20%2Fworkflow/compute_scientific_html.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/workflow/compute_scientific_html.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Plot for scientific validation</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plotting-functions">Plotting Functions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#execution">Execution</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="plot-for-scientific-validation">
+<h1>Plot for scientific validation<a class="headerlink" href="#plot-for-scientific-validation" title="Link to this heading">#</a></h1>
+<p>We recommend executing this notebook with <code class="docutils literal notranslate"><span class="pre">kbatch_papermill</span></code>.</p>
+<p>Given a result repository <code class="docutils literal notranslate"><span class="pre">result_root</span></code>, a tag name <code class="docutils literal notranslate"><span class="pre">tag_name</span></code> and the associated tag repository <code class="docutils literal notranslate"><span class="pre">tag_root</span></code>, the following cells compute a plot containing:</p>
+<ol class="arabic simple">
+<li><p>The temperature and pressure timeseries of the tag.</p></li>
+<li><p>The different reconstructed trajectories of the fish.</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># install pangeo-fish</span>
+<span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>pangeo-fish
+<span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span><span class="s2">&quot;dask&lt;2025&quot;</span><span class="w"> </span><span class="s2">&quot;distributed&lt;2025&quot;</span>
+<span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>dask<span class="o">[</span>dataframe<span class="o">]</span>
+<span class="o">!</span>pip<span class="w"> </span>list<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-e<span class="w"> </span>dask<span class="w"> </span>-e<span class="w"> </span>distributed
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># import libraries</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">xarray</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">xr</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pangeo_fish</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">holoviews</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">hv</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">movingpandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mpd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">holoviews.element.chart</span><span class="w"> </span><span class="kn">import</span> <span class="n">Curve</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">holoviews.core.overlay</span><span class="w"> </span><span class="kn">import</span> <span class="n">Overlay</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pangeo_fish.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">open_tag</span><span class="p">,</span> <span class="n">read_trajectories</span><span class="p">,</span> <span class="n">save_html_hvplot</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pangeo_fish.tags</span><span class="w"> </span><span class="kn">import</span> <span class="n">to_time_slice</span>
+
+<span class="n">pangeo_fish</span><span class="o">.</span><span class="n">__version__</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_parameters docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># this will be updated by `papermill` (or do it yourself if you execute the notebook manually!)</span>
+<span class="n">tag_root</span> <span class="o">=</span> <span class="s2">&quot;s3://gfts-ifremer/bar_taos/formatted/&quot;</span>
+<span class="n">tag_name</span> <span class="o">=</span> <span class="s2">&quot;PE_A18891&quot;</span>
+<span class="n">result_root</span> <span class="o">=</span> <span class="s2">&quot;s3://gfts-ifremer/bar_taos/run/username/test&quot;</span>
+
+<span class="n">storage_options</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;anon&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s2">&quot;profile&quot;</span><span class="p">:</span> <span class="s2">&quot;gfts&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;client_kwargs&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;endpoint_url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://s3.gra.perf.cloud.ovh.net&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;region_name&quot;</span><span class="p">:</span> <span class="s2">&quot;gra&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">track_modes</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;mode&quot;</span><span class="p">]</span>
+<span class="n">target_root</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">result_root</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">tag_name</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="n">target_root</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># load trajectories</span>
+<span class="n">trajectories</span> <span class="o">=</span> <span class="n">read_trajectories</span><span class="p">(</span>
+    <span class="n">track_modes</span><span class="p">,</span> <span class="n">target_root</span><span class="p">,</span> <span class="n">storage_options</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;parquet&quot;</span>
+<span class="p">)</span>
+
+<span class="c1"># retrieve the pd.DataFrame objects</span>
+<span class="n">mean_df</span> <span class="o">=</span> <span class="n">trajectories</span><span class="o">.</span><span class="n">trajectories</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">df</span>
+<span class="n">mode_df</span> <span class="o">=</span> <span class="n">trajectories</span><span class="o">.</span><span class="n">trajectories</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">df</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="plotting-functions">
+<h2>Plotting Functions<a class="headerlink" href="#plotting-functions" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">opts_kwargs</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;red&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;line_width&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+    <span class="s2">&quot;line_dash&quot;</span><span class="p">:</span> <span class="s2">&quot;dashed&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">create_vertical_lines</span><span class="p">(</span><span class="n">da</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">,</span> <span class="n">opts</span><span class="o">=</span><span class="p">{}):</span>
+    <span class="c1"># creates vertical lines styled w.r.t ``opts``</span>
+    <span class="n">vlines</span> <span class="o">=</span> <span class="n">hv</span><span class="o">.</span><span class="n">VLines</span><span class="p">(</span><span class="n">da</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">values</span><span class="p">)</span><span class="o">.</span><span class="n">opts</span><span class="p">(</span><span class="o">**</span><span class="n">opts</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">vlines</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">add_vertical_lines</span><span class="p">(</span><span class="n">plot</span><span class="p">,</span> <span class="n">da</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">,</span> <span class="n">opts</span><span class="o">=</span><span class="p">{},</span> <span class="n">margin_factor</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
+    <span class="c1"># adds vertical lines to a Curve object while preserving the initial vertical vertical limits</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">plot</span><span class="p">,</span> <span class="n">Curve</span><span class="p">):</span>
+        <span class="n">dim_name</span> <span class="o">=</span> <span class="n">plot</span><span class="o">.</span><span class="n">dimensions</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">plot</span><span class="p">,</span> <span class="n">Overlay</span><span class="p">):</span>
+        <span class="n">dim_name</span> <span class="o">=</span> <span class="n">plot</span><span class="o">.</span><span class="n">get_dimension</span><span class="p">(</span><span class="n">plot</span><span class="o">.</span><span class="n">ddims</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;unknown type for plot: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">plot</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">y_range</span> <span class="o">=</span> <span class="n">plot</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="n">dim_name</span><span class="p">)</span>
+    <span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span> <span class="o">=</span> <span class="n">y_range</span>
+    <span class="n">padding</span> <span class="o">=</span> <span class="p">(</span><span class="n">y_max</span> <span class="o">-</span> <span class="n">y_min</span><span class="p">)</span> <span class="o">*</span> <span class="n">margin_factor</span>
+    <span class="n">y_min</span> <span class="o">-=</span> <span class="n">padding</span>
+    <span class="n">y_max</span> <span class="o">+=</span> <span class="n">padding</span>
+
+    <span class="n">vlines</span> <span class="o">=</span> <span class="n">create_vertical_lines</span><span class="p">(</span><span class="n">da</span><span class="p">,</span> <span class="n">opts</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">plot</span> <span class="o">*</span> <span class="n">vlines</span><span class="p">)</span><span class="o">.</span><span class="n">opts</span><span class="p">(</span><span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span><span class="p">))</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">plot_ts</span><span class="p">(</span><span class="n">mean_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">mode_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">tag</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataTree</span><span class="p">):</span>
+    <span class="n">time_slice</span> <span class="o">=</span> <span class="n">to_time_slice</span><span class="p">(</span><span class="n">tag</span><span class="p">[</span><span class="s2">&quot;tagging_events/time&quot;</span><span class="p">])</span>
+    <span class="n">tag_log</span> <span class="o">=</span> <span class="n">tag</span><span class="p">[</span><span class="s2">&quot;dst&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">ds</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">time_slice</span><span class="p">)</span>
+
+    <span class="c1"># Creating pandas series for xarrray dataset</span>
+    <span class="n">mean_lon_</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">mean_df</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;longitude&quot;</span><span class="p">)</span>
+    <span class="n">mean_lat_</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">mean_df</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;latitude&quot;</span><span class="p">)</span>
+    <span class="n">mode_lon_</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">mode_df</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;longitude&quot;</span><span class="p">)</span>
+    <span class="n">mode_lat_</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">mode_df</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;latitude&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Creating xarray datasets</span>
+    <span class="n">mean_coords</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">mean_lon_</span><span class="p">,</span> <span class="n">mean_lat_</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">mode_coords</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">mode_lon_</span><span class="p">,</span> <span class="n">mode_lat_</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+
+    <span class="c1"># Assigning dataarrays to variables</span>
+    <span class="n">mean_lon</span> <span class="o">=</span> <span class="n">mean_coords</span><span class="p">[</span><span class="s2">&quot;longitude&quot;</span><span class="p">]</span>
+    <span class="n">mean_lat</span> <span class="o">=</span> <span class="n">mean_coords</span><span class="p">[</span><span class="s2">&quot;latitude&quot;</span><span class="p">]</span>
+    <span class="n">mode_lon</span> <span class="o">=</span> <span class="n">mode_coords</span><span class="p">[</span><span class="s2">&quot;longitude&quot;</span><span class="p">]</span>
+    <span class="n">mode_lat</span> <span class="o">=</span> <span class="n">mode_coords</span><span class="p">[</span><span class="s2">&quot;latitude&quot;</span><span class="p">]</span>
+
+    <span class="n">width</span> <span class="o">=</span> <span class="mi">500</span>
+    <span class="n">height</span> <span class="o">=</span> <span class="mi">250</span>
+
+    <span class="n">tag_log</span><span class="p">[</span><span class="s2">&quot;depth&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tag_log</span><span class="p">[</span><span class="s2">&quot;pressure&quot;</span><span class="p">]</span>
+
+    <span class="n">temp_plot</span> <span class="o">=</span> <span class="n">tag_log</span><span class="p">[</span><span class="s2">&quot;temperature&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hvplot</span><span class="p">(</span>
+        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;Red&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Temperature (°C)&quot;</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+    <span class="n">temp_plot</span> <span class="o">=</span> <span class="n">add_vertical_lines</span><span class="p">(</span>
+        <span class="n">temp_plot</span><span class="p">,</span> <span class="n">da</span><span class="o">=</span><span class="n">tag</span><span class="p">[</span><span class="s2">&quot;acoustic&quot;</span><span class="p">],</span> <span class="n">opts</span><span class="o">=</span><span class="n">opts_kwargs</span><span class="p">,</span> <span class="n">margin_factor</span><span class="o">=</span><span class="mf">0.1</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">opts</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">)</span>
+
+    <span class="n">depth_plot</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">tag_log</span><span class="p">[</span><span class="s2">&quot;depth&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">hvplot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;Blue&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Depth (m)&quot;</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">depth_plot</span> <span class="o">=</span> <span class="n">add_vertical_lines</span><span class="p">(</span>
+        <span class="n">depth_plot</span><span class="p">,</span> <span class="n">da</span><span class="o">=</span><span class="n">tag</span><span class="p">[</span><span class="s2">&quot;acoustic&quot;</span><span class="p">],</span> <span class="n">opts</span><span class="o">=</span><span class="n">opts_kwargs</span><span class="p">,</span> <span class="n">margin_factor</span><span class="o">=</span><span class="mf">0.1</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">opts</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">)</span>
+
+    <span class="n">lon_plot</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">mean_lat</span><span class="o">.</span><span class="n">hvplot</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="p">[</span><span class="n">mean_lat_</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">mean_lat_</span><span class="o">.</span><span class="n">max</span><span class="p">()])</span>
+        <span class="o">*</span> <span class="n">mode_lat</span><span class="o">.</span><span class="n">hvplot</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;mode&quot;</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="p">[</span><span class="n">mode_lat_</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">mean_lat_</span><span class="o">.</span><span class="n">max</span><span class="p">()])</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">opts</span><span class="p">(</span><span class="n">show_grid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Fish latitude over time&quot;</span><span class="p">)</span>
+    <span class="n">lon_plot</span> <span class="o">=</span> <span class="n">add_vertical_lines</span><span class="p">(</span>
+        <span class="n">lon_plot</span><span class="p">,</span> <span class="n">da</span><span class="o">=</span><span class="n">tag</span><span class="p">[</span><span class="s2">&quot;acoustic&quot;</span><span class="p">],</span> <span class="n">opts</span><span class="o">=</span><span class="n">opts_kwargs</span><span class="p">,</span> <span class="n">margin_factor</span><span class="o">=</span><span class="mf">0.1</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">opts</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">)</span>
+
+    <span class="n">lat_plot</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">mean_lon</span><span class="o">.</span><span class="n">hvplot</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="p">[</span><span class="n">mean_lon_</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">mean_lat_</span><span class="o">.</span><span class="n">max</span><span class="p">()])</span>
+        <span class="o">*</span> <span class="n">mode_lon</span><span class="o">.</span><span class="n">hvplot</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;mode&quot;</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="p">[</span><span class="n">mode_lon_</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">mean_lat_</span><span class="o">.</span><span class="n">max</span><span class="p">()])</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">opts</span><span class="p">(</span><span class="n">show_grid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Fish longitude over time&quot;</span><span class="p">)</span>
+    <span class="n">lat_plot</span> <span class="o">=</span> <span class="n">add_vertical_lines</span><span class="p">(</span>
+        <span class="n">lat_plot</span><span class="p">,</span> <span class="n">da</span><span class="o">=</span><span class="n">tag</span><span class="p">[</span><span class="s2">&quot;acoustic&quot;</span><span class="p">],</span> <span class="n">opts</span><span class="o">=</span><span class="n">opts_kwargs</span><span class="p">,</span> <span class="n">margin_factor</span><span class="o">=</span><span class="mf">0.1</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">opts</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">temp_plot</span> <span class="o">+</span> <span class="n">depth_plot</span> <span class="o">+</span> <span class="n">lon_plot</span> <span class="o">+</span> <span class="n">lat_plot</span><span class="p">)</span><span class="o">.</span><span class="n">cols</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">gather_points</span><span class="p">(</span><span class="n">tag</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataTree</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_aux_df</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="o">**</span><span class="n">points_kwargs</span><span class="p">):</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span>
+            <span class="n">df</span><span class="p">,</span> <span class="n">geometry</span><span class="o">=</span><span class="n">gpd</span><span class="o">.</span><span class="n">points_from_xy</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">longitude</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">latitude</span><span class="p">),</span> <span class="n">crs</span><span class="o">=</span><span class="s2">&quot;EPSG:4326&quot;</span>
+        <span class="p">)</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;geo&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;tiles&quot;</span><span class="p">:</span> <span class="s2">&quot;CartoLight&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="s2">&quot;longitude&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="s2">&quot;latitude&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">points_kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">gdf</span><span class="o">.</span><span class="n">hvplot</span><span class="o">.</span><span class="n">points</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="c1"># adds the initial position</span>
+    <span class="n">longitude</span> <span class="o">=</span> <span class="p">[</span><span class="n">tag</span><span class="p">[</span><span class="s2">&quot;tagging_events&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isel</span><span class="p">(</span><span class="n">event_name</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">longitude</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">()]</span>
+    <span class="n">latitude</span> <span class="o">=</span> <span class="p">[</span><span class="n">tag</span><span class="p">[</span><span class="s2">&quot;tagging_events&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isel</span><span class="p">(</span><span class="n">event_name</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">latitude</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">()]</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;longitude&quot;</span><span class="p">:</span> <span class="n">longitude</span><span class="p">,</span> <span class="s2">&quot;latitude&quot;</span><span class="p">:</span> <span class="n">latitude</span><span class="p">}</span>
+    <span class="n">init_plot</span> <span class="o">=</span> <span class="n">_aux_df</span><span class="p">(</span>
+        <span class="n">data</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Release&quot;</span><span class="p">,</span> <span class="n">tiles</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+
+    <span class="c1"># adds the detection positions</span>
+    <span class="c1"># the variable names might depend on the tags</span>
+    <span class="n">lon_var_name</span><span class="p">,</span> <span class="n">lat_var_name</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">var_name</span> <span class="ow">in</span> <span class="n">tag</span><span class="p">[</span><span class="s2">&quot;acoustic&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">data_vars</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">&quot;longitude&quot;</span> <span class="ow">in</span> <span class="n">var_name</span><span class="p">:</span>
+            <span class="n">lon_var_name</span> <span class="o">=</span> <span class="n">var_name</span>
+        <span class="k">if</span> <span class="s2">&quot;latitude&quot;</span> <span class="ow">in</span> <span class="n">var_name</span><span class="p">:</span>
+            <span class="n">lat_var_name</span> <span class="o">=</span> <span class="n">var_name</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">lon_var_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">lat_var_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s1">&#39;Lon/lat variables in `tag[&quot;acoustic&quot;]` could not be found.&#39;</span><span class="p">,</span> <span class="ne">RuntimeWarning</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">init_plot</span>
+
+    <span class="n">longitude</span> <span class="o">=</span> <span class="n">tag</span><span class="p">[</span><span class="s2">&quot;acoustic&quot;</span><span class="p">][</span><span class="n">lon_var_name</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+    <span class="n">latitude</span> <span class="o">=</span> <span class="n">tag</span><span class="p">[</span><span class="s2">&quot;acoustic&quot;</span><span class="p">][</span><span class="n">lat_var_name</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;longitude&quot;</span><span class="p">:</span> <span class="n">longitude</span><span class="p">,</span> <span class="s2">&quot;latitude&quot;</span><span class="p">:</span> <span class="n">latitude</span><span class="p">}</span>
+    <span class="n">detections_plot</span> <span class="o">=</span> <span class="n">_aux_df</span><span class="p">(</span>
+        <span class="n">data</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Detections&quot;</span><span class="p">,</span> <span class="n">tiles</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">init_plot</span> <span class="o">*</span> <span class="n">detections_plot</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">plot_track</span><span class="p">(</span><span class="n">mean_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">mode_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">sigma</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">target_root</span><span class="si">}</span><span class="s2">/parameters.json&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;sigma&quot;</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="s1">&#39;Optimisation result (&quot;parameters.json&quot;) not found. Sigma won</span><span class="se">\&#39;</span><span class="s1">t be shown in the title.&#39;</span>
+        <span class="p">)</span>
+        <span class="n">sigma</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="n">mean_df</span><span class="p">[</span><span class="s2">&quot;month&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mean_df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%B&quot;</span><span class="p">)</span>
+    <span class="n">mode_df</span><span class="p">[</span><span class="s2">&quot;month&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mode_df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%B&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Converting back to trajectories (...)</span>
+    <span class="n">mean_traj</span> <span class="o">=</span> <span class="n">mpd</span><span class="o">.</span><span class="n">Trajectory</span><span class="p">(</span>
+        <span class="n">mean_df</span><span class="p">,</span> <span class="n">traj_id</span><span class="o">=</span><span class="n">mean_df</span><span class="o">.</span><span class="n">traj_id</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="n">mode_traj</span> <span class="o">=</span> <span class="n">mpd</span><span class="o">.</span><span class="n">Trajectory</span><span class="p">(</span>
+        <span class="n">mode_df</span><span class="p">,</span> <span class="n">traj_id</span><span class="o">=</span><span class="n">mode_df</span><span class="o">.</span><span class="n">traj_id</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="n">trajectories</span> <span class="o">=</span> <span class="n">mpd</span><span class="o">.</span><span class="n">TrajectoryCollection</span><span class="p">([</span><span class="n">mean_traj</span><span class="p">,</span> <span class="n">mode_traj</span><span class="p">])</span>
+
+    <span class="n">plots</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">traj</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">trajectories</span><span class="o">.</span><span class="n">trajectories</span><span class="p">):</span>
+        <span class="n">title</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;track mode: </span><span class="si">{</span><span class="n">traj</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">title</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;, </span><span class="si">{</span><span class="n">tag_name</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">sigma</span><span class="si">:</span><span class="s2">.5f</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">traj_plot</span> <span class="o">=</span> <span class="n">traj</span><span class="o">.</span><span class="n">hvplot</span><span class="p">(</span>
+            <span class="n">c</span><span class="o">=</span><span class="s2">&quot;month&quot;</span><span class="p">,</span>
+            <span class="n">tiles</span><span class="o">=</span><span class="s2">&quot;CartoLight&quot;</span><span class="p">,</span>
+            <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;rainbow&quot;</span><span class="p">,</span>
+            <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
+            <span class="n">width</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+            <span class="n">height</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span>
+            <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1"># (i % 2 == 0)</span>
+        <span class="p">)</span>
+        <span class="c1"># if (i % 2 == 0):</span>
+        <span class="c1">#     traj_plot = traj_plot.opts(legend_position=&quot;bottom_right&quot;)</span>
+        <span class="n">plots</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">traj_plot</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">hv</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span><span class="n">plots</span><span class="p">)</span><span class="o">.</span><span class="n">cols</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="execution">
+<h2>Execution<a class="headerlink" href="#execution" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tag</span> <span class="o">=</span> <span class="n">open_tag</span><span class="p">(</span><span class="n">tag_root</span><span class="p">,</span> <span class="n">tag_name</span><span class="p">)</span>
+<span class="n">tag</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ts_plot</span> <span class="o">=</span> <span class="n">plot_ts</span><span class="p">(</span><span class="n">mean_df</span><span class="p">,</span> <span class="n">mode_df</span><span class="p">,</span> <span class="n">tag</span><span class="p">)</span>
+<span class="n">track_plot</span> <span class="o">=</span> <span class="n">plot_track</span><span class="p">(</span><span class="n">mean_df</span><span class="p">,</span> <span class="n">mode_df</span><span class="p">)</span> <span class="o">*</span> <span class="n">gather_points</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span>
+<span class="n">plot</span> <span class="o">=</span> <span class="p">(</span><span class="n">ts_plot</span> <span class="o">+</span> <span class="n">track_plot</span><span class="p">)</span><span class="o">.</span><span class="n">cols</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">plot</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">save_html_hvplot</span><span class="p">(</span><span class="n">plot</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">target_root</span><span class="si">}</span><span class="s2">/ts_track_plot.html&quot;</span><span class="p">,</span> <span class="n">storage_options</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./workflow"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="scientific_validation.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">3. Scientific Validation of the results</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="launch_scientific_html.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Launching the scientific plotting notebooks as jobs</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plotting-functions">Plotting Functions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#execution">Execution</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Pangeo
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

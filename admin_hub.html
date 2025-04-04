@@ -1,0 +1,761 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Setup instructions and User Access &#8212; Global Fish Tracking System (GFTS) - DestinE Platform use case</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/exercise.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'admin_hub';</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Conferences and other events" href="outreach.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/gfts.png" class="logo__image only-light" alt="Global Fish Tracking System (GFTS) - DestinE Platform use case - Home"/>
+    <script>document.write(`<img src="_static/gfts.png" class="logo__image only-dark" alt="Global Fish Tracking System (GFTS) - DestinE Platform use case - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Global Fish Tracking System
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">About</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="GFTS_Use_Case_Description.html">The GFTS Use Case</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contribute.html">How to contribute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code_of_conduct.html">Contributor Covenant Code of Conduct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rule_of_participation.html">Introduction</a></li>
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Onboarding new users</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="new2gfts.html">GFTS Presentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="workflow.html">GFTS Workflow</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Workflow</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="workflow/input_data_preparation.html">1. Data Preparation for <code class="docutils literal notranslate"><span class="pre">pangeo_fish</span></code></a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="workflow/tag_data_processing.html">Tag Data Preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workflow/reference_model_creation.html">Create a Reference Model with <code class="docutils literal notranslate"><span class="pre">virtualizarr</span></code></a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="workflow/geolocation_model_execution.html">2. Estimation of fish locations</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="workflow/papermill_launcher2.html">Tutorial: processing several tags with <code class="docutils literal notranslate"><span class="pre">kbatch_papermill</span></code></a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="workflow/scientific_validation.html">3. Scientific Validation of the results</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="workflow/compute_scientific_html.html">Plot for scientific validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workflow/launch_scientific_html.html">Launching the scientific plotting notebooks as jobs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workflow/panel_scientific_validation.html">Result Visualization with a <code class="docutils literal notranslate"><span class="pre">panel</span></code> application</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="workflow/result_publication.html">4. Result Publication</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="workflow/regroup_results.html">Data Reduction: Quarters</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="workflow/simplify_individual_results.html">Data Reduction: Individual Tags</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="workflow/contact_gfts_service.html">Sending Results to the GFTS Service</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Miscellaneous Examples</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="other_examples_overview.html">Example Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CopernicusMarine.html">Copernicus Marine for GFTS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tag_data.html">Intro to Biologging data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tag_data_summary.html">Tool: How to summarize the tag data</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="s3_CMEMS_2D_kerchunk.html">Create Kerchunk catalog for CMEMS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="s3_CMEMS_3D_kerchunk.html">Create Kerchunk catalog for CMEMS 3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="s3chunked_parquet.html">Read parquet kerchunk catalog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cmems_catalog_creation.html">Copernicus data exploration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gfts_intake.html">Reading CMEMS Copernicus data from GFTS s3 bucket</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Compute_3D_pdf.html">Computing 3D PDF from State matrix and tag pressure information</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClimateDT-zarr-2D-3D.html">Extract selected area from DestinE Climate Twin in Healpix to Zarr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="visu3Dvista.html">Visualize bathymetry with pyvista</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reporting &amp; Outreach</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="deliverables.html">Project deliverables and reports</a></li>
+<li class="toctree-l1"><a class="reference internal" href="outreach.html">Conferences and other events</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">The GFTS Hub</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Setup instructions and User Access</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/destination-earth/DestinE_ESA_GFTS" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/destination-earth/DestinE_ESA_GFTS/issues/new?title=Issue%20on%20page%20%2Fadmin_hub.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/admin_hub.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Setup instructions and User Access</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gfts-hub-deployment">GFTS Hub deployment</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gfts-hub-user-image">GFTS Hub User Image</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#s3-buckets">S3 Buckets</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#access-to-the-gfts-hub-and-s3-buckets">Access to the GFTS Hub and S3 Buckets</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-access-to-the-gfts-hub-and-s3-buckets">Getting access to the GFTS Hub and S3 Buckets</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#giving-access-to-the-gfts-hub-and-existing-s3-buckets-admin-only">Giving access to the GFTS Hub and existing S3 Buckets (Admin only)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#creating-a-new-group-of-users-admin-only">Creating a new group of users (Admin only)</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="setup-instructions-and-user-access">
+<h1>Setup instructions and User Access<a class="headerlink" href="#setup-instructions-and-user-access" title="Link to this heading">#</a></h1>
+<p>This section provides an overview of where to find information and source code related to the deployment and administration of GFTS JupyterHub. It also explains how users can be added and by whom.</p>
+<section id="gfts-hub-deployment">
+<h2>GFTS Hub deployment<a class="headerlink" href="#gfts-hub-deployment" title="Link to this heading">#</a></h2>
+<p>The source code and documentation to deploy the GFTS Hub on the DestinE Cloud Infrastructure (currently at OVH) are available in the <code class="docutils literal notranslate"><span class="pre">gfts-track-reconstruction</span></code> folder, located in the root directory.</p>
+<p>A good starting point is the <a class="reference external" href="https://github.com/destination-earth/DestinE_ESA_GFTS/blob/main/gfts-track-reconstruction/jupyterhub/README.md">README.md</a> file, located in the <code class="docutils literal notranslate"><span class="pre">gfts-track-reconstruction/jupyterhub</span></code> folder.</p>
+<section id="gfts-hub-user-image">
+<h3>GFTS Hub User Image<a class="headerlink" href="#gfts-hub-user-image" title="Link to this heading">#</a></h3>
+<p>The user image is defined in the <a class="reference external" href="https://github.com/destination-earth/DestinE_ESA_GFTS/tree/main/gfts-track-reconstruction/jupyterhub/images/user">gfts-track-reconstruction/jupyterhub/images/user</a> folder and consists of:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://raw.githubusercontent.com/destination-earth/DestinE_ESA_GFTS/main/gfts-track-reconstruction/jupyterhub/images/user/Dockerfile">Dockerfile</a> where you can review the Pangeo base image we are using, and see how additional conda and pip packages are installed, among other details;</p></li>
+<li><p><a class="reference external" href="https://github.com/destination-earth/DestinE_ESA_GFTS/blob/main/gfts-track-reconstruction/jupyterhub/images/user/conda-requirements.txt">conda-requirements.txt</a> contains the list of packages to be installed with conda. To suggest the installation of a new conda package, you can edit this file and make a Pull Request. Be sure to follow the <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> format when adding new packages.</p></li>
+<li><p><a class="reference external" href="https://github.com/destination-earth/DestinE_ESA_GFTS/blob/main/gfts-track-reconstruction/jupyterhub/images/user/requirements.txt">requirements.txt</a> contains the list of packages installed with pip. Similarly, you can suggest adding new pip packages by editing this file and submitting a Pull Request.</p></li>
+</ul>
+</section>
+</section>
+<section id="s3-buckets">
+<h2>S3 Buckets<a class="headerlink" href="#s3-buckets" title="Link to this heading">#</a></h2>
+<p>Limited storage is available on the GFTS hub itself but we have setup different S3 buckets where we manage the data we need for the GFTS project. We currently have different S3 buckets which we can split into 2 categories:</p>
+<ol class="arabic simple">
+<li><p>Public S3 buckets: these buckets enable to share data to all users of the platform.</p>
+<ul class="simple">
+<li><p>“<strong>gfts-reference-data</strong>”: This S3 bucket contains reference datasets (such as Copernicus Marine) that have been copied here to speed up access and data processing. Most GFTS users will only require read-only access to this bucket; a few GFTS users can write to it to copy new reference datasets. If you need additional reference datasets, please create an issue <a class="reference external" href="https://github.com/destination-earth/DestinE_ESA_GFTS/issues/new">here</a>.</p></li>
+<li><p>“<strong>destine-gfts-data-lake</strong>”: This S3 bucket contains datasets generated by the GFTS, which are intended to be made public for all users with access to the GFTS hub;</p></li>
+</ul>
+</li>
+<li><p>Private S3 buckets: these buckets contain datasets that are private to a specific group. All users of a given group have <strong>read</strong> and <strong>write</strong> access to their corresponding buckets. Users can store private datasets or save intermediate results that will be shared in <strong>destine-gfts-data-lake</strong> once validated.</p>
+<ul class="simple">
+<li><p>“<strong>gfts-ifremer</strong>”: This S3 bucket contains datasets that are private to IFREMER GFTS users.</p></li>
+<li><p>“<strong>gfts-vliz</strong>”: This S3 bucket contains datasets that are private to VLIZ GFTS users.</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="access-to-the-gfts-hub-and-s3-buckets">
+<h2>Access to the GFTS Hub and S3 Buckets<a class="headerlink" href="#access-to-the-gfts-hub-and-s3-buckets" title="Link to this heading">#</a></h2>
+<section id="getting-access-to-the-gfts-hub-and-s3-buckets">
+<h3>Getting access to the GFTS Hub and S3 Buckets<a class="headerlink" href="#getting-access-to-the-gfts-hub-and-s3-buckets" title="Link to this heading">#</a></h3>
+<p>The first step is to create an <a class="reference external" href="https://github.com/destination-earth/DestinE_ESA_GFTS/issues/new">issue</a> with the following information:</p>
+<ol class="arabic simple">
+<li><p>The GitHub username of the person you want to add to the GFTS Hub;</p></li>
+<li><p>The list of S3 buckets this new person would need to access.</p></li>
+<li><p>If a new group of users is required, please specify the name of the new S3 private bucket to be created for this group and identify any existing users who need access to it. <strong>A new group of users is necessary if you have a unique set of biologging data that must remain private and cannot be shared publicly, or if you need to share intermediate and non-validated results within a specific group before making them available to the GFTS community</strong>.</p></li>
+</ol>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>The current list of authorized GFTS users can be found in <a class="reference external" href="https://github.com/destination-earth/DestinE_ESA_GFTS/blob/main/gfts-track-reconstruction/jupyterhub/gfts-hub/values.yaml#L169"><code class="docutils literal notranslate"><span class="pre">gfts-track-reconstruction/jupyterhub/gfts-hub/values.yaml</span></code></a>.</p>
+</div>
+</section>
+<section id="giving-access-to-the-gfts-hub-and-existing-s3-buckets-admin-only">
+<h3>Giving access to the GFTS Hub and existing S3 Buckets (Admin only)<a class="headerlink" href="#giving-access-to-the-gfts-hub-and-existing-s3-buckets-admin-only" title="Link to this heading">#</a></h3>
+<p>Everyone can initiate a Pull Request to add a new user with read-only access to <code class="docutils literal notranslate"><span class="pre">gfts-reference-data</span></code> and <code class="docutils literal notranslate"><span class="pre">destine-gfts-data-lake</span></code>.
+There is only one step:</p>
+<ol class="arabic simple">
+<li><p>Add the new user (github username) in <strong>lowercase</strong> in <code class="docutils literal notranslate"><span class="pre">gfts-track-reconstruction/jupyterhub/gfts-hub/values.yaml</span></code></p></li>
+</ol>
+<p>When the PR is merged, the github user will have read-only access to <code class="docutils literal notranslate"><span class="pre">gfts-reference-data</span></code> and <code class="docutils literal notranslate"><span class="pre">destine-gfts-data-lake</span></code> and will be able to:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">s3fs</span>
+<span class="n">s3</span> <span class="o">=</span> <span class="n">s3fs</span><span class="o">.</span><span class="n">S3FileSystem</span><span class="p">(</span><span class="n">anon</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">s3</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="s2">&quot;gfts-reference-data&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To grant read access to private data or write access, the user must be added to an s3 group in the <code class="docutils literal notranslate"><span class="pre">tofu</span></code> configuration,
+adding the following steps which can only be done by a GFTS Hub admin:</p>
+<ol class="arabic" start="2">
+<li><p>Add the github username (lowercase) in one of the <code class="docutils literal notranslate"><span class="pre">s3_</span></code> groups in <code class="docutils literal notranslate"><span class="pre">gfts-track-reconstruction/jupyterhub/tofu/main.tf</span></code> for the following permissions:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">s3_ifremer_developers</span></code>: write access to <code class="docutils literal notranslate"><span class="pre">gfts-ifremer</span></code> and <code class="docutils literal notranslate"><span class="pre">gfts-reference-data</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">s3_ifremer_users</span></code>: write access to <code class="docutils literal notranslate"><span class="pre">gfts-ifremer</span></code> only</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">s3_vliz_users</span></code>: write access to <code class="docutils literal notranslate"><span class="pre">gfts-vliz</span></code> only</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">s3_admins</span></code>: admin access to all s3 buckets</p></li>
+</ul>
+<p>If you need to create a new user group and a private S3 bucket for them, please read the next section on creating a new user group before proceeding with steps 3–6.</p>
+</li>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">tofu</span> <span class="pre">apply</span></code> to apply the S3 permissions. Ensure you are in the <code class="docutils literal notranslate"><span class="pre">gfts-track-reconstruction/jupyterhub/tofu</span></code> folder before executing the <code class="docutils literal notranslate"><span class="pre">tofu</span></code> command and have run <code class="docutils literal notranslate"><span class="pre">source</span> <span class="pre">secrets/ovh-creds.sh</span></code>.</p></li>
+<li><p>Update <code class="docutils literal notranslate"><span class="pre">gfts-track-reconstruction/jupyterhub/secrets/config.yaml</span></code> with the output of the command <code class="docutils literal notranslate"><span class="pre">tofu</span> <span class="pre">output</span> <span class="pre">-json</span> <span class="pre">s3_credentials_json</span></code>. This command needs to be executed in the <code class="docutils literal notranslate"><span class="pre">tofu</span></code> folder after applying the S3 permissions with <code class="docutils literal notranslate"><span class="pre">tofu</span> <span class="pre">apply</span></code>. If the file contains binary content, it means you do not have the rights to add new users to the GFTS S3 buckets and will need to ask a GFTS admin for assistance.</p></li>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">pytest</span></code> in the <code class="docutils literal notranslate"><span class="pre">tofu</span></code> directory to test s3 permissions.</p></li>
+<li><p>Don’t forget to commit and push your changes!</p></li>
+</ol>
+<p>Steps 3 and 4 are what actually grant the jupyterhub user s3 access.</p>
+</section>
+<section id="creating-a-new-group-of-users-admin-only">
+<h3>Creating a new group of users (Admin only)<a class="headerlink" href="#creating-a-new-group-of-users-admin-only" title="Link to this heading">#</a></h3>
+<p>If you need to create a new user group with a corresponding private S3 bucket, follow the additional step below (to be completed after step 1 and before step 2).</p>
+<p>Choose a new group name (not too long e.g. &lt; 8 characters) which can be the organisation name of the user(s) or its acronym. We suggest to add the prefix <code class="docutils literal notranslate"><span class="pre">gfts-</span></code> (e.g. gfts-ifremer, gfts-vliz, etc.). In the example below, we are adding a new group of users called <code class="docutils literal notranslate"><span class="pre">gfts-vliz</span></code>:</p>
+<ul class="simple">
+<li><p>Add the new bucket name in the <code class="docutils literal notranslate"><span class="pre">s3_buckets</span></code> variable in <code class="docutils literal notranslate"><span class="pre">gfts-track-reconstruction/jupyterhub/tofu/main.tf</span></code>:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="n">s3_buckets</span> <span class="o">=</span> <span class="n">toset</span><span class="p">([</span>
+    <span class="s2">&quot;gfts-vliz&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;gfts-ifremer&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;gfts-reference-data&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;destine-gfts-data-lake&quot;</span><span class="p">,</span>
+  <span class="p">])</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Create a new variable to list the users who will have access to the new S3 bucket. Locate the variable <code class="docutils literal notranslate"><span class="pre">s3_ifremer_users</span></code> and add the new variable immediately after it:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="n">s3_vliz_users</span> <span class="o">=</span> <span class="n">toset</span><span class="p">([</span>
+    <span class="s2">&quot;davidcasalsvliz&quot;</span><span class="p">,</span>
+  <span class="p">])</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Update the <code class="docutils literal notranslate"><span class="pre">s3_users</span></code> variable by adding the new list of users (here <code class="docutils literal notranslate"><span class="pre">local.s3_vliz_users</span></code>):</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">s3_users</span> <span class="o">=</span> <span class="n">setunion</span><span class="p">(</span><span class="n">local</span><span class="o">.</span><span class="n">s3_readonly_users</span><span class="p">,</span> <span class="n">local</span><span class="o">.</span><span class="n">s3_admins</span><span class="p">,</span> <span class="n">local</span><span class="o">.</span><span class="n">s3_vliz_users</span><span class="p">,</span> <span class="n">local</span><span class="o">.</span><span class="n">s3_ifremer_developers</span><span class="p">,</span> <span class="n">local</span><span class="o">.</span><span class="n">s3_ifremer_users</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Create a new resource policy for this new group of users (search for <code class="docutils literal notranslate"><span class="pre">resource</span> <span class="pre">&quot;ovh_cloud_project_user_s3_policy&quot;</span> <span class="pre">&quot;s3_ifremer_users&quot;</span></code> to locate the section on resource policy for users):</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">resource</span> <span class="s2">&quot;ovh_cloud_project_user_s3_policy&quot;</span> <span class="s2">&quot;s3_vliz_users&quot;</span> <span class="p">{</span>
+  <span class="n">for_each</span>     <span class="o">=</span> <span class="n">local</span><span class="o">.</span><span class="n">s3_vliz_users</span>
+  <span class="n">service_name</span> <span class="o">=</span> <span class="n">local</span><span class="o">.</span><span class="n">service_name</span>
+  <span class="n">user_id</span>      <span class="o">=</span> <span class="n">ovh_cloud_project_user</span><span class="o">.</span><span class="n">s3_users</span><span class="p">[</span><span class="n">each</span><span class="o">.</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">id</span>
+  <span class="n">policy</span> <span class="o">=</span> <span class="n">jsonencode</span><span class="p">({</span>
+    <span class="s2">&quot;Statement&quot;</span> <span class="p">:</span> <span class="n">concat</span><span class="p">([</span>
+      <span class="p">{</span>
+        <span class="s2">&quot;Sid&quot;</span> <span class="p">:</span> <span class="s2">&quot;Admin&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Effect&quot;</span> <span class="p">:</span> <span class="s2">&quot;Allow&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Action&quot;</span> <span class="p">:</span> <span class="n">local</span><span class="o">.</span><span class="n">s3_admin_action</span><span class="p">,</span>
+        <span class="s2">&quot;Resource&quot;</span> <span class="p">:</span> <span class="p">[</span>
+          <span class="s2">&quot;arn:aws:s3:::${aws_s3_bucket.gfts-vliz.id}&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;arn:aws:s3:::${aws_s3_bucket.gfts-vliz.id}/*&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+      <span class="p">},</span>
+    <span class="p">],</span> <span class="n">local</span><span class="o">.</span><span class="n">s3_default_policy</span><span class="p">)</span>
+  <span class="p">})</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Make sure your replace <code class="docutils literal notranslate"><span class="pre">vliz</span></code> with the new group name!</p>
+<ul class="simple">
+<li><p>Create the new S3 bucket by locating resource <code class="docutils literal notranslate"><span class="pre">&quot;aws_s3_bucket&quot;</span> <span class="pre">&quot;gfts-ifremer&quot;</span></code> and adding the new bucket configuration immediately after it:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">resource</span> <span class="s2">&quot;aws_s3_bucket&quot;</span> <span class="s2">&quot;gfts-vliz&quot;</span> <span class="p">{</span>
+  <span class="n">bucket</span> <span class="o">=</span> <span class="s2">&quot;gfts-vliz&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>You are done with the configuration of the new group and its corresponding private S3 bucket. Go back to the previous section on <a class="reference external" href="https://destination-earth.github.io/DestinE_ESA_GFTS/admin_hub.html#giving-access-to-the-gfts-hub-and-s3-buckets-admin-only">giving access to the GFTS Hub and S3 buckets</a> and follow the steps 2-6.</p></li>
+</ul>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>The following packages need to be installed on your system:</p>
+<ol class="arabic simple">
+<li><p><a class="reference external" href="https://ssh-vault.com">ssh-vault</a>;</p></li>
+<li><p><a class="reference external" href="https://github.com/AGWA/git-crypt/blob/master/INSTALL.md">git-crypt</a>;</p></li>
+<li><p><a class="reference external" href="https://opentofu.org">opentofu</a></p></li>
+</ol>
+<p>As an admin, you’ll need to set up your environment. The GFTS maintainer will provide you with a key encrypted with your GitHub SSH key. Save the content sent by the GFTS maintainer into a file, and name it <code class="docutils literal notranslate"><span class="pre">ssh-vault.txt</span></code>. At the moment, the keys are known to <a class="reference external" href="https://github.com/annefou">annefou</a> and <a class="reference external" href="https://github.com/minrk">minrk</a>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>ssh-vault.txt<span class="w"> </span><span class="p">|</span><span class="w"> </span>ssh-vault<span class="w"> </span>view<span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>--decode<span class="w"> </span>&gt;<span class="w"> </span>keyfile<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>git-crypt<span class="w"> </span>unlock<span class="w"> </span>keyfile<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>rm<span class="w"> </span>keyfile
+</pre></div>
+</div>
+<p>Before executing the command above, ensure you have changed the directory to the root of the <code class="docutils literal notranslate"><span class="pre">DestinE_ESA_GFTS</span></code> git repository.</p>
+<p>Thanks to the previous command, you should be able to <code class="docutils literal notranslate"><span class="pre">cat</span> <span class="pre">gfts-track-reconstruction/jupyterhub/tofu/secrets/ovh-creds.sh</span></code> and see a text file.</p>
+<p>Finally to initialize your environment and execute <code class="docutils literal notranslate"><span class="pre">tofu</span></code> commands, you need to change the directory to the <code class="docutils literal notranslate"><span class="pre">gfts-track-reconstruction/jupyterhub/tofu</span></code> folder and source <code class="docutils literal notranslate"><span class="pre">secrets/ovh-creds.sh</span></code> e.g.:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>secrets/ovh-creds.sh
+tofu<span class="w"> </span>init
+tofu<span class="w"> </span>apply
+</pre></div>
+</div>
+</div>
+<p>Then you are ready to go and can follow the steps explained above to grant access to S3 buckets to a new user.</p>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="outreach.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Conferences and other events</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gfts-hub-deployment">GFTS Hub deployment</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gfts-hub-user-image">GFTS Hub User Image</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#s3-buckets">S3 Buckets</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#access-to-the-gfts-hub-and-s3-buckets">Access to the GFTS Hub and S3 Buckets</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-access-to-the-gfts-hub-and-s3-buckets">Getting access to the GFTS Hub and S3 Buckets</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#giving-access-to-the-gfts-hub-and-existing-s3-buckets-admin-only">Giving access to the GFTS Hub and existing S3 Buckets (Admin only)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#creating-a-new-group-of-users-admin-only">Creating a new group of users (Admin only)</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Pangeo
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
