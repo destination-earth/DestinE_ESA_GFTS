@@ -1,5 +1,7 @@
 import logging
 
+import fsspec
+
 import boto3
 import click
 import healpy as hp
@@ -233,6 +235,44 @@ def open_dst(root: str, tag_name: str, storage_options={}):
     ]
 
 
+def open_metadata(root: str, tag_name: str, storage_options={}) -> dict:
+    logger.debug(f"Writing markdown file for {tag_name}.")
+
+    if not root.endswith("/"):
+        root += "/"
+
+    if storage_options == {}:
+        path = f"{root}{tag_name}/metadata.json"
+    else:
+        path = f"s3://{SOURCE_BUCKET}/{root}{tag_name}/metadata.json"
+
+    try:
+        with fsspec.open(path, mode="r", **storage_options) as f:
+            return json.load(f)
+    except Exception:
+        logger.log(f'An error occurred when fetching: "{path}".')
+        return {}
+
+
+def dict_to_md_table(data: dict, columns: list):
+    if (not isinstance(columns, list)) or len(columns) != 2:
+        columns = ["Key", "Value"]
+
+    headers = [f"| {columns[0]}  | {columns[1]} |", "| ------------- | ------------- |"]
+    rows = [f"| {k} | {v} |" for k, v in data.items()]
+    return "\n".join(headers + rows)
+
+
+def save_metadata(md_content: str, tag: str):
+    logger.debug(f"Writing markdown file for {tag}")
+
+    with get_filesystem().open(
+        f"s3://{TARGET_BUCKET}/{TARGET_PREFIX}{tag}/{tag}.md",
+        "w",
+    ) as fl:
+        fl.write(md_content)
+
+
 def add_pressure_and_temperature(df: pd.DataFrame, tag: str) -> pd.DataFrame:
     """Adds temperature and pression columns to df.
     The values are added only to the most probable daily cell/cell_ids for each time.
@@ -310,6 +350,10 @@ def process_tag(tag: str):
     result_with_temp = add_pressure_and_temperature(result, tag)
 
     to_parquet(df=result_with_temp, tag=tag)
+
+    data = open_metadata(TAG_ROOT, tag, TAG_ROOT_STORAGE_OPTIONS)
+    md_content = dict_to_md_table(data, columns=["Attribute", "Description"])
+    save_metadata(md_content, tag)
 
 
 def already_processed(tag: str):
