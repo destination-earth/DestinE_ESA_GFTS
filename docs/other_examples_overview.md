@@ -9,3 +9,7 @@ Here a brief overview of the different use-cases illustrated in the next pages:
 - **_Copernicus data exploration_** and **_Reading CMEMS Copernicus data from GFTS s3 bucket_** illustrate how to wrap several reference models into a single [YAML intake catalog](https://intake.readthedocs.io/en/latest/catalog.html#yaml-format).
 
 The rest of the pages focus on specific data visualization methods.
+
+:::{warning}
+The GFTS project is being actively developed and as such, the following notebooks might be deprecated and their executions are likely to include errors (of various complexity).
+:::
