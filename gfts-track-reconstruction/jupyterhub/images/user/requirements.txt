@@ -8,5 +8,5 @@ jupyter-keepalive
 jupyterhub==4.1.6
 kbatch==0.5.0a2
 kbatch-papermill==0.1.0a1
-pangeo-fish==2025.3.1
-xarray-healpy==2025.3.2
+pangeo-fish==2025.3.3
+xhealpixify==2025.3.3
