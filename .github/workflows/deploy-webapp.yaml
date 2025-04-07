@@ -26,11 +26,6 @@ jobs:
         env:
           GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
 
-      - name: "Source environment variables"
-        run: |
-          source ./deploy/secrets/webapp-secrets.sh
-          source ./deploy/tf/secrets/ovh-creds.sh
-
       - name: Setup Kubernetes configuration
         uses: azure/k8s-set-context@v3
         with:
@@ -58,13 +53,14 @@ jobs:
             latest
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: ./webapp
-          file: ./webapp/Dockerfile
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+        run: |
+          source ./deploy/secrets/webapp-secrets.sh
+          docker buildx build \
+            --push \
+            --file ./webapp/Dockerfile \
+            --tag ${{ steps.meta.outputs.tags }} \
+            --label ${{ steps.meta.outputs.labels }} \
+            ./webapp
 
       - name: Setup Helm
         uses: azure/setup-helm@v3
@@ -77,6 +73,7 @@ jobs:
 
       - name: Deploy to Kubernetes
         run: |
+          source ./deploy/tf/secrets/ovh-creds.sh
           envsubst < ./deploy/helm/webapp/values-template.yaml > ./deploy/helm/webapp/values.yaml
           helm upgrade --install \
             --namespace webapp \
