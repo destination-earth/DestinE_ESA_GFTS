@@ -1,6 +1,6 @@
 image:
   repository: c63eqfuv.c1.gra9.container-registry.ovh.net/gfts/webapp
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
   tag: "latest"
 
 serviceAccount:
