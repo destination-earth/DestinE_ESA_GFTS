@@ -73,9 +73,25 @@ jupyterhub:
     profileList:
       - display_name: "GFTS environment"
         slug: default
-        description: Select resource allocation
+        description: Select resource allocation and image
         default: true
         profile_options:
+          image:
+            display_name: Image
+            choices:
+              default:
+                default: true
+                display_name: "Default GFTS environment"
+                kubespawner_override: {}
+              pangeo:
+                display_name: "Stock Pangeo environment"
+                kubespawner_override:
+                  image: quay.io/pangeo/pangeo-notebook:2025.01.24
+              lastknowngood:
+                display_name: "Last known good image (before s3 put problems)"
+                kubespawner_override:
+                  image: >-
+                    c63eqfuv.c1.gra9.container-registry.ovh.net/gfts/jupyterhub-user:0.0.1-0.dev.git.336.h58d2d48
           resource_allocation:
             display_name: Resource allocation
             choices:
