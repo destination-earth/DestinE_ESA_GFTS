@@ -57,6 +57,7 @@ jupyterhub:
       KBATCH_S3_CODE_DIR: s3://gfts-ifremer/kbatch/{username}
       AWS_ENDPOINT_URL_S3: "https://s3.gra.perf.cloud.ovh.net"
       AWS_DEFAULT_REGION: gra
+      AWS_REQUEST_CHECKSUM_CALCULATION: WHEN_REQUIRED
 
       # rclone config (https://rclone.org/docs/#environment-variables)
       RCLONE_CONFIG_GFTS_TYPE: s3
