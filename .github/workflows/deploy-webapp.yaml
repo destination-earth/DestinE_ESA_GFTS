@@ -29,6 +29,7 @@ jobs:
       - name: "Source environment variables"
         run: |
           source ./deploy/secrets/webapp-secrets.sh
+          source ./deploy/tf/secrets/ovh-creds.sh
 
       - name: Setup Kubernetes configuration
         uses: azure/k8s-set-context@v3
