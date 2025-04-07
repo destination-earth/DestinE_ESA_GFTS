@@ -1,7 +1,7 @@
 image:
   repository: c63eqfuv.c1.gra9.container-registry.ovh.net/gfts/webapp
   pullPolicy: Always
-  tag: "latest"
+  tag: "sha-ea9569e"
 
 serviceAccount:
   create: true
