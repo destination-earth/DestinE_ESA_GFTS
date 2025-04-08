@@ -70,7 +70,7 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
-            MAPBOX_TOKEN=${{ $MAPBOX_TOKEN }}
+            MAPBOX_TOKEN=${{ env.MAPBOX_TOKEN }}
 
       - name: Setup Helm
         uses: azure/setup-helm@v3
