@@ -2,6 +2,7 @@
 
 Below is a list of publications and conferences (starting from the most recent) that made use of GFTS resources and/or promoted the GFTS project:
 
+- Wiesmann, D.,  Fouilloux, A., Odaka, T., Ragan-Kelly, B., Woillez, M., Mazouni, Q., Autret, E.: Global Fish Tracking System (GFTS): Harnessing Technological Innovations for Conservation and Sustainable Resource Management, LPS25, Vienna, Austria, 23-27 June 2025.
 - Odaka, T., Woillez, M., Fouilloux, A., Ragan-Kelly, B., Autret, E., and Wiesmann, D.: Global Fish Tracking System: Leveraging Destination Earth and Biologging Data for Climate Change Insights, Conservation, and Sustainable Use, One Ocean Science Congress 2025, Nice, France, 3–6 Jun 2025, OOS2025-1044, [10.5194/oos2025-1044](https://doi.org/10.5194/oos2025-1044), 2025.
 - Magin, J., Mazouni, Q., Cap, E., Gonse, M., Woillez, M., Fouilloux, A., Delouis, J.-M., & Odaka, T. (2025). pangeo-fish (2025.03.3). Zenodo. [10.5281/zenodo.15110143](https://doi.org/10.5281/zenodo.15110143)
 - Odaka, T., Fouilloux, A., Wiesmann, D., Autret, E., Woillez, M., and Ragan-Kelley, B.: The Global Fish Tracking System for
