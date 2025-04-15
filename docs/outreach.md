@@ -2,6 +2,8 @@
 
 Below is a list of publications and conferences (starting from the most recent) that made use of GFTS resources and/or promoted the GFTS project:
 
+- Odaka, T., Woillez, M., Fouilloux, A., Ragan-Kelly, B., Autret, E., and Wiesmann, D.: Global Fish Tracking System: Leveraging Destination Earth and Biologging Data for Climate Change Insights, Conservation, and Sustainable Use, One Ocean Science Congress 2025, Nice, France, 3–6 Jun 2025, OOS2025-1044, [10.5194/oos2025-1044](https://doi.org/10.5194/oos2025-1044), 2025.
+- Magin, J., Mazouni, Q., Cap, E., Gonse, M., Woillez, M., Fouilloux, A., Delouis, J.-M., & Odaka, T. (2025). pangeo-fish (2025.03.3). Zenodo. [10.5281/zenodo.15110143](https://doi.org/10.5281/zenodo.15110143)
 - Odaka, T., Fouilloux, A., Wiesmann, D., Autret, E., Woillez, M., and Ragan-Kelley, B.: The Global Fish Tracking System for
   Impactful Marine Conservation, 3rd Destination Earth User eXchange, Darmstadt, Germany, 15–16 Oct 2024, EGU24-15500, DOI: [10.5281/zenodo.15224060](https://doi.org/10.5281/zenodo.15224060)
 - Fouilloux, Anne, and Benjamin Ragan-Kelley. Simula's Contribution to the Global Fish Tracking System (GFTS) on the Destine Platform, presentation given at the [Norwegian Destination Earth info meeting](https://www.romsenter.no/kalender/destination-earth-infomoete), 13 May 2024, DOI: [10.5281/zenodo.11187870](https://doi.org/10.5281/zenodo.11187870)
