@@ -15,8 +15,10 @@ RUN git clone https://github.com/developmentseed/gfts.git /app
 RUN corepack enable && \
     yarn install --frozen-lockfile
 
+RUN yarn add http-server
+
 RUN yarn build
 
 EXPOSE 9000
 
-CMD ["yarn", "serve"]
+CMD ["npx", "http-server", "./dist", "-p", "9000", "--gzip"]

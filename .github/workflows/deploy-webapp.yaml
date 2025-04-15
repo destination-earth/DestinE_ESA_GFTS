@@ -26,15 +26,6 @@ jobs:
         env:
           GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
 
-      - name: "Source environment variables"
-        run: |
-          if [ -f ./deploy/secrets/webapp-secrets.sh ]; then
-            source ./deploy/secrets/webapp-secrets.sh
-          else
-            echo "webapp-secrets.sh not found!"
-            exit 1
-          fi
-
       - name: Setup Kubernetes configuration
         uses: azure/k8s-set-context@v3
         with:
@@ -70,7 +61,8 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
-            MAPBOX_TOKEN=${{ env.MAPBOX_TOKEN }}
+            MAPBOX_TOKEN=${{ secrets.MAPBOX_TOKEN }}
+            WEBAPP_URL=${{ secrets.WEBAPP_URL }}
 
       - name: Setup Helm
         uses: azure/setup-helm@v3
