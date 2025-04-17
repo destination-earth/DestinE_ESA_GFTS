@@ -1,0 +1,808 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>GFTS Verification and Validation &#8212; Global Fish Tracking System (GFTS) - DestinE Platform use case</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/exercise.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'system/gfts_github_actions';</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Documentation Generation" href="admin_doc.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/gfts.png" class="logo__image only-light" alt="Global Fish Tracking System (GFTS) - DestinE Platform use case - Home"/>
+    <script>document.write(`<img src="../_static/gfts.png" class="logo__image only-dark" alt="Global Fish Tracking System (GFTS) - DestinE Platform use case - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Global Fish Tracking System
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">About</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../GFTS_Use_Case_Description.html">The GFTS Use Case</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribute.html">How to contribute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code_of_conduct.html">Contributor Covenant Code of Conduct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rule_of_participation.html">Introduction</a></li>
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Onboarding new users</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../new2gfts.html">GFTS Presentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../workflow.html">GFTS Workflow</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Workflow</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../workflow/input_data_preparation.html">1. Data Preparation for <code class="docutils literal notranslate"><span class="pre">pangeo_fish</span></code></a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../workflow/tag_data_processing.html">Tag Data Preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../workflow/reference_model_creation.html">Create a Reference Model with <code class="docutils literal notranslate"><span class="pre">virtualizarr</span></code></a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../workflow/geolocation_model_execution.html">2. Estimation of fish locations</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../workflow/papermill_launcher2.html">Tutorial: processing several tags with <code class="docutils literal notranslate"><span class="pre">kbatch_papermill</span></code></a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../workflow/scientific_validation.html">3. Scientific Validation of the results</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../workflow/compute_scientific_html.html">Plot for scientific validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../workflow/launch_scientific_html.html">Launching the scientific plotting notebooks as jobs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../workflow/panel_scientific_validation.html">Result Visualization with a <code class="docutils literal notranslate"><span class="pre">panel</span></code> application</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../workflow/result_publication.html">4. Result Publication</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../workflow/regroup_results.html">Data Reduction: Quarters</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="../workflow/simplify_individual_results.html">Data Reduction: Individual Tags</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="../workflow/contact_gfts_service.html">Sending Results to the GFTS Service</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Miscellaneous Examples</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../other_examples_overview.html">Example Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CopernicusMarine.html">Copernicus Marine for GFTS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tag_data.html">Intro to Biologging data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tag_data_summary.html">Tool: How to summarize the tag data</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../s3_CMEMS_2D_kerchunk.html">Create Kerchunk catalog for CMEMS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../s3_CMEMS_3D_kerchunk.html">Create Kerchunk catalog for CMEMS 3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../s3chunked_parquet.html">Read parquet kerchunk catalog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cmems_catalog_creation.html">Copernicus data exploration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gfts_intake.html">Reading CMEMS Copernicus data from GFTS s3 bucket</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Compute_3D_pdf.html">Computing 3D PDF from State matrix and tag pressure information</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ClimateDT-zarr-2D-3D.html">Extract selected area from DestinE Climate Twin in Healpix to Zarr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../visu3Dvista.html">Visualize bathymetry with pyvista</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reporting &amp; Outreach</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../deliverables.html">Project deliverables and reports</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../outreach.html">Conferences and other events</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">GFTS Technical Guide</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="gfts_components.html">Overview of GFTS System Components</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="gfts_hub.html">GFTS JupyterHub</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="admin_hub.html">Managing access to the GFTS Hub and S3 Buckets</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="gfts_service.html">GFTS Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="admin_doc.html">Documentation Generation</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">GFTS Verification and Validation</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/destination-earth/DestinE_ESA_GFTS" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/destination-earth/DestinE_ESA_GFTS/issues/new?title=Issue%20on%20page%20%2Fsystem/gfts_github_actions.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/system/gfts_github_actions.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>GFTS Verification and Validation</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#backend-verification-activities">Backend verification activities</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#github-actions-workflows">GitHub Actions Workflows</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#linting-with-pre-commit-pre-commit-yaml">Linting with Pre-Commit (pre-commit.yaml)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-deployment-deploy-yaml">Documentation Deployment (deploy.yaml)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#docker-image-testing-test-image-yaml">Docker Image Testing (test-image.yaml)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#jupyterhub-deployment-deploy-hub-yaml">JupyterHub Deployment (deploy-hub.yaml)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#web-application-deployment-deploy-webapp-yaml">Web Application Deployment (deploy-webapp.yaml)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#transparency-and-logging">Transparency and Logging</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modeling-environment-verification">Modeling environment verification</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#decision-support-tool-verification-activities">Decision support tool verification activities</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#checks-workflow">Checks Workflow</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#deploy-github-pages-workflow">Deploy GitHub Pages Workflow</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#additional-features">Additional Features</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#validation-activities">Validation activities</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modeling-environment-validation">Modeling environment validation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#decision-support-tool-validation">Decision support tool validation</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="gfts-verification-and-validation">
+<h1>GFTS Verification and Validation<a class="headerlink" href="#gfts-verification-and-validation" title="Link to this heading">#</a></h1>
+<p>This section describes the Software Verification and Validation approach for the Global Fish Tracking System (GFTS) use case for the DestinE Platform.</p>
+<section id="backend-verification-activities">
+<h2>Backend verification activities<a class="headerlink" href="#backend-verification-activities" title="Link to this heading">#</a></h2>
+<p>We have established a GitHub repository (<a class="github reference external" href="https://github.com/destination-earth/DestinE_ESA_GFTS">destination-earth/DestinE_ESA_GFTS</a>) to manage the development and verification of the GFTS. The repository includes a comprehensive set of GitHub Actions workflows to automate building, testing, linting, and deployment processes, ensuring the reliability and quality of the system. To enhance transparency, we have added badges to the repository’s <a class="reference external" href="https://github.com/destination-earth/DestinE_ESA_GFTS">README.md</a> file to display the pass/fail status of key workflows, and detailed logs of all GitHub Actions runs are publicly accessible at <a class="github reference external" href="https://github.com/destination-earth/DestinE_ESA_GFTS/actions">destination-earth/DestinE_ESA_GFTS</a>.</p>
+<p>Below is an overview of the implemented workflows and their roles in verification:</p>
+<section id="github-actions-workflows">
+<h3>GitHub Actions Workflows<a class="headerlink" href="#github-actions-workflows" title="Link to this heading">#</a></h3>
+<section id="linting-with-pre-commit-pre-commit-yaml">
+<h4>Linting with Pre-Commit (pre-commit.yaml)<a class="headerlink" href="#linting-with-pre-commit-pre-commit-yaml" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>Purpose</strong>: Ensures code quality and consistency by running pre-commit hooks on pull requests.</p></li>
+<li><p><strong>Activities</strong>:</p>
+<ul>
+<li><p>Installs and runs pre-commit to check code formatting, style, and potential errors.</p></li>
+<li><p>Caches pre-commit hooks to improve performance.</p></li>
+<li><p>Provides detailed feedback on failures, including auto-formatting diffs, to guide developers in resolving issues.</p></li>
+</ul>
+</li>
+<li><p><strong>Verification Role</strong>: Enforces coding standards, reducing bugs and maintaining a clean codebase.</p></li>
+</ul>
+</section>
+<section id="documentation-deployment-deploy-yaml">
+<h4>Documentation Deployment (deploy.yaml)<a class="headerlink" href="#documentation-deployment-deploy-yaml" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>Purpose</strong>: Automates the building and deployment of GFTS documentation as a Jupyter Book.</p></li>
+<li><p><strong>Activities</strong>:</p>
+<ul>
+<li><p>Triggers on pushes to the main branch for changes in the docs/ directory.</p></li>
+<li><p>Uses a Conda environment to build the Jupyter Book.</p></li>
+<li><p>Deploys the generated HTML to the gh-pages branch using GitHub Pages.</p></li>
+<li><p>Badge: Displays the workflow status in the <a class="reference external" href="https://github.com/destination-earth/DestinE_ESA_GFTS">README.md</a>: <a class="reference external" href="https://github.com/destination-earth/DestinE_ESA_GFTS/actions/workflows/deploy.yml/badge.svg">GFTS Jupyter Book</a></p></li>
+</ul>
+</li>
+<li><p><strong>Verification Role</strong>: Ensures that documentation is consistently updated and accessible, supporting user and developer verification of system functionality.</p></li>
+</ul>
+</section>
+<section id="docker-image-testing-test-image-yaml">
+<h4>Docker Image Testing (test-image.yaml)<a class="headerlink" href="#docker-image-testing-test-image-yaml" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>Purpose</strong>: Validates Docker images for the JupyterHub environment when changes are made to Conda or pip dependencies.</p></li>
+<li><p><strong>Activities</strong>:</p>
+<ul>
+<li><p>Triggers on pull requests affecting the gfts-track-reconstruction/jupyterhub/images/user directory.</p></li>
+<li><p>Builds the Docker image using Chartpress without pushing to the registry, ensuring the image is functional.</p></li>
+<li><p>Verifies that dependencies are correctly installed and compatible.</p></li>
+</ul>
+</li>
+<li><p><strong>Verification Role</strong>: Confirms that changes to the environment do not break the JupyterHub deployment, ensuring stability.</p></li>
+</ul>
+</section>
+<section id="jupyterhub-deployment-deploy-hub-yaml">
+<h4>JupyterHub Deployment (deploy-hub.yaml)<a class="headerlink" href="#jupyterhub-deployment-deploy-hub-yaml" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>Purpose</strong>: Automates the deployment of the JupyterHub environment to OVH cloud infrastructure.</p></li>
+<li><p><strong>Activities</strong>:</p>
+<ul>
+<li><p>Triggers on pushes to main or test-deploy branches or manually via workflow dispatch.</p></li>
+<li><p>Installs dependencies, kubectl, and Helm.</p></li>
+<li><p>Unlocks git-crypt secrets for secure access to configuration files.</p></li>
+<li><p>Builds and pushes Docker images using Chartpress.</p></li>
+<li><p>Deploys the JupyterHub environment with Helm, configuring compute and storage (e.g., S3 buckets for user groups).</p></li>
+<li><p>Supports testing multiple Docker images for flexibility.</p></li>
+<li><p>Badge: Displays the workflow status in the <a class="reference external" href="https://github.com/destination-earth/DestinE_ESA_GFTS">README.md</a>: <a class="reference external" href="https://github.com/destination-earth/DestinE_ESA_GFTS/actions/workflows/deploy-hub.yaml/badge.svg">GFTS Jupyter Hub</a></p></li>
+</ul>
+</li>
+<li><p><strong>Verification Role</strong>: Ensures that the JupyterHub environment is correctly configured, scalable, and operational, meeting requirements like R101 (Scalable JupyterHub environment).</p></li>
+</ul>
+</section>
+<section id="web-application-deployment-deploy-webapp-yaml">
+<h4>Web Application Deployment (deploy-webapp.yaml)<a class="headerlink" href="#web-application-deployment-deploy-webapp-yaml" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>Purpose</strong>: Automates the deployment of the GFTS web application service to Kubernetes.</p></li>
+<li><p><strong>Activities</strong>:</p>
+<ul>
+<li><p>Triggers on pushes to the main branch for changes in the webapp/ directory or manually via workflow dispatch.</p></li>
+<li><p>Unlocks git-crypt secrets for secure configuration.</p></li>
+<li><p>Builds and pushes the webapp Docker image to the OVH container registry, incorporating environment variables (e.g., Mapbox token).</p></li>
+<li><p>Updates Helm dependencies and deploys the webapp to Kubernetes using Helm.</p></li>
+</ul>
+</li>
+<li><p><strong>Verification Role</strong>: Verifies that the web application is correctly built, deployed, and accessible, supporting the decision support tool’s development.</p></li>
+</ul>
+</section>
+<section id="transparency-and-logging">
+<h4>Transparency and Logging<a class="headerlink" href="#transparency-and-logging" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>GitHub Actions Badges</strong>: The <a class="reference external" href="https://github.com/destination-earth/DestinE_ESA_GFTS">README.md</a> file includes badges (see image below) for the deploy.yaml and deploy-hub.yaml workflows, providing a visual indication of their pass/fail status. These badges enhance transparency by allowing stakeholders to quickly assess the health of critical workflows.
+<img alt="Image showing the badges on the README file" src="../_images/badges-GFTS.png" /></p></li>
+<li><p><strong>Detailed Logs</strong>: All GitHub Actions runs, including logs for linting, testing, and deployment workflows, are publicly accessible at <a class="github reference external" href="https://github.com/destination-earth/DestinE_ESA_GFTS/actions">destination-earth/DestinE_ESA_GFTS</a>. These logs provide detailed insights into the execution of each workflow, facilitating debugging and verification. Below is a view of the Github action tab in the Github repository showing a successful run of the deployment of the documentation.
+<img alt="Image showing the github workflow for deploying the GFTS documentation" src="../_images/deployment_workflows.png" /></p></li>
+</ul>
+</section>
+</section>
+<section id="modeling-environment-verification">
+<h3>Modeling environment verification<a class="headerlink" href="#modeling-environment-verification" title="Link to this heading">#</a></h3>
+<p>To ensure quality control of our JupyterHub deployments on the cloud, we implement a CI/CD pipeline that includes automated testing, validation, and deployment processes. This pipeline leverages the GitHub Actions workflows described above, which are triggered by code changes, e.g. a pull request or pushes. For our JupyterHub environment, we use Chartpress, a tool that automates the building and publishing of Docker images for Helm charts. The test-image.yaml and deploy-hub.yaml Github workflows ensure that images are built, tested, and deployed consistently, reducing manual intervention and errors. The pass/fail status of these workflows is visible via badges in the <a class="reference external" href="https://github.com/destination-earth/DestinE_ESA_GFTS">README.md</a>, and detailed logs are available at <a class="github reference external" href="https://github.com/destination-earth/DestinE_ESA_GFTS/actions">destination-earth/DestinE_ESA_GFTS</a>, providing transparency into the verification process. When changes are made, the pipeline automatically builds these images, installs and updates dependencies, and ensures that all configurations pass predefined checks before deployment. Chartpress ensures that our Helm charts and associated images are consistently built and deployed, reducing manual intervention and the likelihood of errors. By combining this with version control, incremental deployments, and cloud monitoring, we maintain a high level of stability and reliability in our JupyterHub environments, ensuring seamless upgrades and operational integrity across cloud platforms.</p>
+<p>The verification activities for the modeling environment are outlined below:</p>
+<ul class="simple">
+<li><p><strong>Scalable Jupyter-Hub environment</strong>: Deployment and verification automated through Chartpress and GitHub Actions (deploy-hub.yaml, test-image.yaml).</p></li>
+<li><p><strong>Access Copernicus Marine Data</strong>: Copernicus marine data has been added to our own object storage and its completeness has been confirmed.</p></li>
+<li><p><strong>Seabass biologging data</strong>: Biologging data has been uploaded to our own object storage and its completeness has been confirmed.</p></li>
+<li><p><strong>Fish track model output</strong>: Fish track output is inspected visually by scientists to ensure correctness of the results. Iterations are being carried out correcting for unexpected modeling output.</p></li>
+</ul>
+</section>
+<section id="decision-support-tool-verification-activities">
+<h3>Decision support tool verification activities<a class="headerlink" href="#decision-support-tool-verification-activities" title="Link to this heading">#</a></h3>
+<p>We have established a GitHub repository (<a class="github reference external" href="https://github.com/developmentseed/gfts">developmentseed/gfts</a>) to manage the development and verification of the GFTS decision support tool. We leverage GitHub Actions to automate software verification and deployment processes through two primary workflows: Checks and Deploy GitHub Pages. These workflows ensure consistent validation of code quality and streamline the deployment of frontend assets.</p>
+<section id="checks-workflow">
+<h4>Checks Workflow<a class="headerlink" href="#checks-workflow" title="Link to this heading">#</a></h4>
+<p>This workflow runs automatically for all branches except main. The project uses branch protection rules to ensure that code changes are merged only after successful verification through pull requests.
+The workflow is structured into three primary jobs:</p>
+<ul class="simple">
+<li><p>prep (Preparation Job):</p>
+<ul>
+<li><p>Installs Node.js based on the .nvmrc file.</p></li>
+<li><p>Restores and caches node_modules to optimize performance.</p></li>
+<li><p>Installs project dependencies using yarn. Skips execution if the pull request is still marked as a draft.</p></li>
+</ul>
+</li>
+<li><p>lint (Code Quality Check):</p>
+<ul>
+<li><p>Runs only after the prep job completes successfully.</p></li>
+<li><p>Performs static analysis using the project’s configured linter (yarn lint).</p></li>
+<li><p>Ensures code adheres to the defined formatting and style rules.</p></li>
+</ul>
+</li>
+<li><p>test (Automated Testing):</p>
+<ul>
+<li><p>Also depends on the prep job.</p></li>
+<li><p>Executes the project’s test suite (yarn test) to verify functionality and detect regressions.</p></li>
+</ul>
+</li>
+</ul>
+<p>The lint and test jobs are executed in parallel, allowing for faster feedback.</p>
+</section>
+<section id="deploy-github-pages-workflow">
+<h4>Deploy GitHub Pages Workflow<a class="headerlink" href="#deploy-github-pages-workflow" title="Link to this heading">#</a></h4>
+<p>This workflow is triggered only when code is pushed to the main branch, reflecting the intention to deploy production-ready artifacts.
+It consists of two jobs:</p>
+<ul class="simple">
+<li><p>build:</p>
+<ul>
+<li><p>Checks out the codebase and installs dependencies.</p></li>
+<li><p>Builds the project (yarn build), typically producing static frontend files in a dist directory.</p></li>
+<li><p>Uses caching for both dependencies (node_modules) and build output (dist) to accelerate subsequent runs.</p></li>
+</ul>
+</li>
+<li><p>deploy:</p>
+<ul>
+<li><p>Depends on the successful completion of the build job.</p></li>
+<li><p>Restores the cached build output.</p></li>
+<li><p>Uses the JamesIves/github-pages-deploy-action to publish the contents of the dist folder to the gh-pages branch, which is then served via GitHub Pages.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="additional-features">
+<h4>Additional Features<a class="headerlink" href="#additional-features" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Environment Variables: The deployment workflow uses secrets and environment variables (e.g., PUBLIC_URL, DATA_API, MAPBOX_TOKEN) to configure the build and deployment process dynamically.</p></li>
+<li><p>Concurrency Control: Both workflows use concurrency settings to ensure that only the latest run per branch is executed, canceling any in-progress jobs for the same reference.</p></li>
+<li><p>Permissions: The workflows are granted appropriate permissions (e.g., contents: write) to perform deployments.</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="validation-activities">
+<h2>Validation activities<a class="headerlink" href="#validation-activities" title="Link to this heading">#</a></h2>
+<p>For our use case we will validate that the outcomes of our efforts match the intended use case. For this we are actively participating in the relevant communities and are in continuous contact with potential users. Our work has a clear product focus where user needs are put at the forefront of development. We will work with potential users to validate that what we are building is meeting their needs.</p>
+<section id="modeling-environment-validation">
+<h3>Modeling environment validation<a class="headerlink" href="#modeling-environment-validation" title="Link to this heading">#</a></h3>
+<p>During two conferences we have interacted with multiple stakeholders of the GFTS project, as well as several potential users of the GFTS fish track reconstruction environment. This has informed multiple decisions on how to set up the architecture. The feedback from stakeholders within the Destination Earth ecosystem, and the increased learning about the concrete capabilities of the DestinE Platform has resulted in a revised assessment of how we will operationalize the fish track reconstruction. We are considering packaging the environment in a stack that can easily be reproduced in Jupyter hub environments, such as the environment that will be offered by the DestinE platform.
+We are also in conversations with the biologging community to understand their needs. Examples are the European Tracking Network (ETN).
+To support user validation and replication, we have provided a comprehensive Docker and Conda environment setup in the repository at:
+<a class="github reference external" href="https://github.com/destination-earth/DestinE_ESA_GFTS/tree/main/gfts-track-reconstruction/jupyterhub/images/user">destination-earth/DestinE_ESA_GFTS</a>.
+This includes a Dockerfile based on the pangeo-notebook image (see <a class="github reference external" href="https://github.com/pangeo-data/pangeo-docker-images">pangeo-data/pangeo-docker-images</a>), installing essential dependencies and packages like pangeo-fish and xhealpixify. The Conda environment is defined in conda-requirements.txt (e.g., copernicusmarine, movingpandas), and pip dependencies are listed in requirements.txt. A jupyter_server_config.py file configures the Jupyter server for idle timeouts and content management. These resources, combined with the GFTS documentation (deployed via deploy.yaml), enable end-users to replicate the environment locally or on compatible platforms and test fish track reconstruction workflows, such as those using the pangeo-fish package, although access to DestinE Platform data is required for full functionality.</p>
+</section>
+<section id="decision-support-tool-validation">
+<h3>Decision support tool validation<a class="headerlink" href="#decision-support-tool-validation" title="Link to this heading">#</a></h3>
+<p>We are in continuous contact with our test users to obtain feedback on the design and features of the interface. This feedback is integrated into the web application in the progressive updates that we are pushing to the GitHub repository. This feedback loop is essential to validate that our decision support tool adds value to the end user.</p>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./system"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="admin_doc.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Documentation Generation</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#backend-verification-activities">Backend verification activities</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#github-actions-workflows">GitHub Actions Workflows</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#linting-with-pre-commit-pre-commit-yaml">Linting with Pre-Commit (pre-commit.yaml)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-deployment-deploy-yaml">Documentation Deployment (deploy.yaml)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#docker-image-testing-test-image-yaml">Docker Image Testing (test-image.yaml)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#jupyterhub-deployment-deploy-hub-yaml">JupyterHub Deployment (deploy-hub.yaml)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#web-application-deployment-deploy-webapp-yaml">Web Application Deployment (deploy-webapp.yaml)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#transparency-and-logging">Transparency and Logging</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modeling-environment-verification">Modeling environment verification</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#decision-support-tool-verification-activities">Decision support tool verification activities</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#checks-workflow">Checks Workflow</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#deploy-github-pages-workflow">Deploy GitHub Pages Workflow</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#additional-features">Additional Features</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#validation-activities">Validation activities</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modeling-environment-validation">Modeling environment validation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#decision-support-tool-validation">Decision support tool validation</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Pangeo
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

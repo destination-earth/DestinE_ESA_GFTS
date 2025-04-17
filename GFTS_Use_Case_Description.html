@@ -1,0 +1,1110 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>The GFTS Use Case &#8212; Global Fish Tracking System (GFTS) - DestinE Platform use case</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/exercise.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'GFTS_Use_Case_Description';</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="How to contribute" href="contribute.html" />
+    <link rel="prev" title="Global Fish Tracking System" href="intro.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/gfts.png" class="logo__image only-light" alt="Global Fish Tracking System (GFTS) - DestinE Platform use case - Home"/>
+    <script>document.write(`<img src="_static/gfts.png" class="logo__image only-dark" alt="Global Fish Tracking System (GFTS) - DestinE Platform use case - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Global Fish Tracking System
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">About</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">The GFTS Use Case</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contribute.html">How to contribute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code_of_conduct.html">Contributor Covenant Code of Conduct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rule_of_participation.html">Introduction</a></li>
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Onboarding new users</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="new2gfts.html">GFTS Presentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="workflow.html">GFTS Workflow</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Workflow</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="workflow/input_data_preparation.html">1. Data Preparation for <code class="docutils literal notranslate"><span class="pre">pangeo_fish</span></code></a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="workflow/tag_data_processing.html">Tag Data Preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workflow/reference_model_creation.html">Create a Reference Model with <code class="docutils literal notranslate"><span class="pre">virtualizarr</span></code></a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="workflow/geolocation_model_execution.html">2. Estimation of fish locations</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="workflow/papermill_launcher2.html">Tutorial: processing several tags with <code class="docutils literal notranslate"><span class="pre">kbatch_papermill</span></code></a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="workflow/scientific_validation.html">3. Scientific Validation of the results</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="workflow/compute_scientific_html.html">Plot for scientific validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workflow/launch_scientific_html.html">Launching the scientific plotting notebooks as jobs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workflow/panel_scientific_validation.html">Result Visualization with a <code class="docutils literal notranslate"><span class="pre">panel</span></code> application</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="workflow/result_publication.html">4. Result Publication</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="workflow/regroup_results.html">Data Reduction: Quarters</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="workflow/simplify_individual_results.html">Data Reduction: Individual Tags</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="workflow/contact_gfts_service.html">Sending Results to the GFTS Service</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Miscellaneous Examples</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="other_examples_overview.html">Example Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CopernicusMarine.html">Copernicus Marine for GFTS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tag_data.html">Intro to Biologging data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tag_data_summary.html">Tool: How to summarize the tag data</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="s3_CMEMS_2D_kerchunk.html">Create Kerchunk catalog for CMEMS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="s3_CMEMS_3D_kerchunk.html">Create Kerchunk catalog for CMEMS 3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="s3chunked_parquet.html">Read parquet kerchunk catalog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cmems_catalog_creation.html">Copernicus data exploration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gfts_intake.html">Reading CMEMS Copernicus data from GFTS s3 bucket</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Compute_3D_pdf.html">Computing 3D PDF from State matrix and tag pressure information</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ClimateDT-zarr-2D-3D.html">Extract selected area from DestinE Climate Twin in Healpix to Zarr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="visu3Dvista.html">Visualize bathymetry with pyvista</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reporting &amp; Outreach</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="deliverables.html">Project deliverables and reports</a></li>
+<li class="toctree-l1"><a class="reference internal" href="outreach.html">Conferences and other events</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">GFTS Technical Guide</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="system/gfts_components.html">Overview of GFTS System Components</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="system/gfts_hub.html">GFTS JupyterHub</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="system/admin_hub.html">Managing access to the GFTS Hub and S3 Buckets</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="system/gfts_service.html">GFTS Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="system/admin_doc.html">Documentation Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="system/gfts_github_actions.html">GFTS Verification and Validation</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/destination-earth/DestinE_ESA_GFTS" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/destination-earth/DestinE_ESA_GFTS/issues/new?title=Issue%20on%20page%20%2FGFTS_Use_Case_Description.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/GFTS_Use_Case_Description.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>The GFTS Use Case</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#actors">Actors</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#use-case-description">Use Case Description</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fish-track-modeling-environment">Fish track modeling environment</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#preconditions">Preconditions</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#input-summary">Input summary</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#output-summary">Output summary</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-description">Workflow description</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#future-conditions-decision-support-tool">Future conditions decision support tool</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Preconditions</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Input summary</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Output summary</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">Workflow description</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#application-to-seabass">Application to Seabass</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#expected-outcome">Expected outcome</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#uncertainty">Uncertainty</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#architecture">Architecture</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#co-design">Co-design</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#destine-platform-integration">DestinE Platform integration</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#planning-and-strategy">Planning and Strategy</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#scalability-plan">Scalability Plan</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#long-term-strategy">Long Term Strategy</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#traceability">Traceability</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#use-case-associations">Use case associations</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#use-case-notes">Use Case Notes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation-plan">Implementation Plan</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="the-gfts-use-case">
+<h1>The GFTS Use Case<a class="headerlink" href="#the-gfts-use-case" title="Link to this heading">#</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
+<p>This document describes the Global Fish Tracking System (GFTS) use case
+for DestinE Platform. The subject area of the GFTS use case is in marine
+biology, the project is performing fish track reconstruction within
+biologging science and estimation of future fish habitat conditions
+based on sea temperature projections from the Climate Adaptation Digital
+Twin.</p>
+<p>This document will be continuously updated as we progress in the use
+case development. Especially the sections around integration with
+DestinE Platform services and the use of DestinE Digital Twin data will
+evolve as we advance in implementing the original plan in a
+collaborative co-creation approach.</p>
+<section id="actors">
+<h3>Actors<a class="headerlink" href="#actors" title="Link to this heading">#</a></h3>
+<p>There are three main actors in this use case. The three actors have
+complementary capabilities that will ensure a successful use case
+development. The three partners are responsible for the end-user
+perspective, infrastructure development, and interface implementation.
+The end-user of the system are researchers that perform fish track
+reconstruction science.</p>
+<p>The end-user is represented by the <a class="reference external" href="https://www.ifremer.fr">Institut Français de Recherche pour
+l’Exploitation de la Mer</a> (IFREMER). IFREMER is
+a consortium partner of the GFTS project. This institute is at the
+forefront of fish track research and has contributed to the definition
+of this use case from the proposal writing stage. They will use the GFTS
+as a platform for advancing their fish tracking modeling.</p>
+<p>For infrastructure development and deployment the project has the
+<a class="reference external" href="https://www.simula.no/">Simula Research Laboratory</a> (SRL) as a
+consortium partner. Simula is a research laboratory that performs
+high-quality information and communication technology research. It is
+the perfect partner for ensuring a highly scalable fish track
+reconstruction environment that IFREMER will rely on.</p>
+<p>To create a decision support tool the project has <a class="reference external" href="https://developmentseed.org/">Development
+Seed</a> as a consortium partner. Development
+Seed is a pioneering technology company specializing in data
+visualization, mapping, and software development for social good,
+recognized for its innovative use of geospatial data to empower
+organizations and governments worldwide. Development Seed is also the
+lead of the project.</p>
+</section>
+</section>
+<section id="use-case-description">
+<h2>Use Case Description<a class="headerlink" href="#use-case-description" title="Link to this heading">#</a></h2>
+<p>Our use case has two main components, one is a modeling environment for
+fish track reconstruction, and the other is a decision support tool to
+explore future habitat conditions for fish species based on the
+reconstructed tracks.</p>
+<section id="fish-track-modeling-environment">
+<h3>Fish track modeling environment<a class="headerlink" href="#fish-track-modeling-environment" title="Link to this heading">#</a></h3>
+<p>The modeling environment addresses a need from the scientific community
+to have a consistent way of running fish track reconstruction at scale.
+Currently, scientists that have biologging data from in situ
+measurements have to perform fish track reconstruction on their own
+local machines. Fish track reconstruction is a highly resource intensive
+process. It requires access to large datasets of sea temperature
+profiles along time and space, as well as a high number of computing
+power to run the models. This is a limitation for biologists who are
+specialized in marine biology and biologging from in-situ fish tagging.
+These scientists may not have the knowledge of creating and maintaining
+scalable computing environments for fish track reconstruction.
+Furthermore, the ocean temperature data used for fish track
+reconstruction is shared across different modeling efforts for different
+species. A modeling environment that combines data availability with
+computational resources will significantly lower the barriers for
+biologists to perform fish track reconstruction. This is a clear value
+added when compared to the current workflow that biologists use for fish
+track reconstruction.</p>
+<p>Our use case will therefore add value by creating a ready to use
+environment for fish track reconstruction from biologging data. This
+environment will be made available to scientists that are limited in
+their current workflow, reducing the barrier of entry for this kind of
+scientific analysis, and increasing the uptake of ocean temperature data
+created in the DestinE project and the DestinE Platform environment.</p>
+<section id="preconditions">
+<h4>Preconditions<a class="headerlink" href="#preconditions" title="Link to this heading">#</a></h4>
+<p>The first precondition for using the fish track modeling environment is
+familiarity with the pangeo-fish software and fish track reconstruction
+techniques. The model environment will be a ready-to-use development
+environment, but the user will still be expected to be an expert in fish
+track reconstruction. The environment is meant to relieve the burden of
+infrastructure management for users that know how to run models in
+notebooks.</p>
+<p>A second precondition for using this system is the availability of
+biologging data. The system does not provide the biologging data itself.
+A user of the system will have to provide this data and upload it to the
+system prior to start modeling.</p>
+<p>A third precondition is availability of computing resources. The DestinE
+Platform infrastructure will provide the underlying infrastructure. The
+requirements on the size of the computing resources will depend on the
+amount of biologgin data that is available (how many species, how many
+observation points, for how many dates), as well as the resolution of
+the ocean temperature data used for reconstruction. Here the higher the
+better, each user will choose the best available data for the region
+where the biologing data was collected and the time range for which it
+is available.</p>
+</section>
+<section id="input-summary">
+<h4>Input summary<a class="headerlink" href="#input-summary" title="Link to this heading">#</a></h4>
+<p>The inputs for this system are biologging data from fish species on the
+one hand, and ocean temperature on the other hand. The biologging data
+needs to be provided by the user, whereas the ocean temperature data
+will be available through the DestinE Platform data lake. This is one of
+the key advantages of this system, that the big data requirements for
+this kind of modeling are readily available through the DestinE
+Platform.</p>
+</section>
+<section id="output-summary">
+<h4>Output summary<a class="headerlink" href="#output-summary" title="Link to this heading">#</a></h4>
+<p>The outputs of the fish track modeling environment are the reconstructed
+fish tracks. These are georeferenced fish locations with dates attached
+to them, as well as daily posterior distributions of fish position.
+These represent daily maps of fish presence probability. These fish
+tracks and location probabilities are stored within the GFTS system and
+can be integrated into the decision support system in a later step. The
+presence probability can be aggregated over time intervals such as
+spawning periods and individual fishes to help managers designing
+spatial management measures.</p>
+</section>
+<section id="workflow-description">
+<h4>Workflow description<a class="headerlink" href="#workflow-description" title="Link to this heading">#</a></h4>
+<p>The high level workflow for using this system is to register on the
+platform. To control the type and level of usage of the platform, users
+will be able to join the GFTS platform by invitation only in the first
+iteration. After registration and login, the user will have access to a
+Jupyter environment that will scale on demand. The user will then upload
+their biologging data, perform modeling and store the output of the
+modeling in secure and long term cloud storage.</p>
+</section>
+</section>
+<section id="future-conditions-decision-support-tool">
+<h3>Future conditions decision support tool<a class="headerlink" href="#future-conditions-decision-support-tool" title="Link to this heading">#</a></h3>
+<p>Fish track reconstruction is a significant first step in better
+understanding fish populations in the oceans. However, the fish tracks
+themselves are not enough for decision makers to derive actionable
+insights for improving marine life protection and design fisheries
+policies.</p>
+<p>The second part of the GFTS project is therefore to leverage the fish
+tracks and combine them with long term ocean temperature forecasts from
+the DestinE Climate Adaptation Digital Twins. We will calculate the
+future conditions of these fish track locations relying heavily on
+DestinE Digital Twin data and the core functionalities of the DestinE
+Platform. Ocean condition variables from the climate adaptation Digital
+Twin forecasts will be crossed with reconstructed fish tracks using the
+scalable DestinE Platform. Example variables for these calculations are
+sea temperature and salinity.</p>
+<p>This integration will enable us to evaluate a range of potential
+scenarios. These “what-if” scenarios will depict how variations in
+climate conditions could impact the quality of habitat for fish species
+based on the estimated fish track locations.</p>
+<section id="id1">
+<h4>Preconditions<a class="headerlink" href="#id1" title="Link to this heading">#</a></h4>
+<p>The precondition for providing the decision support tool for any fish
+species, is its previous completion of fish track reconstruction in the
+modeling environment. Once fish tracks are available, the system can
+integrate them and create what-if scenarios based on long term climate
+projections.</p>
+<p>Another precondition is the existence of detailed data from the
+different Climate Adaptation Digital twin models, ideally under
+different climate scenarios. These are required to compute the what-if
+scenarios that analyze the future conditions that fish will meet in
+their current location.</p>
+</section>
+<section id="id2">
+<h4>Input summary<a class="headerlink" href="#id2" title="Link to this heading">#</a></h4>
+<p>The input for the decision support system are the fish tracks, and
+future projections of ocean temperatures. With these two inputs,
+scenarios will be computed and made available to the user.</p>
+</section>
+<section id="id3">
+<h4>Output summary<a class="headerlink" href="#id3" title="Link to this heading">#</a></h4>
+<p>The output of the decision support system are maps and graphs of future
+habitat conditions for the species at hand. The system will expose the
+what-if scenarios to the end user through an intuitive interface.
+Outputs are the graphical representation on the interface, as well as
+potentially options to export the underlying data.</p>
+</section>
+<section id="id4">
+<h4>Workflow description<a class="headerlink" href="#id4" title="Link to this heading">#</a></h4>
+<p>The decision support system will be publicly available. The workflow
+begins therefore with accessing the tool though a browser. The user can
+then explore different scenarios for the available species in the
+interface. The detail of how this interaction will look like will be
+part of a co-creation process with our initial users and the development
+team.</p>
+</section>
+</section>
+<section id="application-to-seabass">
+<h3>Application to Seabass<a class="headerlink" href="#application-to-seabass" title="Link to this heading">#</a></h3>
+<p>To demonstrate the capabilities of the GFTS system, we will focus on
+Seabass, a species that has been studied by our scientific team for
+decades. We will leverage an extensive fish track biologging dataset
+that IFREMER has collected from 2010 onwards. The dataset is for Seabass
+along the French Atlantic coast.. The combination of this dataset with
+the Climate Adaptation Digital Twin will allow us to develop a fully
+fledged usage of the GFTS infrastructure and demonstrate the
+functionality of the system. If data availability allows, we will also
+add other fish species such as Pollock to the analysis to demonstrate</p>
+</section>
+<section id="expected-outcome">
+<h3>Expected outcome<a class="headerlink" href="#expected-outcome" title="Link to this heading">#</a></h3>
+<p>We expect the outcome of this project to support both the scientific
+community and policy makers in the space of marine biology and marine
+area protection. In a fast changing world it is important to ensure that
+scientists have the tools to scale their scientific methods to regional
+and global levels, so that the large-scale implications of scientific
+insights can be estimated. Once data and insights are generated, it is
+equally important to ensure that policy makers have access to this data
+in a way that is useful for them to maximize the positive outcome of the
+scientific output.</p>
+<p>In the GFTS project we address the needs of the scientists and the
+policy makers at the same time. For this, we build a scalable fish track
+reconstruction environment for biologging experts on the one hand, and
+help marine protection policy making by estimating impact of climate
+change on fish habitat conditions on the other hand. We hope this will
+contribute to an increased understanding of fish movement in our seas as
+well as some of the implications of climate change on fish populations
+based on the known fish movements.</p>
+<p>The table below lists institutes that expressed interest in using the
+GFTS system for fish track analysis.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Institute</strong></p></th>
+<th class="head"><p><strong>Species</strong></p></th>
+<th class="head"><p><strong>Location</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Swedish University of Agricultural Science</p></td>
+<td><p>Shark</p></td>
+<td><p>Sweden</p></td>
+</tr>
+<tr class="row-odd"><td><p>Universidade do Algarve</p></td>
+<td><p>-</p></td>
+<td><p>Portugal</p></td>
+</tr>
+<tr class="row-even"><td><p>Dalhousie University</p></td>
+<td><p>-</p></td>
+<td><p>Canada</p></td>
+</tr>
+<tr class="row-odd"><td><p>Flanders Marine Institute</p></td>
+<td><p>-</p></td>
+<td><p>Belgium</p></td>
+</tr>
+<tr class="row-even"><td><p>Nihon University College of Bioresource Sciences Department of Marine Science</p></td>
+<td><p>-</p></td>
+<td><p>Japan</p></td>
+</tr>
+<tr class="row-odd"><td><p>Centre d’Etudes Biologiques de Chizé</p></td>
+<td><p>-</p></td>
+<td><p>France</p></td>
+</tr>
+<tr class="row-even"><td><p>Institute of Marine Research</p></td>
+<td><p>-</p></td>
+<td><p>Norway</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="uncertainty">
+<h3>Uncertainty<a class="headerlink" href="#uncertainty" title="Link to this heading">#</a></h3>
+<p>Our approach quantifies uncertainties using hidden Markov models to
+derive the posterior probability of the sequence of fish positions, from
+which by-products are derived as mean, maximum and most probable fish
+trajectories. Appropriate ocean temperature and pressure datasets
+together with biologging in-situ datasets are used to estimate fish
+habitats, along with sensitivity analysis for a range of outcomes. The
+developed interactive tools offer end-users the ability to generate
+probabilistic predictions and explore different scenarios. Sensitivity
+analysis identifies key uncertainties and their impact on decisions,
+while expert judgment complements limited data. Subsequently,
+policy-making prioritizes robust strategies to design fish conservation
+areas.</p>
+</section>
+</section>
+<section id="architecture">
+<h2>Architecture<a class="headerlink" href="#architecture" title="Link to this heading">#</a></h2>
+<p>The technical framework of this proposal is based on the Pangeo
+ecosystem, which facilitates co-creation and solution development. An
+interactive and scalable Pangeo computing infrastructure will be
+deployed to provision the resources required for running the pangeo-fish
+model. We will connect all available and relevant ocean temperature and
+pressure datasets of DestinE using Pangeo techniques such as Intake,
+STAC and kerchunk. Then, in consultation with IFREMER’s Ocean Physics
+scientist, additional datasets from IFREMER such as OSI-SAF datasets,
+and Copernicus marine services will be connected to the Pangeo DestinE
+Platform.</p>
+<p>The following diagram shows an overview of what data is used as input,
+what data is being generated, and how this information feeds into the
+decision support tool.</p>
+<section id="co-design">
+<h3>Co-design<a class="headerlink" href="#co-design" title="Link to this heading">#</a></h3>
+<p>The co-creation process developed within the <a class="reference external" href="https://e-shape.eu/index.php/co-design">e-shape
+project</a> will be adopted to
+ensure that all stakeholders are engaged and their needs are addressed.
+We will employ co-creation as a collaborative process where stakeholders
+and end-users actively engage in the creation of the GFTS platform. We
+are planning to reach out to potential users and help them to</p>
+<ol class="arabic simple">
+<li><p>Use the GFTS system and pangeo-fish software to run fish track
+reconstruction</p></li>
+<li><p>Include their existing fish track data in the decision support tool</p></li>
+<li><p>Explore early versions of the decision support tool and get feedback
+on how to advance</p></li>
+</ol>
+<p>To achieve this, we will set up online workshops, interviews, and
+training sessions where relevant. The goal of these activities will be
+for the new users and stakeholders to become familiar with the GFTS
+system and be able to use it for their own purposes.</p>
+<p>In general, we will encourage all participants to openly share ideas,
+and to joint decision-making to generate an innovative and tailored
+outcome for GFTS. By integrating diverse perspectives, knowledge, and
+experiences, our co-creation process will ensure a solution that is more
+relevant, usable, and sustainable. This approach fosters a sense of
+ownership and commitment among stakeholders, leading to an outcome that
+better meets the needs and preferences of everyone involved.</p>
+</section>
+<section id="destine-platform-integration">
+<h3>DestinE Platform integration<a class="headerlink" href="#destine-platform-integration" title="Link to this heading">#</a></h3>
+<p>This section contains the specification of how we will integrate with
+DestinE Platform at a high level. The integration plan details will
+evolve as we get onboarded to the DestinE Platform in practice. We will
+document the process of the integration of our use case into DestinE
+Platform in our public GitHub repository. Documenting our learnings as
+part of the first cohort of DestinE Platform users will hopefully help
+future use cases and other future DestinE Platform users to integrate
+their project with DestinE Platform easier and faster.</p>
+<p>We will leverage the DestinE Platform wherever possible, from
+authentication, to existing Kubernetes clusters, object storage, and
+more. The use case will be made available to selected DestinE users and
+integrated in the DestinE Platform system native capabilities. The
+selected DestinE users can make use of the data available on the DestinE
+Platform, the DestinE data lake, and from the DestinE Digital Twins.
+Authorized users will be able to run the tools &amp; services developed
+within the Use Case.</p>
+<p>Interactive dashboards will be built based on Jupyter and Pangeo
+technologies such as Voila dashboards, Jupyterlite or Observable
+community notebooks. For the development phase, Pangeo JupyterHub with
+Dask cluster would be deployed on the DestinE Platform.</p>
+</section>
+</section>
+<section id="planning-and-strategy">
+<h2>Planning and Strategy<a class="headerlink" href="#planning-and-strategy" title="Link to this heading">#</a></h2>
+<section id="scalability-plan">
+<h3>Scalability Plan<a class="headerlink" href="#scalability-plan" title="Link to this heading">#</a></h3>
+<p>We will build a scalable infrastructure from day one. The pangeo
+deployment will be based on Kubernetes and have an auto-scaling feature
+that will add more capacity to the infrastructure on demand as usage
+increases. Our service will rely on the ability of the DestinE Platform
+to provide the necessary resources to our Kubernetes cluster. The
+processing we use for the Seabass species will be a great scale test, as
+it is one of the larger existing biologging datasets in the world.</p>
+</section>
+<section id="long-term-strategy">
+<h3>Long Term Strategy<a class="headerlink" href="#long-term-strategy" title="Link to this heading">#</a></h3>
+<p>Our long term strategy is to create a decision support tool that
+supports decision making around fish stocks around the globe. We believe
+that this requires the ability to estimate and map fish locations,
+primarily focused on biologging data, but with the vision of extending
+to other sources that indicated potential fish habitat. This is why the
+GFTS system has two main components: the fish track reconstruction
+environment, and the decision support tool.</p>
+<p>The fish track reconstruction itself is an expensive analysis and will
+require funding for data analysis on demand using a case by case basis.
+The fish track reconstruction environment is not freely accessible and
+we will only scale up for the resource intensive processes if there is
+funding for such additional analysis. When no processing is being
+performed, the environment will only require minimal resources.</p>
+<p>The decision support tool will be kept online in the medium term. Also
+this system is expected to have low resource utilization. New data from
+additional analysis will only be integrated into the decision making
+tool when the fish track reconstruction mechanism is deployed for
+additional processing as described above.</p>
+</section>
+<section id="traceability">
+<h3>Traceability<a class="headerlink" href="#traceability" title="Link to this heading">#</a></h3>
+<p>We are using ORCID IDs for all the work published under the GFTS
+project. We are also publishing the source code and the relevant
+documentation in the public <a class="reference external" href="https://github.com/destination-earth/DestinE_ESA_GFTS">DestinE_ESA_GFTS GitHub
+repository</a>. The
+documentation will be integrated into the codebase and published in a
+rendered version in a separate <a class="reference external" href="https://destination-earth.github.io/DestinE_ESA_GFTS/">url for
+documentation</a>.</p>
+<p>All the software developed within the project will be licensed through
+the Apache 2 OSI license and will be made available in Github. All
+developments will be done in the GitHub repository linked below and
+software releases will get a DOI in Zenodo to increase the Findability,
+Availability, Interoperability and Reusability (FAIR) of all the
+software components. FAIR <a class="reference external" href="https://www.researchobject.org">Research
+Objects</a> (ROs) will be created using the
+<a class="reference external" href="https://reliance.rohub.org">RoHub</a>, a Research Object Management
+platform in order to align with Open Science principles such as the
+practice of sharing inputs, outputs, models, software, workflows,
+brochures, training, and any other publication during the active phase
+of the project.</p>
+<p>Link to public GitHub repository:
+<a class="github reference external" href="https://github.com/destination-earth/DestinE_ESA_GFTS">destination-earth/DestinE_ESA_GFTS</a></p>
+<p>Link to documentation website:
+<a class="reference external" href="https://destination-earth.github.io/DestinE_ESA_GFTS/">https://destination-earth.github.io/DestinE_ESA_GFTS/</a></p>
+<p>The use of commercial software is not foreseen. All the technologies are
+based on the Jupyter and Pangeo ecosystem that are widely adopted
+standard-based technologies enabling interoperability of DestinE
+components with external systems and guaranteeing compliance with
+standards indicated in DestinE Platform.</p>
+</section>
+<section id="use-case-associations">
+<h3>Use case associations<a class="headerlink" href="#use-case-associations" title="Link to this heading">#</a></h3>
+<p>This section we will document any associations with other DestinE
+Platform use cases. There are no other use cases associated with the
+GFTS use case at the moment.</p>
+</section>
+<section id="use-case-notes">
+<h3>Use Case Notes<a class="headerlink" href="#use-case-notes" title="Link to this heading">#</a></h3>
+<p>This section will contain any additional notes and information on the
+use case that users need to be aware of while using the suggested
+workflow. There are no additional use case notes at the moment.</p>
+</section>
+<section id="implementation-plan">
+<h3>Implementation Plan<a class="headerlink" href="#implementation-plan" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>WP1: Management</p>
+<ul>
+<li><p>Task 1: Daniel Wiesmann (DS)</p></li>
+</ul>
+</li>
+<li><p>WP2:</p>
+<ul>
+<li><p>Task 2: Technology, Benjamin Ragan-Kelley (SRL)</p></li>
+<li><p>Task 2: Science, Tina Odaka (IFREMER);</p></li>
+</ul>
+</li>
+<li><p>WP3:</p>
+<ul>
+<li><p>Task 3: Tina Odaka (Ifremer)</p></li>
+</ul>
+</li>
+<li><p>WP4:</p>
+<ul>
+<li><p>Task 4: User experience, Mathieu Woillez (IFREMER);</p></li>
+<li><p>Task 4: Technology, Daniel Wiesmann (DS)</p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="intro.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Global Fish Tracking System</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="contribute.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">How to contribute</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#actors">Actors</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#use-case-description">Use Case Description</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fish-track-modeling-environment">Fish track modeling environment</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#preconditions">Preconditions</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#input-summary">Input summary</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#output-summary">Output summary</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-description">Workflow description</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#future-conditions-decision-support-tool">Future conditions decision support tool</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Preconditions</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Input summary</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Output summary</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">Workflow description</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#application-to-seabass">Application to Seabass</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#expected-outcome">Expected outcome</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#uncertainty">Uncertainty</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#architecture">Architecture</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#co-design">Co-design</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#destine-platform-integration">DestinE Platform integration</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#planning-and-strategy">Planning and Strategy</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#scalability-plan">Scalability Plan</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#long-term-strategy">Long Term Strategy</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#traceability">Traceability</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#use-case-associations">Use case associations</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#use-case-notes">Use Case Notes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation-plan">Implementation Plan</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Pangeo
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
