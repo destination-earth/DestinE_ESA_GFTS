@@ -57,6 +57,11 @@ parts:
     chapters:
       - file: deliverables
       - file: outreach
-  - caption: The GFTS Hub
+  - caption: GFTS Technical Guide
     chapters:
-      - file: admin_hub
+      - file: system/gfts_components
+      - file: system/gfts_hub
+        sections:
+          - file: system/admin_hub
+      - file: system/gfts_service
+      - file: system/gfts_github_actions
