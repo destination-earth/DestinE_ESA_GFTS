@@ -9,4 +9,3 @@ The GFTS Service is a web-based decision support tool designed to visualize fish
 - **Data Visualization**: Interactive maps and charts for exploring fish movement data.
 - **Decision Support**: Tools for analyzing trends and patterns to guide policy decisions.
 - **User-Friendly Interface**: Accessible design for both technical and non-technical users.
-

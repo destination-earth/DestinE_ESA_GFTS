@@ -12,7 +12,7 @@ The GFTS Hub is a powerful modeling environment based on JupyterHub, designed fo
 
 ## Setup and administration
 
-This section provides an overview of where to find information and source code related to the deployment and administration of GFTS JupyterHub. 
+This section provides an overview of where to find information and source code related to the deployment and administration of GFTS JupyterHub.
 It also explains how and by whom users can be added.
 
 ### GFTS Hub deployment
