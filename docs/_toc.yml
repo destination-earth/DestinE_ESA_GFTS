@@ -64,4 +64,5 @@ parts:
         sections:
           - file: system/admin_hub
       - file: system/gfts_service
+      - file: system/admin_doc
       - file: system/gfts_github_actions

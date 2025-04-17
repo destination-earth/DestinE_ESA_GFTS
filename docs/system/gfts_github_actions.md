@@ -1,4 +1,4 @@
-# Software Verification and Validation
+# GFTS Verification and Validation
 
 This section describes the Software Verification and Validation approach for the Global Fish Tracking System (GFTS) use case for the DestinE Platform. 
 
