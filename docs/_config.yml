@@ -6,10 +6,11 @@
 #######################################################################################
 # Book settings
 title: Global Fish Tracking System (GFTS) - DestinE Platform use case # The title of the book. Will be placed in the left navbar.
-author: Pangeo # The author of the book
-copyright: "2023" # Copyright year to be placed in the footer
-logo: "./images/gfts.png" # A path to the book logo
+author: GFTS Consortium # The author of the book
+copyright: "2025-05-09 Development Seed" # Copyright year to be placed in the footer
+logo: "./_static/logomark.svg" # A path to the book logo
 only_build_toc_files: true
+release: "0.1.0"
 
 # Force re-execution of notebooks on each build.
 # See https://jupyterbook.org/content/execute.html
@@ -46,7 +47,23 @@ html:
 
 sphinx:
   config:
+    author: Development Seed
+    copyright: "09.05.2025 Development Seed"
+    project: Global Fish Tracking System
+    release: "0.1.0"
     html_js_files:
       - https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js
+    html_static_path:
+      - _static/
+    html_css_files:
+      - code-style.css
+      - xarray-style.css
+      - service-doc.css
+    html_theme: sphinx_rtd_theme
+    rst_epilog: |
+      .. |project| replace:: GFTS
+    nitpicky: true
+
   extra_extensions:
     - sphinx_exercise
+    - sphinx_rtd_theme

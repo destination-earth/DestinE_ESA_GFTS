@@ -29,6 +29,7 @@ dependencies:
   - pip:
       - wget
       - sphinx-exercise
+      - sphinx-rtd-theme
       - jupytext
       - nbgitpuller
       - mystmd

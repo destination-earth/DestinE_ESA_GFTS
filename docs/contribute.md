@@ -10,12 +10,11 @@ Our docs are written using JupyterBook. To contribute to the docs,
 install the python dependencies
 
 ```bash
-pip install jupyter-book sphinx-exercise sphinx-autobuild
+pip install jupyter-book sphinx-exercise sphinx-rtd-theme
 ```
 
-And then run a small sphinx server with live-reload functionality
+And then run jupyter book to build the code
 
 ```bash
-cd docs
-sphinx-autobuild . _build/html -b html
+jupyter-book build --all docs
 ```

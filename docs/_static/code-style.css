@@ -1,0 +1,432 @@
+/* DESP Fonts */
+@font-face {
+  font-family: "Roboto-Regular";
+  src:
+    local("Roboto-Regular"),
+    url(./fonts/Roboto/Roboto-Regular.ttf) format("truetype");
+}
+@font-face {
+  font-family: "Roboto-Bold";
+  src:
+    local("Roboto-Bold"),
+    url(./fonts/Roboto/Roboto-Bold.ttf) format("truetype");
+}
+
+/* Base theme variables */
+:root {
+  /* Main theme colors */
+  --pst-color-primary: rgb(69, 157, 185);
+  --pst-color-secondary: rgb(238, 144, 64);
+  --pst-color-success: rgb(40, 167, 69);
+  --pst-color-info: var(--pst-color-primary);
+  --pst-color-warning: rgb(255, 193, 7);
+  --pst-color-danger: rgb(220, 53, 69);
+
+  /* Font settings */
+  --pst-font-size-base: 1rem;
+  --pst-font-family-base-system: -apple-system, "BlinkMacSystemFont", "Segoe UI",
+    "Helvetica Neue", "Arial", sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol";
+  --pst-font-family-monospace-system: "SFMono-Regular", "Menlo", "Consolas",
+    "Monaco", "Liberation Mono", "Lucida Console", monospace;
+  --pst-font-family-base: "Roboto-Regular", Fallback,
+    var(--pst-font-family-base-system);
+  --pst-font-family-heading: "Roboto-Bold", Fallback,
+    var(--pst-font-family-base-system);
+  --pst-font-family-monospace: var(--pst-font-family-monospace-system);
+}
+
+/* Dark theme specific styling (overrides RTD theme) */
+html[data-theme="dark"],
+html:not([data-theme="light"]),
+.wy-body-for-nav {
+  color: #f0f0f0;
+  background: #0d1527;
+}
+
+/* Dark theme colors */
+html[data-theme="dark"],
+html:not([data-theme="light"]) {
+  --pst-color-primary: rgb(100, 180, 210);
+  --pst-color-secondary: rgb(255, 165, 85);
+  --pst-color-on-background: #f0f0f0;
+  --pst-color-surface: #141f2c;
+  --pst-color-on-surface: #f0f0f0;
+
+  /* Code block colors */
+  --code-background: #141f2c;
+  --code-border: #2a3a56;
+  --code-foreground: #f0f0f0;
+  --code-literal: #75bddf;
+  --code-name: #7bd67b;
+  --code-number: #f7ae7e;
+  --code-string: #a9d18e;
+  --code-comment: #8c8c8c;
+  --code-keyword: #cf8cf8;
+  --code-operator: #f29668;
+  --inline-code-background: #172033;
+  --inline-code-foreground: #e6e6e6;
+}
+
+/* Basic typography */
+.wy-body-for-nav {
+  font-family: var(--pst-font-family-base) !important;
+  font-display: swap;
+}
+
+.wy-body-for-nav h1,
+.wy-body-for-nav h2,
+.wy-body-for-nav h3,
+.wy-body-for-nav h4,
+.wy-body-for-nav h5,
+.wy-body-for-nav h6 {
+  font-family: var(--pst-font-family-heading) !important;
+}
+
+/* Navigation and sidebar */
+.wy-nav-side {
+  background: #0d1527;
+  border-right: 1px solid #1a2440;
+}
+
+.wy-side-nav-search {
+  background: #0d1527;
+}
+
+.wy-nav-content {
+  background: #0d1527;
+  max-width: 1200px;
+}
+
+/* Hide default navigation */
+div[role="navigation"]:not(.wy-menu) {
+  display: none;
+}
+
+/* External links */
+.reference.external {
+  color: var(--pst-color-primary);
+}
+
+/* Table styling */
+table,
+table thead,
+table td,
+.rst-content table.docutils,
+.rst-content table.field-list {
+  border: 1px solid #2a3a56 !important;
+}
+
+table thead {
+  color: white !important;
+  background-color: #00365d !important;
+}
+
+.rst-content table.docutils:not(.field-list) tr td,
+.wy-table-backed,
+.wy-table-odd td,
+.wy-table-striped tr td,
+.rst-content table.docutils:not(.field-list) tr:nth-child(2n-1) td,
+.wy-table-backed,
+.wy-table-odd td,
+.wy-table-striped tr:nth-child(2n-1) td {
+  background-color: #0d1527 !important;
+}
+
+/* Navigation menu */
+.wy-menu-vertical a {
+  color: #cccccc;
+}
+
+.wy-menu-vertical a:hover {
+  background-color: #1a2440;
+  color: white;
+}
+
+.toctree-expand {
+  color: #999 !important;
+}
+
+/* Admonitions */
+.admonition {
+  background-color: var(--pst-color-surface) !important;
+  border-radius: 0.25rem;
+  border-left: 6px solid var(--pst-color-primary);
+  box-shadow:
+    0 0.2rem 0.5rem rgba(0, 0, 0, 0.05),
+    0 0 0.0625rem rgba(0, 0, 0, 0.1);
+}
+
+.admonition-title {
+  background-color: rgba(100, 180, 210, 0.2) !important;
+  color: var(--pst-color-primary) !important;
+}
+
+.admonition.note .admonition-title {
+  background-color: rgba(100, 180, 210, 0.2) !important;
+  color: var(--pst-color-primary) !important;
+}
+
+.admonition.warning .admonition-title {
+  background-color: rgba(255, 165, 85, 0.2) !important;
+  color: var(--pst-color-secondary) !important;
+}
+
+.admonition.danger .admonition-title {
+  background-color: rgba(220, 53, 69, 0.2) !important;
+  color: var(--pst-color-danger) !important;
+}
+
+/* Code blocks styling */
+div[class^="highlight"] {
+  border: 1px solid var(--code-border);
+  border-radius: 0.25rem;
+  background: var(--code-background);
+}
+
+pre {
+  padding: 0.8rem;
+  background-color: var(--code-background);
+  color: var(--code-foreground);
+  border: none;
+  font-family: var(--pst-font-family-monospace);
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+/* Code syntax highlighting */
+.highlight .hll {
+  background-color: #324158;
+}
+.highlight .c {
+  color: var(--code-comment);
+  font-style: italic;
+} /* Comment */
+.highlight .err {
+  color: #f07178;
+} /* Error */
+.highlight .k {
+  color: var(--code-keyword);
+  font-weight: bold;
+} /* Keyword */
+.highlight .n {
+  color: var(--code-foreground);
+} /* Name */
+.highlight .o {
+  color: var(--code-operator);
+} /* Operator */
+.highlight .p {
+  color: var(--code-foreground);
+} /* Punctuation */
+.highlight .cm {
+  color: var(--code-comment);
+  font-style: italic;
+} /* Comment.Multiline */
+.highlight .cp {
+  color: var(--code-comment);
+} /* Comment.Preproc */
+.highlight .c1 {
+  color: var(--code-comment);
+  font-style: italic;
+} /* Comment.Single */
+.highlight .cs {
+  color: var(--code-comment);
+  font-style: italic;
+} /* Comment.Special */
+.highlight .kc {
+  color: var(--code-keyword);
+  font-weight: bold;
+} /* Keyword.Constant */
+.highlight .kd {
+  color: var(--code-keyword);
+  font-weight: bold;
+} /* Keyword.Declaration */
+.highlight .kn {
+  color: var(--code-keyword);
+  font-weight: bold;
+} /* Keyword.Namespace */
+.highlight .kp {
+  color: var(--code-keyword);
+} /* Keyword.Pseudo */
+.highlight .kr {
+  color: var(--code-keyword);
+  font-weight: bold;
+} /* Keyword.Reserved */
+.highlight .kt {
+  color: var(--code-keyword);
+} /* Keyword.Type */
+.highlight .m {
+  color: var(--code-number);
+} /* Literal.Number */
+.highlight .s {
+  color: var(--code-string);
+} /* Literal.String */
+.highlight .na {
+  color: var(--code-name);
+} /* Name.Attribute */
+.highlight .nb {
+  color: var(--code-name);
+} /* Name.Builtin */
+.highlight .nc {
+  color: var(--code-name);
+  font-weight: bold;
+} /* Name.Class */
+.highlight .no {
+  color: var(--code-name);
+} /* Name.Constant */
+.highlight .nd {
+  color: var(--code-name);
+} /* Name.Decorator */
+.highlight .ni {
+  color: var(--code-name);
+} /* Name.Entity */
+.highlight .ne {
+  color: var(--code-name);
+  font-weight: bold;
+} /* Name.Exception */
+.highlight .nf {
+  color: var(--code-name);
+} /* Name.Function */
+.highlight .nl {
+  color: var(--code-name);
+} /* Name.Label */
+.highlight .nn {
+  color: var(--code-name);
+} /* Name.Namespace */
+.highlight .nx {
+  color: var(--code-name);
+} /* Name.Other */
+.highlight .py {
+  color: var(--code-name);
+} /* Name.Property */
+.highlight .nt {
+  color: var(--code-keyword);
+} /* Name.Tag */
+.highlight .nv {
+  color: var(--code-name);
+} /* Name.Variable */
+.highlight .ow {
+  color: var(--code-operator);
+  font-weight: bold;
+} /* Operator.Word */
+.highlight .mf {
+  color: var(--code-number);
+} /* Literal.Number.Float */
+.highlight .mh {
+  color: var(--code-number);
+} /* Literal.Number.Hex */
+.highlight .mi {
+  color: var(--code-number);
+} /* Literal.Number.Integer */
+.highlight .mo {
+  color: var(--code-number);
+} /* Literal.Number.Oct */
+.highlight .sb {
+  color: var(--code-string);
+} /* Literal.String.Backtick */
+.highlight .sc {
+  color: var(--code-string);
+} /* Literal.String.Char */
+.highlight .sd {
+  color: var(--code-string);
+} /* Literal.String.Doc */
+.highlight .s2 {
+  color: var(--code-string);
+} /* Literal.String.Double */
+.highlight .se {
+  color: var(--code-string);
+} /* Literal.String.Escape */
+.highlight .sh {
+  color: var(--code-string);
+} /* Literal.String.Heredoc */
+.highlight .si {
+  color: var(--code-string);
+} /* Literal.String.Interpol */
+.highlight .sx {
+  color: var(--code-string);
+} /* Literal.String.Other */
+.highlight .sr {
+  color: var(--code-string);
+} /* Literal.String.Regex */
+.highlight .s1 {
+  color: var(--code-string);
+} /* Literal.String.Single */
+.highlight .ss {
+  color: var(--code-string);
+} /* Literal.String.Symbol */
+
+/* Inline code */
+code.literal,
+.rst-content code {
+  background-color: var(--inline-code-background);
+  color: var(--inline-code-foreground);
+  border: none;
+  font-size: 0.85em;
+  padding: 2px 5px;
+  border-radius: 3px;
+}
+
+/* Fix for xarray html representation */
+[hidden] {
+  display: initial !important;
+}
+
+/* Make xarray HTML representation visible */
+.xr-wrap,
+.xr-text-repr-fallback,
+.xr-header,
+.xr-obj-type,
+.xr-array-name,
+.xr-section-summary,
+.xr-section-inline-details {
+  color: var(--code-foreground);
+}
+
+.xr-wrap {
+  background-color: var(--code-background);
+  border: 1px solid var(--code-border);
+}
+
+.xr-sections {
+  background-color: var(--code-background);
+}
+
+.xr-array-dimensions,
+.xr-var-dims,
+.xr-var-dtype {
+  color: var(--code-literal);
+}
+
+.xr-section-summary-in:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.xr-section-summary-in:hover span {
+  color: white;
+}
+
+.xr-var-name,
+.xr-var-data {
+  color: var(--code-foreground);
+}
+
+/* Improved code block titles/captions */
+.code-block-caption {
+  color: var(--pst-color-on-background);
+  background-color: rgba(100, 180, 210, 0.1);
+  border-top-left-radius: 0.25rem;
+  border-top-right-radius: 0.25rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  font-weight: bold;
+  border-bottom: 1px solid var(--code-border);
+  margin-bottom: -1px;
+}
+
+/* Code with line numbers */
+.highlight .linenos {
+  background-color: rgba(0, 0, 0, 0.15);
+  color: #8c8c8c;
+  border-right: 1px solid var(--code-border);
+  padding: 0 5px;
+}

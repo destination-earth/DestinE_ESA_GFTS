@@ -1,0 +1,73 @@
+/* DESP Fonts */
+@font-face {
+  font-family: "Roboto-Regular";
+  src:
+    local("Roboto-Regular"),
+    url(./fonts/Roboto/Roboto-Regular.ttf) format("truetype");
+}
+@font-face {
+  font-family: "Roboto-Bold";
+  src:
+    local("Roboto-Bold"),
+    url(./fonts/Roboto/Roboto-Bold.ttf) format("truetype");
+}
+
+.wy-body-for-nav {
+  color: white;
+  font-family: "Roboto-Regular", Fallback, sans-serif !important;
+  font-display: swap;
+}
+.wy-body-for-nav h1,
+.wy-body-for-nav h2,
+.wy-body-for-nav h3,
+.wy-body-for-nav h4,
+.wy-body-for-nav h5,
+.wy-body-for-nav h6 {
+  font-family: "Roboto-Bold", Fallback, sans-serif !important;
+}
+.wy-body-for-nav {
+  background: #0d1527;
+}
+.wy-nav-side {
+  background: #0d1527;
+}
+.wy-side-nav-search {
+  background: #0d1527;
+}
+.wy-nav-content {
+  background: #0d1527;
+  max-width: 1920px;
+}
+div[role="navigation"]:not(.wy-menu) {
+  display: none;
+}
+.reference.external {
+  color: #2980b9;
+}
+
+table thead {
+  color: white !important;
+  background-color: #00365d;
+}
+
+.rst-content table.docutils:not(.field-list) tr td,
+.wy-table-backed,
+.wy-table-odd td,
+.wy-table-striped tr td {
+  background-color: #0d1527;
+}
+.rst-content table.docutils:not(.field-list) tr:nth-child(2n-1) td,
+.wy-table-backed,
+.wy-table-odd td,
+.wy-table-striped tr:nth-child(2n-1) td {
+  background-color: #0d1527;
+}
+.toctree-expand {
+  color: #999 !important;
+}
+.admonition {
+  background-color: #141f2c !important;
+}
+.admonition-title {
+  background-color: #7b34db !important;
+}
