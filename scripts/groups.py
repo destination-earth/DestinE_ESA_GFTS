@@ -3,18 +3,18 @@ import numpy as np
 
 from simplify import (
     has_states,
-    list_tags,
     logger,
     open_dataset,
     rotate_data,
     get_filesystem,
+    TARGET_BUCKET,
+    TARGET_PREFIX,
 )
 
 NSIDE = 4096
 
 
-def convert_to_parquet():
-    data = xr.open_zarr("data/sea_bass_average.zarr")
+def convert_to_parquet(data: xr.Dataset):
     for quarter, group in data.groupby("quarter"):
         logger.info(f"Writing parquet file for quarter {quarter}")
         subset = (
@@ -23,32 +23,40 @@ def convert_to_parquet():
             .set_index(["cell_ids", "quarter"])
             .unstack("quarter")
         )
-        del subset["cell"]
+        # better than deleting the "cell"?
+        subset = subset[["states"]]
         subset = subset.reset_index()
         subset.columns = ["cell_ids", "states"]
         subset = subset[subset > 1e-7].dropna()
-        subset.to_parquet(f"data/sea_bass_average_q{quarter}.parquet", index=False)
+
         with get_filesystem().open(
-            f"s3://destine-gfts-visualisation-data/groups/sea_bass_average_q{quarter}.parquet",
+            f"s3://{TARGET_BUCKET}/{TARGET_PREFIX}q{quarter}.parquet",
             "wb",
         ) as fl:
             subset.to_parquet(fl, index=False)
 
 
-def rotate_group():
-    data = xr.open_zarr("data/sea_bass_average_with_shift.zarr")
-    rotated = rotate_data(data.rename_dims({"quarter": "time"}))
-    rotated = rotated.rename_dims({"time": "quarter"})
+def rotate_group(data: xr.Dataset):
+    if "cells" in data.dims:
+        logger.debug("ds is already a HEALPix grid")
+        vars_to_keep = ["states", "cell_ids", "quarter"]
+        vars_to_drop = [var for var in data.variables if var not in vars_to_keep]
+        rotated = (
+            # in case of rotation, the result is a unindexed ds with variable states[quarter, cell] and coordinate cell_ids[cell]
+            data.drop_vars(vars_to_drop)
+            .rename({"cells": "cell"})
+            .drop_indexes("quarter", errors="ignore")
+            .drop_vars("quarter", errors="ignore")
+        )
+    else:
+        rotated = rotate_data(data.rename_dims({"quarter": "time"}))
+        rotated = rotated.rename_dims({"time": "quarter"})
 
-    rotated.to_zarr("data/sea_bass_average.zarr", mode="w")
-    store = get_filesystem().get_mapper(
-        "s3://destine-gfts-visualisation-data/groups/sea_bass_average.zarr"
-    )
-    rotated.to_zarr(store=store, mode="w", consolidated=True, compute=True)
+    return rotated
 
 
-def create_groups():
-    tags = list_tags()
+def create_groups(tags: list[str]):
+    """Regroup quarterly all the states.zarr files found for a list of tags."""
 
     result = None
     timpesteps = 0
@@ -80,16 +88,13 @@ def create_groups():
     result = result / timpesteps
 
     result = result.where(result != 0, other=np.nan)
-
-    result.to_zarr("data/sea_bass_average_with_shift.zarr", mode="w")
-
-    store = get_filesystem().get_mapper(
-        "s3://destine-gfts-visualisation-data/groups/sea_bass_average_with_shift.zarr"
-    )
-    result.to_zarr(store=store, mode="w", consolidated=True, compute=True)
+    return result
 
 
 if __name__ == "__main__":
-    # create_groups()
-    # rotate_group()
+    from simplify import list_tags
+
+    tags = list_tags()
+    result = create_groups(tags)
+    result = rotate_group(result)
     convert_to_parquet()
