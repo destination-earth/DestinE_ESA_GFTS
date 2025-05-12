@@ -47,8 +47,8 @@ html:
 
 sphinx:
   config:
-    author: Development Seed
-    copyright: "09.05.2025 Development Seed"
+    author: GFTS Consortium
+    copyright: "2025-05-09 GFTS Consortium"
     project: Global Fish Tracking System
     release: "0.1.0"
     html_js_files:
