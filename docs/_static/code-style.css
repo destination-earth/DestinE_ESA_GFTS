@@ -89,6 +89,11 @@ html:not([data-theme="light"]) {
   border-right: 1px solid #1a2440;
 }
 
+.wy-nav-top {
+  background: #0d1527;
+  border-bottom: 1px solid #1a2440;
+}
+
 .wy-side-nav-search {
   background: #0d1527;
 }
