@@ -43,7 +43,7 @@ jobs:
           zip -r ../../gfts_docs_build_v${{ steps.version.outputs.version }}.zip .
       # Upload the zip file as an artifact
       - name: Upload documentation zip
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: gfts-docs-build-v${{ steps.version.outputs.version }}
           path: docs/gfts_docs_build_v${{ steps.version.outputs.version }}.zip
