@@ -30,6 +30,24 @@ jobs:
       - name: Build the jupyter book
         run: |
           jupyter-book build docs
+      # Extract version
+      - name: Extract version
+        id: version
+        run: |
+          VERSION=$(grep -m 1 "release:" docs/_config.yml | sed 's/release: "\(.*\)"/\1/')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+      # Create versioned zip file
+      - name: Create versioned zip file of documentation
+        run: |
+          cd docs/_build/html
+          zip -r ../../gfts_docs_build_v${{ steps.version.outputs.version }}.zip .
+      # Upload the zip file as an artifact
+      - name: Upload documentation zip
+        uses: actions/upload-artifact@v3
+        with:
+          name: gfts-docs-build-v${{ steps.version.outputs.version }}
+          path: docs/gfts_docs_build_v${{ steps.version.outputs.version }}.zip
+          retention-days: 180
       # Deploy the book's HTML to gh-pages branch
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
