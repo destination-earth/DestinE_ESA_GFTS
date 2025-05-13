@@ -1,0 +1,140 @@
+/* 
+ * xarray HTML representation fix for RTD theme with dark mode
+ * This CSS ensures xarray visualizations display properly in Read the Docs theme with dark mode
+ */
+
+/* 
+ * First fix: Ensure xarray HTML wraps are displayed
+ * The main issue with sphinx-book-theme is that bootstrap's [hidden] selector 
+ * overrides xarray's display property. This fix ensures xarray HTML is visible.
+ */
+.xr-wrap[hidden] {
+  display: block !important;
+}
+
+/* 
+   * Second fix: Apply dark theme colors for xarray HTML representations
+   * These colors are adapted from your existing dark theme colors
+   */
+.wy-body-for-nav .xr-wrap,
+html[data-theme="dark"] .xr-wrap {
+  --xr-font-color0: #ffffff;
+  --xr-font-color1: #eaeaea;
+  --xr-font-color2: #cccccc;
+  --xr-font-color3: #b0b0b0;
+  --xr-border-color: #2a3a56;
+  --xr-disabled-color: #484848;
+  --xr-background-color: #141f2c;
+  --xr-background-color-row-even: #172033;
+  --xr-background-color-row-odd: #1a2440;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* Fix for xarray text representation which should be hidden when HTML view is active */
+.wy-body-for-nav pre.xr-text-repr-fallback,
+html[data-theme="dark"] pre.xr-text-repr-fallback {
+  display: none;
+}
+
+/* Override RTD theme's list styling which can affect xarray HTML representation */
+.wy-body-for-nav .xr-dim-list,
+html[data-theme="dark"] .xr-dim-list {
+  display: inline-block !important;
+  list-style: none;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.wy-body-for-nav .xr-dim-list li,
+html[data-theme="dark"] .xr-dim-list li {
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+}
+
+/* Improve link color in xarray HTML representation for dark theme */
+.wy-body-for-nav .xr-wrap a,
+html[data-theme="dark"] .xr-wrap a {
+  color: var(--pst-color-primary);
+  text-decoration: none;
+}
+
+/* Ensure xarray sections have proper colors and backgrounds */
+.wy-body-for-nav .xr-sections,
+html[data-theme="dark"] .xr-sections {
+  background-color: var(--xr-background-color);
+  border: 1px solid var(--xr-border-color);
+}
+
+/* Fix for xarray attributes section in dark mode */
+.wy-body-for-nav .xr-attrs,
+html[data-theme="dark"] .xr-attrs {
+  color: var(--xr-font-color1);
+}
+
+.wy-body-for-nav .xr-attrs dt,
+html[data-theme="dark"] .xr-attrs dt {
+  color: var(--xr-font-color0);
+}
+
+/* 
+   * Fix for alternate row colors in xarray tables 
+   * RTD theme can override these, making the table hard to read
+   */
+.wy-body-for-nav .xr-var-data,
+.wy-body-for-nav .xr-var-name,
+html[data-theme="dark"] .xr-var-data,
+html[data-theme="dark"] .xr-var-name {
+  word-break: normal;
+  background: var(--xr-background-color);
+}
+
+.wy-body-for-nav tr:nth-child(even) .xr-var-name,
+.wy-body-for-nav tr:nth-child(even) .xr-var-data,
+html[data-theme="dark"] tr:nth-child(even) .xr-var-name,
+html[data-theme="dark"] tr:nth-child(even) .xr-var-data {
+  background: var(--xr-background-color-row-even);
+}
+
+.wy-body-for-nav tr:nth-child(odd) .xr-var-name,
+.wy-body-for-nav tr:nth-child(odd) .xr-var-data,
+html[data-theme="dark"] tr:nth-child(odd) .xr-var-name,
+html[data-theme="dark"] tr:nth-child(odd) .xr-var-data {
+  background: var(--xr-background-color-row-odd);
+}
+
+/* Make sure dataarray visualizations are properly styled */
+.wy-body-for-nav .xr-array-name,
+.wy-body-for-nav .xr-array-dimensions,
+html[data-theme="dark"] .xr-array-name,
+html[data-theme="dark"] .xr-array-dimensions {
+  color: var(--xr-font-color0);
+}
+
+.wy-body-for-nav .xr-section-summary,
+html[data-theme="dark"] .xr-section-summary {
+  color: var(--xr-font-color2);
+}
+
+.wy-body-for-nav .xr-section-summary-in:hover,
+html[data-theme="dark"] .xr-section-summary-in:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.wy-body-for-nav .xr-section-summary-in:hover span,
+html[data-theme="dark"] .xr-section-summary-in:hover span {
+  color: var(--xr-font-color0);
+}
+
+html[data-theme="dark"] .xr-attrs dd {
+  color: #fff;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 4px;
+  padding: 2px 6px;
+}
+
+html[data-theme="dark"] .xr-attrs dt {
+  color: #eaeaea;
+  font-weight: 500;
+}
