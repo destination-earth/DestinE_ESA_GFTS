@@ -1,7 +1,10 @@
+# pin back aiobotocore/boto3 due to Content-MD5 header problems on Delete
+aiobotocore==2.16.*
 # packages to be installed with conda
 # requirements.txt format
 # to install with pip, use requirements.txt
 altair
+boto3==1.35.*
 cdshealpix
 copernicusmarine
 dask-image
