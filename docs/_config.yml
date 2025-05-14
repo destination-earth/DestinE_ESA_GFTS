@@ -7,7 +7,7 @@
 # Book settings
 title: Global Fish Tracking System (GFTS) - DestinE Platform use case # The title of the book. Will be placed in the left navbar.
 author: GFTS Consortium # The author of the book
-copyright: "2025-05-09 Development Seed" # Copyright year to be placed in the footer
+copyright: "2025 Development Seed, Simula, and Ifremer" # Copyright year to be placed in the footer
 logo: "./_static/logomark.svg" # A path to the book logo
 only_build_toc_files: true
 release: "1.0"
@@ -48,7 +48,7 @@ html:
 sphinx:
   config:
     author: GFTS Consortium
-    copyright: "2025-05-09 Development Seed"
+    copyright: "2025 Development Seed, Simula, and Ifremer"
     project: Global Fish Tracking System
     release: "1.0"
     html_js_files:
