@@ -11,21 +11,27 @@ This repository contains scripts for downloading and processing data from the De
 ## Prerequisites
 
 ### System Requirements
+
 - Python 3.x
 - ECMWF ecCodes library (for GRIB file processing)
 
 ### Python Dependencies
+
 ```bash
-pip install polytope-client xarray cfgrib
+pip install polytope-client xarray cfgrib conflator lxml earthkit-data earthkit-plots earthkit-regrid covjsonkit
 ```
 
 ## Authentication Setup
 
-1. You need to have a valid ECMWF API key or DESP key
-2. Configure your credentials using one of these methods:
-   - Create a `~/.polytopeapirc` file (JSON format)
-   - Set environment variables (`POLYTOPE_USER_EMAIL` and `POLYTOPE_USER_KEY`)
-   - Pass credentials directly to the `setup_client` function (not recommended)
+You need to have a valid ECMWF API key or DESP key
+
+To create credentials based on your email and password run
+
+```bash
+python desp-authentication.py
+```
+
+This will write auth keys into a config file at `~/.polytopeapirc` in JSON format.
 
 ## Usage
 
@@ -34,6 +40,7 @@ pip install polytope-client xarray cfgrib
 The script downloads two types of ocean temperature data for a specific region:
 
 1. Sea Water Potential Temperature (thetao)
+
    - 3D ocean temperature data
    - Parameter ID: 263501
    - Level type: o3d
@@ -44,7 +51,9 @@ The script downloads two types of ocean temperature data for a specific region:
    - Level type: o2d
 
 #### Region of Interest
+
 The data is downloaded for the North Atlantic region defined by the following bounding box:
+
 - Longitude: -14.65°E to 9.40°E
 - Latitude: 40.92°N to 56.74°N
 
@@ -53,6 +62,7 @@ python download-data.py
 ```
 
 This will:
+
 1. Set up the Polytope client
 2. Revoke any previous requests
 3. Download both thetao and tos data files in GRIB format for the specified region
@@ -65,6 +75,7 @@ python read_grib.py
 ```
 
 This script provides utilities to:
+
 - Read GRIB files into xarray Datasets
 - Display dataset information and structure
 - Show first and last observations with their locations
@@ -98,6 +109,7 @@ print_temperature_dates(ds)
 ## Data Details
 
 ### Download Parameters
+
 - Dataset: climate-dt
 - Activity: ScenarioMIP
 - Experiment: SSP3-7.0
@@ -107,6 +119,7 @@ print_temperature_dates(ds)
 - Region: North Atlantic (40.92°N-56.74°N, -14.65°E-9.40°E)
 
 ### Data Format
+
 - Input: GRIB format
 - Grid: HEALPix
 - Coordinates: latitude/longitude
