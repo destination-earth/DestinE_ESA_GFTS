@@ -12,7 +12,7 @@ RUN apk add --no-cache git
 
 WORKDIR /app
 RUN git clone https://github.com/developmentseed/gfts.git /app
-RUN git checkout path-test
+# RUN git checkout path-test
 RUN corepack enable && \
     yarn install --frozen-lockfile
 
