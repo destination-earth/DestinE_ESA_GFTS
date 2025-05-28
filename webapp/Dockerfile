@@ -19,6 +19,7 @@ RUN corepack enable && \
 RUN yarn add http-server
 
 RUN yarn build
+RUN cp ./dist/index.html ./dist/404.html
 
 EXPOSE 9000
 
