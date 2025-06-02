@@ -55,8 +55,36 @@ def rotate_group(data: xr.Dataset):
     return rotated
 
 
-def create_groups(tags: list[str]):
-    """Regroup quarterly all the states.zarr files found for a list of tags."""
+def create_groups(tags: list[str], method="intersection", cell_ids=None):
+    """Regroups quarterly all the states.zarr files found for a list of tags.
+    Optionally, `cell_ids` along with `method` can be used to account for cases where the states.zarr files cover different studied areas.
+    **The option assumes that the data has the coordinates ``cell_ids`` and is indexed by ``cells`` (i.e., HEALPix data).**
+
+
+    Parameters
+    ----------
+    - tags : list[str]
+        The names of the tags to process.
+    - method : str, default to "intersection"
+        Method to use in case of different areas covered by the tags. It must be used along with `cell_ids`.
+        Possible values are ["intersection", "union"]:
+
+            - ``"intersection"``: subset the tags to `cell_ids`.
+            - ``"union"``: extend the tags to `cell_ids`.
+
+    - cell_ids : array-like, optional
+        Cell indices to account for different studied areas among the fish tags.
+
+    Returns
+    -------
+    xarray.Dataset
+        The quarterly regrouped dataset.
+    """
+
+    if (cell_ids is not None) and (method not in ["intersection", "union"]):
+        raise ValueError(
+            'The "method" parameter must be either "intersection" or "union".'
+        )
 
     result = None
     timpesteps = 0
@@ -67,6 +95,28 @@ def create_groups(tags: list[str]):
         logger.debug(f"Processing tag {tag} ({idx + 1}/{len(tags)})")
 
         data = open_dataset(tag)
+
+        if cell_ids is not None:
+            # intersection
+            if method == "intersection":
+                mask = data["cell_ids"].compute().isin(cell_ids)
+                data = data.where(mask, drop=True)
+            # union
+            else:
+                # swaps dimension and fills values
+                data = data.swap_dims({"cells": "cell_ids"})
+                data = data.reindex(cell_ids=cell_ids, fill_value=0)
+                # and puts back cells index
+                data = data.assign_coords(
+                    cells=(
+                        "cell_ids",
+                        np.arange(data["cell_ids"].size).astype(np.int64),
+                    )
+                )
+                data = data.swap_dims(({"cell_ids": "cells"})).reset_index(
+                    "cells", drop=True
+                )
+
         timpesteps += data.time.shape[0]
         data = data.fillna(0)
 
@@ -76,11 +126,15 @@ def create_groups(tags: list[str]):
             result = avg_by_quarter
         else:
             # Combine both datasets and sum by quarter
-            result = xr.concat(
-                [avg_by_quarter, result],
-                dim="quarter",
-            )
-            result = result.groupby("quarter").sum("quarter")
+            try:
+                result = xr.concat(
+                    [avg_by_quarter, result],
+                    dim="quarter",
+                )
+                result = result.groupby("quarter").sum("quarter")
+            except Exception as e:
+                logger.debug(e)
+                timpesteps -= data.time.shape[0]
 
         result = result.fillna(0)
         result = result.compute()

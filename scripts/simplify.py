@@ -25,13 +25,13 @@ UINT16_MAX = 65535
 
 # remote access
 ENDPOINT = "https://s3.gra.perf.cloud.ovh.net/"
-PROFILE = "ovh_gfts"
 REGION = "gra"
 
 # I/O variables
 # .zarr files are expected to be {SOURCE_BUCKET}/{SOURCE_PREFIX}{tag}/{SOURCE_SUFFIX}states.zarr
 # .parquet files are stored to {TARGET_BUCKET}/{TARGET_PREFIX}{tag}/{tag}_healpix.parquet
 
+PROFILE = os.environ.get("PROFILE", "ovh_gfts")
 SOURCE_BUCKET = os.environ.get("SOURCE_BUCKET", "gfts-ifremer")
 TARGET_BUCKET = os.environ.get("TARGET_BUCKET", "destine-gfts-visualisation-data")
 TAG_ROOT = os.environ.get("TAG_ROOT")
