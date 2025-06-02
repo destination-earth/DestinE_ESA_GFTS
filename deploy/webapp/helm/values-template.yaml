@@ -1,0 +1,58 @@
+image:
+  repository: c63eqfuv.c1.gra9.container-registry.ovh.net/gfts/webapp
+  pullPolicy: Always
+  tag: "latest"
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 9000
+
+ingress:
+  enabled: true
+  namespace: webapp
+  installController: true
+  className: webapp-nginx
+  hosts:
+    - host: gfts.developmentseed.org
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+
+ingress-nginx:
+  controller:
+    ingressClass: webapp-nginx
+    ingressClassResource:
+      name: webapp-nginx
+      enabled: true
+      default: false
+      controllerValue: "k8s.io/webapp-ingress-nginx"
+    service:
+      loadBalancerIP: "57.130.19.137"
+      annotations:
+        loadbalancer.ovhcloud.com/class: "octavia"
+        loadbalancer.openstack.org/keep-floatingip: "true"
+      externalTrafficPolicy: Local
+  fullnameOverride: webapp-ingress-nginx
+
+livenessProbe:
+  httpGet:
+    path: /
+    port: 9000
+
+readinessProbe:
+  httpGet:
+    path: /
+    port: 9000
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80

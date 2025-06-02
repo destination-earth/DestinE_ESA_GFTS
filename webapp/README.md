@@ -12,7 +12,5 @@ The webapp can be run in a container. The Dockerfile is in the `webapp` director
 
 ### Infrastructure
 
-As a requirement for the webapp, we need a kubernetes cluster. Then the webapp consists in two parts to:
-
-- terraform/tofu resources for a static floating IP address in `deploy/tf`
-- helm charts for a configured kubernetes cluster `deploy/helm/webapp`
+As a requirement for the webapp, we need a kubernetes cluster, which needs to be setup manually as OVH Cloud doesn't support terraform for their high availability zone.
+Then everything is managed through helm charts in `deploy/webapp/helm`

@@ -5,6 +5,6 @@ This helm chart handles the deployment of the GFTS webapp, it's ingress tied to 
 Please make sure you have ssh-vault configured properly and you run the following commands in the helm chart directory before deploying the chart:
 
 ```bash
-source ../../deploy/tf/secrets/ovh-creds.sh
+source ../secrets/creds.sh
 envsubst < values-template.yaml > values.yaml
 ```

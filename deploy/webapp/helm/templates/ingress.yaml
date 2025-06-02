@@ -40,23 +40,4 @@ spec:
                   number: {{ $.Values.service.port }}
           {{- end }}
     {{- end }}
-{{- range .Values.ingress.tls }}
-{{- if .certManager }}
----
-apiVersion: cert-manager.io/v1
-kind: Issuer
-metadata:
-  name: {{ .certManagerIssuer }}
-spec:
-  acme:
-    server: https://acme-v02.api.letsencrypt.org/directory
-    email: {{ .certManagerEmail }}
-    privateKeySecretRef:
-      name: {{ .certManagerIssuer }}-secret
-    solvers:
-      - http01:
-          ingress:
-            class: {{ $.Values.ingress.className }}
-{{- end }}
-{{- end }}
 {{- end }}
