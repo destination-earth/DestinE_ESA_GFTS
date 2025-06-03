@@ -55,6 +55,43 @@ def rotate_group(data: xr.Dataset):
     return rotated
 
 
+def compute_cell_ids(tags: list[xr.Dataset], method="intersection"):
+    """Extracts from the datasets either the intersection or union of their ``cell_ids``.
+
+    Parameters
+    ----------
+    - tags : list[xarray.Dataset]
+        The datasets. **They must contain the variable/coordinate ``cell_ids``.**
+    - method : str, default to "intersection"
+        Method for extracting the cell_ids values.
+
+    Returns
+    -------
+    numpy.ndarray
+        The union or intersection of ``cell_ids`` among `tags`.
+    """
+
+    if method not in ["intersection", "union"]:
+        raise ValueError('Unknown parameter "method".')
+
+    if not all(["cell_ids" in ds for ds in tags]):
+        raise ValueError('Some datasets do not have "cell_ids" entry.')
+
+    if tags == []:
+        return []
+
+    if method == "intersection":
+        aux = np.intersect1d
+    else:
+        aux = np.union1d
+
+    cell_ids = tags[0]["cell_ids"].to_numpy()
+    for ds in tags[1:]:
+        cell_ids = aux(cell_ids, ds["cell_ids"].to_numpy())
+
+    return cell_ids
+
+
 def create_groups(tags: list[str], method="intersection", cell_ids=None):
     """Regroups quarterly all the states.zarr files found for a list of tags.
     Optionally, `cell_ids` along with `method` can be used to account for cases where the states.zarr files cover different studied areas.
