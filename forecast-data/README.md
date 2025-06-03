@@ -1,12 +1,20 @@
 # Destination Earth Data Download and Processing
 
-This repository contains scripts for downloading and processing data from the Destination Earth (DestinE) Digital Twin of the Ocean through the Polytope API.
+This repository contains scripts for downloading and processing
+data from the Destination Earth (DestinE) Digital Twin of the
+Ocean through the Polytope API.
 
 ## Project Structure
 
-- `download-data.py`: Script for downloading ocean data using the Polytope API
-- `read_grib.py`: Utilities for reading and processing GRIB files using xarray
 - `desp-authentication.py`: Authentication setup for the DESP platform
+- `download-data-by-geom.py`: Script for downloading ocean data for a specific polygon
+  geometry using the Polytope API. Downloads sea surface temperature and salinity data
+  for a defined area in the North Atlantic between 2025-2040.
+- `average-dt-data.py`: Script for processing and analyzing the downloaded data:
+  - Creates seasonal summaries (mean and standard deviation) of temperature and salinity
+  - Resamples data between different HEALPix grid resolutions (4096 to 1024)
+  - Computes weighted seasonal averages using sea bass distribution data
+  - Exports processed data to zarr and CSV formats
 
 ## Prerequisites
 
@@ -35,102 +43,43 @@ This will write auth keys into a config file at `~/.polytopeapirc` in JSON forma
 
 ## Usage
 
-### Downloading Data
+### Data Variables
 
-The script downloads two types of ocean temperature data for a specific region:
+We download and process [2D ocean data for the IFS-NEMO model](<https://confluence.ecmwf.int/display/DDCZ/Climate+DT+Phase+1+data+catalogue#ClimateDTPhase1datacatalogue-Ocean(levtypeo2d)>)
+of the DestinE Climate Adaptation Digital Twin.
 
-1. Sea Water Potential Temperature (thetao)
+We process two variables
 
-   - 3D ocean temperature data
-   - Parameter ID: 263501
-   - Level type: o3d
+1. Time-mean sea surface practical salinity
 
-2. Sea Surface Temperature (tos)
-   - 2D surface temperature data
+   - Short name `avg_sos`
+   - Parameter ID: 263100
+   - [Link to parameter docs](https://codes.ecmwf.int/grib/param-db/?id=263100)
+
+2. Time-mean sea surface temperature
+   - Short name `avg_tos`
    - Parameter ID: 263101
-   - Level type: o2d
+   - [Link to parameter docs](https://codes.ecmwf.int/grib/param-db/?id=263101)
 
-#### Region of Interest
+#### Download data
 
 The data is downloaded for the North Atlantic region defined by the following bounding box:
 
 - Longitude: -14.65°E to 9.40°E
 - Latitude: 40.92°N to 56.74°N
 
+To download the ocean data (sea surface temperature and salinity) for this region, run:
+
 ```bash
-python download-data.py
+python download-data-by-geom.py
 ```
-
-This will:
-
-1. Set up the Polytope client
-2. Revoke any previous requests
-3. Download both thetao and tos data files in GRIB format for the specified region
-4. Display a summary of downloaded files
 
 ### Processing Data
 
+To process the downloaded data and generate seasonal summaries,
+resample to different HEALPix resolutions, and compute weighted
+averages using sea bass distribution data, run:
+
 ```bash
-python read_grib.py
+python average-dt-data.py
 ```
-
-This script provides utilities to:
-
-- Read GRIB files into xarray Datasets
-- Display dataset information and structure
-- Show first and last observations with their locations
-- Display temperature values in both Kelvin and Celsius
-- Optionally convert to NetCDF format
-
-## Data Processing Functions
-
-The `read_grib.py` script provides these main functions:
-
-- `read_grib_file(filepath)`: Read a GRIB file into an xarray Dataset
-- `print_dataset_info(ds)`: Display information about the dataset structure
-- `print_temperature_dates(ds)`: Show first and last observations with locations and values
-- `save_as_netcdf(ds, output_path)`: Convert and save as NetCDF
-
-## Example Usage
-
-```python
-from read_grib import read_grib_file, print_dataset_info, print_temperature_dates
-
-# Read a GRIB file
-ds = read_grib_file('path_to_your_grib_file')
-
-# Display dataset information
-print_dataset_info(ds)
-
-# Show first and last observations
-print_temperature_dates(ds)
-```
-
-## Data Details
-
-### Download Parameters
-
-- Dataset: climate-dt
-- Activity: ScenarioMIP
-- Experiment: SSP3-7.0
-- Model: IFS-NEMO
-- Resolution: high
-- Time: 0000
-- Region: North Atlantic (40.92°N-56.74°N, -14.65°E-9.40°E)
-
-### Data Format
-
-- Input: GRIB format
-- Grid: HEALPix
-- Coordinates: latitude/longitude
-- Units: Kelvin (K)
-
-## Notes
-
-- The downloaded files are in GRIB format
-- Data is from the DestinE Digital Twin Climate
-- Requests use the SSP3-7.0 scenario
-- Default resolution is set to "high"
-- Time is set to "0000" by default
-- Temperature values are in Kelvin (K)
-- Data is limited to the North Atlantic region
