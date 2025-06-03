@@ -21,7 +21,6 @@ Ocean through the Polytope API.
 ### System Requirements
 
 - Python 3.x
-- ECMWF ecCodes library (for GRIB file processing)
 
 ### Python Dependencies
 
