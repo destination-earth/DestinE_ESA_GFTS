@@ -37,9 +37,9 @@ class Config(ConfigModel):
 
 config = Conflator("despauth", Config).load()
 
-if config.user == None:
+if config.user is None:
     config.user = input("Username: ")
-if config.password == None:
+if config.password is None:
     config.password = getpass(prompt="Password: ")
 
 with requests.Session() as s:
