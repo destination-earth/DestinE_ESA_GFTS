@@ -93,13 +93,10 @@ def get_data(model, param, dates, shape):
 aoi = [[40.92, -14.65], [40.92, 9.40], [56.74, 9.40], [56.74, -14.65], [40.92, -14.65]]
 
 combos = [
-    ("ICON", "263100", year, month, aoi)
+    ("IFS-NEMO", "263101", year, month, aoi)
     for year in range(2025, 2040)
     for month in range(1, 13)
 ]
-
-combo = combos[0]
-data = get_data(combo[0], combo[1], get_month_dates(combo[2], combo[3]), combo[4])
 
 with ThreadPoolExecutor() as pool:
     pool.map(
