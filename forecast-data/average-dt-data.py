@@ -4,16 +4,23 @@ import healpy as hp
 import numpy as np
 import xdggs
 import pandas as pd
+import os
 
 DT_NSIDE = 1024
-SEA_BASS_NSIDE = 4096
+FISH_NSIDE = 4096
+
+BASE_DIR = os.environ.get("BASE_DIR", "~/Documents/repos/DestinE_ESA_GFTS")
+SPECIES = "pollock"
+DATA_DIR = os.environ.get("DATA_DIR", "~/Documents/repos/gfts/static/data/pollock")
 
 
 def create_seasonal_summaries(model="IFS-NEMO", params=["263100", "263101"]):
     combined = None
     for param in params:
         datasets = []
-        for path in Path("forecast-data/data").glob(f"{model}-{param}-*.zarr"):
+        for path in Path(f"{BASE_DIR}/forecast-data/data").glob(
+            f"{model}-{param}-*.zarr"
+        ):
             print(path)
             ds = xr.open_dataset(path)
             ds = ds.isel(number=0, steps=0)
@@ -51,11 +58,13 @@ def create_seasonal_summaries(model="IFS-NEMO", params=["263100", "263101"]):
     seasonal_avg = seasonal_avg.swap_dims({"points": "cell_ids"})
     seasonal_avg = seasonal_avg.drop(["z", "x", "y", "number", "steps", "points"])
 
-    seasonal_avg.to_zarr(f"forecast-data/merged-data/{model}-seasonal.zarr")
+    seasonal_avg.to_zarr(f"{BASE_DIR}/forecast-data/merged-data/{model}-seasonal.zarr")
 
 
 def export_seasonal_summaries(model="IFS-NEMO"):
-    seasonal_avg = xr.open_zarr(f"forecast-data/merged-data/{model}-seasonal.zarr")
+    seasonal_avg = xr.open_zarr(
+        f"{BASE_DIR}/forecast-data/merged-data/{model}-seasonal.zarr"
+    )
     for quarter in range(4):
         df = seasonal_avg.sel(quarter=quarter + 1).to_dataframe().reset_index()
         del df["std_sos"]
@@ -65,7 +74,7 @@ def export_seasonal_summaries(model="IFS-NEMO"):
         df.loc[:, "avg_tos"] -= 273.15
         print(f"Writing to parquet for quarter {quarter}")
         df.to_parquet(
-            f"forecast-data/merged-data/{model}-seasonal-q{quarter}.parquet",
+            f"{BASE_DIR}/forecast-data/merged-data/{model}-seasonal-q{quarter}.parquet",
             index=False,
         )
 
@@ -75,22 +84,20 @@ def aggregate(df):
 
     data.coords["cell_ids"] = xr.DataArray(
         data.cell_ids,
-        attrs={"grid_name": "healpix", "nside": SEA_BASS_NSIDE, "nest": True},
+        attrs={"grid_name": "healpix", "nside": FISH_NSIDE, "nest": True},
     )
     data = data.pipe(xdggs.decode)
 
-    # Get the angular coordinates for sea_bass pixels
-    sea_bass_pixels = data.cell_ids.values
-    theta_sea_bass, phi_sea_bass = hp.pix2ang(
-        SEA_BASS_NSIDE, sea_bass_pixels, nest=True
-    )
+    # Get the angular coordinates for fish pixels
+    fish_pixels = data.cell_ids.values
+    theta_fish, phi_fish = hp.pix2ang(FISH_NSIDE, fish_pixels, nest=True)
 
     # Convert to the target resolution
-    sea_bass_pixels_1024 = hp.ang2pix(DT_NSIDE, theta_sea_bass, phi_sea_bass, nest=True)
+    fish_pixels_1024 = hp.ang2pix(DT_NSIDE, theta_fish, phi_fish, nest=True)
 
     # Create a mapping from high-res to low-res pixels
     unique_pixels_1024, inverse_indices = np.unique(
-        sea_bass_pixels_1024, return_inverse=True
+        fish_pixels_1024, return_inverse=True
     )
 
     # Aggregate the weights to the lower resolution
@@ -105,15 +112,15 @@ def aggregate(df):
 
 
 def compute_weighted_seasonal_summaries(model="IFS-NEMO"):
-    seasonal_avg_dt = xr.open_zarr(f"forecast-data/merged-data/{model}-seasonal.zarr")
+    seasonal_avg_dt = xr.open_zarr(
+        f"{BASE_DIR}/forecast-data/merged-data/{model}-seasonal.zarr"
+    )
 
     results = []
     for quarter in range(4):
         print(quarter)
 
-        df = pd.read_parquet(
-            f"/Users/tam/Documents/repos/DestinE_ESA_GFTS/data/sea_bass_average_q{quarter}.parquet"
-        )
+        df = pd.read_parquet(f"{DATA_DIR}/{SPECIES}_average_q{quarter}.parquet")
 
         data_1024 = aggregate(df)
 
@@ -149,11 +156,12 @@ def compute_weighted_seasonal_summaries(model="IFS-NEMO"):
     combined = xr.concat(results, dim="quarter")
 
     combined.to_dataframe().reset_index().to_csv(
-        f"forecast-data/merged-data/{model}-weighted-seasonal.csv", index=False
+        f"{BASE_DIR}/forecast-data/merged-data/{model}-{SPECIES}-weighted-seasonal.csv",
+        index=False,
     )
 
 
 if __name__ == "__main__":
-    create_seasonal_summaries()
-    export_seasonal_summaries()
+    # create_seasonal_summaries()
+    # export_seasonal_summaries()
     compute_weighted_seasonal_summaries()
