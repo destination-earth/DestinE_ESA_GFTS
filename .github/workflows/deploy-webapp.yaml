@@ -71,16 +71,16 @@ jobs:
 
       - name: Update Helm dependencies
         run: |
-          helm dependency update ./deploy/helm/webapp
+          helm dependency update ./deploy/webapp/helm
 
       - name: Deploy to Kubernetes
         run: |
-          source ./deploy/tf/secrets/ovh-creds.sh
-          envsubst < ./deploy/helm/webapp/values-template.yaml > ./deploy/helm/webapp/values.yaml
+          source ./deploy/webapp/secrets/creds.sh
+          envsubst < ./deploy/webapp/helm/values-template.yaml > ./deploy/webapp/helm/values.yaml
           helm upgrade --install \
             --namespace webapp \
             --create-namespace \
             webapp \
-            ./deploy/helm/webapp
+            ./deploy/webapp/helm
         env:
-          KUBECONFIG: ${{ github.workspace }}/gfts-track-reconstruction/jupyterhub/secrets/kubeconfig.yaml
+          KUBECONFIG: ${{ github.workspace }}/deploy/webapp/secrets/kubeconfig.yaml
