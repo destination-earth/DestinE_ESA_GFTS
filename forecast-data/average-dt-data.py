@@ -10,8 +10,15 @@ DT_NSIDE = 1024
 FISH_NSIDE = 4096
 
 BASE_DIR = os.environ.get("BASE_DIR", "~/Documents/repos/DestinE_ESA_GFTS")
+
 SPECIES = "pollock"
 DATA_DIR = os.environ.get("DATA_DIR", "~/Documents/repos/gfts/static/data/pollock")
+
+# SPECIES = "sea_bass"
+# DATA_DIR = os.environ.get("DATA_DIR", "~/Documents/repos/gfts/static/data/sea-bass")
+
+# SPECIES = "sea_bass_taos"
+# DATA_DIR = os.environ.get("DATA_DIR", "~/Documents/repos/gfts/static/data/sea-bass-taos")
 
 
 def create_seasonal_summaries(model="IFS-NEMO", params=["263100", "263101"]):
@@ -155,7 +162,10 @@ def compute_weighted_seasonal_summaries(model="IFS-NEMO"):
 
     combined = xr.concat(results, dim="quarter")
 
-    combined.to_dataframe().reset_index().to_csv(
+    combined = combined.to_dataframe().reset_index()
+    combined.loc[:, "weighted_avg_tos"] -= 273.15
+
+    combined.to_csv(
         f"{BASE_DIR}/forecast-data/merged-data/{model}-{SPECIES}-weighted-seasonal.csv",
         index=False,
     )
