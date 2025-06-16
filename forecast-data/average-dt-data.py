@@ -65,8 +65,8 @@ def export_seasonal_summaries(model="IFS-NEMO"):
     seasonal_avg = xr.open_zarr(
         f"{BASE_DIR}/forecast-data/merged-data/{model}-seasonal.zarr"
     )
-    for quarter in range(4):
-        df = seasonal_avg.sel(quarter=quarter + 1).to_dataframe().reset_index()
+    for quarter in range(1, 5):
+        df = seasonal_avg.sel(quarter=quarter).to_dataframe().reset_index()
         del df["std_sos"]
         del df["std_tos"]
         del df["quarter"]
