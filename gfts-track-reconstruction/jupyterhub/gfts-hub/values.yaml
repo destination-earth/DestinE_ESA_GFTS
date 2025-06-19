@@ -199,6 +199,7 @@ jupyterhub:
           - quentinmaz
           - davidcasalsvliz
           - capetienne
+          - corentin-hue
       KubeSpawner:
         pod_security_context:
           fsGroup: 100
