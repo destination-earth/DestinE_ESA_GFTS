@@ -56,6 +56,10 @@ ingress:
   annotations:
     nginx.ingress.kubernetes.io/auth-signin: "https://gfts.developmentseed.org/oauth2/start"
     nginx.ingress.kubernetes.io/auth-url: "https://gfts.developmentseed.org/oauth2/auth"
+    cert-manager.io/cluster-issuer: "letsencrypt"
+  tls:
+    enabled: true
+    secretName: webapp-tls
   hosts:
     - host: gfts.developmentseed.org
       paths:
@@ -71,11 +75,12 @@ ingress-nginx:
       default: false
       controllerValue: "k8s.io/webapp-ingress-nginx"
     service:
-      loadBalancerIP: "57.130.19.137"
+      loadBalancerIP: "57.130.31.159"
       annotations:
         loadbalancer.ovhcloud.com/class: "octavia"
         loadbalancer.openstack.org/keep-floatingip: "true"
-      externalTrafficPolicy: Local
+    config:
+      strict-validate-path-type: false # needed for letsencrypt acme challenge
   fullnameOverride: webapp-ingress-nginx
 
 livenessProbe:
