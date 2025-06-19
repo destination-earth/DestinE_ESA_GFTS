@@ -23,7 +23,7 @@ terraform {
     }
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 4.0"
+      version = "~> 6.0"
     }
     openstack = {
        source  = "terraform-provider-openstack/openstack"
@@ -35,8 +35,9 @@ terraform {
     bucket                      = "tf-state-gfts"
     key                         = "terraform.tfstate"
     region                      = "gra"
-    endpoint                    = "s3.gra.io.cloud.ovh.net"
+    endpoint                    = "https://s3.gra.io.cloud.ovh.net"
     skip_credentials_validation = true
+    skip_requesting_account_id  = true
     skip_region_validation      = true
   }
 }
@@ -58,7 +59,7 @@ locals {
   cluster_name   = "gfts"
   region         = "GRA11"
   s3_region      = "gra"
-  s3_endpoint    = "s3.gra.perf.cloud.ovh.net"
+  s3_endpoint    = "https://s3.gra.perf.cloud.ovh.net"
   s3_buckets = toset([
     "gfts-vliz",
     "gfts-ifremer",
@@ -90,6 +91,7 @@ locals {
     "mwoillez",
     "marinerandon",
     "danielfdsilva",
+    "corentin-hue",
   ])
   s3_vliz_users = toset([
     "davidcasalsvliz",
@@ -404,11 +406,6 @@ resource "ovh_cloud_project_kube" "cluster" {
   update_policy = "MINIMAL_DOWNTIME"
 }
 
-# Create a static (floating) ip for webapp
-
-resource "openstack_networking_floatingip_v2" "floating_ip" {
-  pool = "Ext-Net"
-}
 
 # ovh node flavors: https://www.ovhcloud.com/en/public-cloud/prices/
 
