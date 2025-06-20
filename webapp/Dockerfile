@@ -19,7 +19,7 @@ RUN corepack enable && \
 RUN yarn build
 RUN cp ./dist/index.html ./dist/404.html
 
-FROM nginx
+FROM nginx:alpine-slim
 
 COPY --from=builder /app/dist /usr/share/nginx/html
 
