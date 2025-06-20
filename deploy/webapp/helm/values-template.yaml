@@ -80,6 +80,8 @@ ingress-nginx:
         loadbalancer.ovhcloud.com/class: "octavia"
         loadbalancer.openstack.org/keep-floatingip: "true"
     config:
+      disable-ipv6: "true"
+      disable-ipv6-dns: "true"
       strict-validate-path-type: false # needed for letsencrypt acme challenge
   fullnameOverride: webapp-ingress-nginx
 
