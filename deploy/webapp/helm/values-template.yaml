@@ -1,7 +1,9 @@
 image:
-  repository: c63eqfuv.c1.gra9.container-registry.ovh.net/gfts/webapp
+  repository: 66gc0z34.c1.gra9.container-registry.ovh.net/gfts/webapp
   pullPolicy: Always
   tag: "latest"
+  pullSecrets:
+    - name: ovh-registry-credentials
 
 serviceAccount:
   create: true
@@ -12,7 +14,7 @@ serviceAccount:
 service:
   type: ClusterIP
   port: 80
-  targetPort: 9000
+  targetPort: 80
 
 oauth2Proxy:
   enabled: true
@@ -88,12 +90,12 @@ ingress-nginx:
 livenessProbe:
   httpGet:
     path: /
-    port: 9000
+    port: 80
 
 readinessProbe:
   httpGet:
     path: /
-    port: 9000
+    port: 80
 
 autoscaling:
   enabled: false
