@@ -24,6 +24,36 @@ global:
     password: "${OAUTH2_PROXY_REDIS_SECRET}"
 
 oauth2-proxy:
+  nameOverride: oauth2-proxy-dpad
+  namespaceOverride: webapp
+  ingress:
+    enabled: true
+    className: webapp-nginx
+    pathType: Prefix
+    path: /oauth2-dpad
+    hosts:
+      - gfts.developmentseed.org
+  config:
+    clientID: "gfts-bearer"
+    clientSecret: "${OAUTH2_PROXY_CLIENT_SECRET}"
+  redis:
+    enabled: true
+  sessionStorage:
+    type: redis
+  extraArgs:
+    provider: keycloak-oidc
+    oidc-issuer-url: "https://iam.ivv.desp.space/realms/desp"
+    whitelist-domain: gfts.developmentseed.org
+    scope: openid profile
+    insecure-oidc-allow-unverified-email: true
+    email-domain: "*"
+    oidc-email-claim: "sub"
+    oidc-groups-claim: "roles"
+    allowed-group: "DPAD_Direct_Access"
+    oidc-audience-claim: "azp"
+    show-debug-on-error: false
+
+oauth2-proxy:
   namespaceOverride: webapp
   ingress:
     enabled: true
@@ -48,7 +78,7 @@ oauth2-proxy:
     email-domain: "*"
     oidc-email-claim: "sub"
     oidc-audience-claim: "azp"
-    show-debug-on-error: true
+    show-debug-on-error: false
 
 ingress:
   enabled: true
@@ -56,9 +86,6 @@ ingress:
   installController: true
   className: webapp-nginx
   annotations:
-    nginx.ingress.kubernetes.io/auth-url: "http://webapp-oauth2-proxy.webapp.svc.cluster.local/oauth2/auth"
-    nginx.ingress.kubernetes.io/auth-signin: "https://gfts.developmentseed.org/oauth2/start?rd=/redirect/$${q}http_host$${q}escaped_request_uri"
-
     cert-manager.io/cluster-issuer: "letsencrypt"
   tls:
     enabled: true
@@ -66,9 +93,16 @@ ingress:
   hosts:
     - host: gfts.developmentseed.org
       paths:
+        - path: /destine
+          pathType: Prefix
+          annotations:
+            nginx.ingress.kubernetes.io/auth-url: "http://webapp-oauth2-proxy-dpad.webapp.svc.cluster.local.webapp.svc.cluster.local/oauth2-dpad/auth"
+            nginx.ingress.kubernetes.io/auth-signin: "https://gfts.developmentseed.org/oauth2-dpad/start?rd=/redirect/$${q}http_host$${q}escaped_request_uri"
         - path: /
           pathType: ImplementationSpecific
-
+          annotations:
+            nginx.ingress.kubernetes.io/auth-url: "http://webapp-oauth2-proxy.webapp.svc.cluster.local/oauth2/auth"
+            nginx.ingress.kubernetes.io/auth-signin: "https://gfts.developmentseed.org/oauth2/start?rd=/redirect/$${q}http_host$${q}escaped_request_uri"
 ingress-nginx:
   controller:
     ingressClass: webapp-nginx
