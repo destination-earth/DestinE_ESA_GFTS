@@ -57,7 +57,7 @@ ingress:
   className: webapp-nginx
   annotations:
     nginx.ingress.kubernetes.io/auth-url: "http://webapp-oauth2-proxy.webapp.svc.cluster.local/oauth2/auth"
-    nginx.ingress.kubernetes.io/auth-signin: "https://gfts.developmentseed.org/oauth2/start?rd=/redirect/$${q}http_host$${q}escaped_request_uri"
+    nginx.ingress.kubernetes.io/auth-signin: "https://gfts.developmentseed.org/oauth2/start"
 
     cert-manager.io/cluster-issuer: "letsencrypt"
   tls:
