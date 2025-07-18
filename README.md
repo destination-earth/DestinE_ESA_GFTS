@@ -110,6 +110,10 @@ Instructions on how to build and deploy GFTS hub are described in [./gfts-track-
 
 The current Jupyterhub deployment is done on OVH cloud operator.
 
+# GFTS webapp
+
+The webapp for this project is being developed in its own repository: [github.com/developmentseed/gfts](https://github.com/developmentseed/gfts).
+
 ## Authors
 
 ### Active contributors
@@ -119,6 +123,7 @@ The current Jupyterhub deployment is done on OVH cloud operator.
 - [@yellowcap](https://www.github.com/yellowcap)
 - [@tinaok](https://www.github.com/tinaok)
 - [@aderrien7](https://www.github.com/aderrien7)
+- [@pantierra](https://www.github.com/pantierra)
 
 ## Contributing
 
