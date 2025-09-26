@@ -2,6 +2,8 @@
 
 All our deliverables and reports are deposited in Zenodo and can be uniquely identified through their Digital Object Identifier (DOI).
 
+They are provided as markdown in this section in markdown format.
+
 For each deliverable and/or report, click on the DOI icon to get the corresponding report:
 
 - Deliverable 5.1 - Project Management Plan for GFTS Use Case Application [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.11185947.svg)](https://doi.org/10.5281/zenodo.11185947)
