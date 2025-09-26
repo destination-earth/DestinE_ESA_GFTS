@@ -51,25 +51,25 @@ parts:
       # various computation use-cases
       - file: Compute_3D_pdf
       - file: ClimateDT-zarr-2D-3D
-      # various visualization use-cases
       - file: visu3Dvista
-  - caption: Reporting & Outreach
+  - caption: Outreach
+    chapters:
+      - file: outreach
+  - caption: Deliverables
     chapters:
       - file: deliverables
-        sections:
-          - file: deliverables/GFTS D5.1 Project Management Plan for Use Case Application
-          - file: deliverables/GFTS D5.2 Use Case Descriptor
-          - file: deliverables/GFTS D5.3 Use Case Application
-          - file: deliverables/GFTS D5.4 User Validation Report
-          - file: deliverables/GFTS D5.5 Use Case Promotion Package
-          - file: deliverables/GFTS D5.6 Use case Exploitation Roadmap
-          - file: deliverables/GFTS FR Final Report
-          - file: deliverables/GFTS SRF Software Reuse File
-          - file: deliverables/GFTS SRP Software Release Plan
-          - file: deliverables/GFTS SRS Software Requirement Specifications
-          - file: deliverables/GFTS SVVP Software Verification and Validation Plan
-          - file: deliverables/GFTS SVVR Software Verification and Validation Report
-      - file: outreach
+      - file: deliverables/GFTS D5.1 Project Management Plan for Use Case Application
+      - file: deliverables/GFTS D5.2 Use Case Descriptor
+      - file: deliverables/GFTS D5.3 Use Case Application
+      - file: deliverables/GFTS D5.4 User Validation Report
+      - file: deliverables/GFTS D5.5 Use Case Promotion Package
+      - file: deliverables/GFTS D5.6 Use case Exploitation Roadmap
+      - file: deliverables/GFTS FR Final Report
+      - file: deliverables/GFTS SRF Software Reuse File
+      - file: deliverables/GFTS SRP Software Release Plan
+      - file: deliverables/GFTS SRS Software Requirement Specifications
+      - file: deliverables/GFTS SVVP Software Verification and Validation Plan
+      - file: deliverables/GFTS SVVR Software Verification and Validation Report
   - caption: GFTS Technical Guide
     chapters:
       - file: system/gfts_components
