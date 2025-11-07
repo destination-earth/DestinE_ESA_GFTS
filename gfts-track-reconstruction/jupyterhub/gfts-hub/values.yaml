@@ -204,6 +204,8 @@ jupyterhub:
         pod_security_context:
           fsGroup: 100
           fsGroupChangePolicy: OnRootMismatch
+        # ovh can take more than 30 minutes to start a large node
+        start_timeout: 2400
 
     extraConfig:
       load_creds: |
