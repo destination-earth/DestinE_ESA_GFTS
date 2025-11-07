@@ -251,6 +251,7 @@ jupyterhub:
           - tinaok
           - quentinmaz
           - capetienne
+          - corentin-hue
     services:
       kbatch-proxy: {}
 
