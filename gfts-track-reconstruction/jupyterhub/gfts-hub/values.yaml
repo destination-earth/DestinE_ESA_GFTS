@@ -200,6 +200,7 @@ jupyterhub:
           - davidcasalsvliz
           - capetienne
           - corentin-hue
+          - cchauvea
       KubeSpawner:
         pod_security_context:
           fsGroup: 100

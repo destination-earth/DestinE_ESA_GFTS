@@ -92,6 +92,7 @@ locals {
     "marinerandon",
     "danielfdsilva",
     "corentin-hue",
+    "cchauvea",
   ])
   s3_vliz_users = toset([
     "davidcasalsvliz",
