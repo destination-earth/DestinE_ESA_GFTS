@@ -1,0 +1,170 @@
+# Emergency backup of every user home directory (one PVC per user) to S3.
+#
+# For each PVC `claim-*` in the `hub` namespace this starts a Job that mounts
+# the volume READ-ONLY and runs `rclone sync` to ${BACKUP_DEST}/<pvc-name>/.
+# User data is never modified. Logs only show rclone's summary lines (bytes
+# and file counts), not file names.
+#
+# The destination is deliberately OUTSIDE the GFTS OVH project (a bucket in the
+# grid4earth OVH project), so the copy survives if the GFTS project goes away.
+#
+# Requirements (GitHub Actions secrets in the `deploy` environment):
+#   HOME_BACKUP_AWS_ACCESS_KEY_ID / HOME_BACKUP_AWS_SECRET_ACCESS_KEY
+#   -> S3 credentials of the DESTINATION project, allowed to write to BACKUP_DEST
+#
+# A PVC that is currently attached to a running user server cannot be mounted
+# by the Job (RWO volume); that Job stays Pending until the server stops.
+name: hub backup homes
+
+on:
+  push:
+    branches:
+      - hub-status
+    paths:
+      - .github/workflows/hub-backup-homes.yaml
+
+env:
+  # rclone remote "dest" = S3 endpoint of the destination project
+  BACKUP_ENDPOINT: https://s3.gra.io.cloud.ovh.net
+  BACKUP_REGION: gra
+  # homes land in <bucket>/HOME/<github username>/ ; GFTS S3 buckets are
+  # copied next to them later under <bucket>/s3/<bucket name>/
+  BACKUP_DEST: dest:gfts-backup/HOME
+  JOB_TIMEOUT: 5h
+
+jobs:
+  backup:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 350
+    environment: deploy
+    env:
+      KUBECONFIG: ${{ github.workspace }}/gfts-track-reconstruction/jupyterhub/secrets/kubeconfig.yaml
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Unlock git-crypt secrets
+        uses: sliteteam/github-action-git-crypt-unlock@f99c0c6b60bb7ec30dcec033a8f0a3b3d48f21e1
+        env:
+          GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
+
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v3.2
+        with:
+          version: v1.31.0
+
+      - name: Inventory
+        run: |
+          echo "== all PVCs in hub"; kubectl -n hub get pvc
+          echo "== running user servers (their PVC cannot be mounted now)"
+          kubectl -n hub get pods -l component=singleuser-server -o name || true
+
+      - name: Create S3 credentials secret (namespace hub)
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.HOME_BACKUP_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.HOME_BACKUP_AWS_SECRET_ACCESS_KEY }}
+        run: |
+          test -n "$AWS_ACCESS_KEY_ID" -a -n "$AWS_SECRET_ACCESS_KEY" || { echo "backup S3 secrets are not set"; exit 1; }
+          kubectl -n hub create secret generic home-backup-s3 \
+            --from-literal=AWS_ACCESS_KEY_ID="$AWS_ACCESS_KEY_ID" \
+            --from-literal=AWS_SECRET_ACCESS_KEY="$AWS_SECRET_ACCESS_KEY" \
+            --dry-run=client -o yaml | kubectl apply -f -
+
+      - name: Start one backup Job per PVC
+        run: |
+          # user home PVCs are named claim-<escaped username> by KubeSpawner
+          pvcs=$(kubectl -n hub get pvc -o jsonpath='{.items[*].metadata.name}' | tr ' ' '\n' | grep '^claim-' | tr '\n' ' ')
+          echo "PVCs: $pvcs"
+          test -n "$pvcs" || { echo "no claim-* PVCs found"; exit 1; }
+          for pvc in $pvcs; do
+          # real (unescaped) username is kept in an annotation by KubeSpawner;
+          # fall back to the PVC name without the claim- prefix
+          user=$(kubectl -n hub get pvc "$pvc" -o jsonpath='{.metadata.annotations.hub\.jupyter\.org/username}')
+          [ -n "$user" ] || user="${pvc#claim-}"
+          folder=$(printf '%s' "$user" | tr 'A-Z' 'a-z' | tr -c 'a-z0-9._-' '_')
+          echo "$pvc -> ${BACKUP_DEST}/${folder}/"
+          cat <<EOF | kubectl apply -f -
+          apiVersion: batch/v1
+          kind: Job
+          metadata:
+            name: home-backup-${pvc}
+            namespace: hub
+            labels:
+              app: home-backup
+          spec:
+            backoffLimit: 2
+            ttlSecondsAfterFinished: 172800
+            template:
+              metadata:
+                labels:
+                  app: home-backup
+              spec:
+                restartPolicy: Never
+                securityContext:
+                  runAsUser: 0
+                containers:
+                  - name: rclone
+                    image: rclone/rclone:1.68
+                    args:
+                      - sync
+                      - /data
+                      - "${BACKUP_DEST}/${folder}/"
+                      - --exclude=.cache/**
+                      - --exclude=**/__pycache__/**
+                      - --exclude=**/.ipynb_checkpoints/**
+                      - --transfers=16
+                      - --checkers=32
+                      - --s3-chunk-size=64M
+                      - --s3-no-check-bucket
+                      - --stats=5m
+                      - --stats-one-line
+                      - --stats-log-level=NOTICE
+                    env:
+                      - name: RCLONE_CONFIG_DEST_TYPE
+                        value: s3
+                      - name: RCLONE_CONFIG_DEST_PROVIDER
+                        value: Other
+                      - name: RCLONE_CONFIG_DEST_ENV_AUTH
+                        value: "true"
+                      - name: RCLONE_CONFIG_DEST_REGION
+                        value: ${BACKUP_REGION}
+                      - name: RCLONE_CONFIG_DEST_ENDPOINT
+                        value: ${BACKUP_ENDPOINT}
+                    envFrom:
+                      - secretRef:
+                          name: home-backup-s3
+                    volumeMounts:
+                      - name: home
+                        mountPath: /data
+                        readOnly: true
+                    resources:
+                      requests:
+                        cpu: 200m
+                        memory: 512Mi
+                      limits:
+                        memory: 2Gi
+                volumes:
+                  - name: home
+                    persistentVolumeClaim:
+                      claimName: ${pvc}
+                      readOnly: true
+          EOF
+          done
+          kubectl -n hub get jobs -l app=home-backup
+
+      - name: Wait for the Jobs
+        run: |
+          kubectl -n hub wait --for=condition=complete job -l app=home-backup --timeout=${JOB_TIMEOUT} || true
+          echo "== job status"; kubectl -n hub get jobs -l app=home-backup
+          echo "== pods still not finished (e.g. PVC attached to a running server)"
+          kubectl -n hub get pods -l app=home-backup --field-selector=status.phase!=Succeeded -o wide || true
+
+      - name: Summaries (rclone stats only)
+        if: always()
+        run: |
+          for job in $(kubectl -n hub get jobs -l app=home-backup -o jsonpath='{.items[*].metadata.name}'); do
+            echo "== $job"; kubectl -n hub logs job/$job --tail=3 2>/dev/null | cut -c1-200 || echo "(no log yet)"
+          done
+
+      - name: Remove the credentials secret
+        if: always()
+        run: kubectl -n hub delete secret home-backup-s3 --ignore-not-found
