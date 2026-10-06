@@ -1,0 +1,189 @@
+# Faster copy of ONE big bucket (gfts-ifremer: ~1.5M small objects, 11.9 TiB)
+# by running one Job per top-level folder, each with many parallel transfers:
+#   src:<bucket>/<prefix>  ->  dest:gfts-backup/s3/<bucket>/<prefix>/
+#
+# Replaces the single whole-bucket Job of hub-backup-s3.yaml for that bucket
+# (DELETE_JOBS removes it first; already-copied objects are skipped by
+# --size-only). Nothing is modified on the source side.
+#
+# Requirements (GitHub Actions secrets in the `deploy` environment):
+#   GFTS_S3_AWS_ACCESS_KEY_ID / GFTS_S3_AWS_SECRET_ACCESS_KEY   (source)
+#   HOME_BACKUP_AWS_ACCESS_KEY_ID / HOME_BACKUP_AWS_SECRET_ACCESS_KEY (destination)
+name: hub backup s3 split
+
+on:
+  push:
+    branches:
+      - hub-status
+    paths:
+      - .github/workflows/hub-backup-s3-split.yaml
+
+env:
+  SRC_ENDPOINT: https://s3.gra.perf.cloud.ovh.net
+  SRC_REGION: gra
+  DEST_ENDPOINT: https://s3.gra.io.cloud.ovh.net
+  DEST_REGION: gra
+  BUCKET: gfts-ifremer
+  DEST_PREFIX: dest:gfts-backup/s3
+  # folders of BUCKET to sync, one Job each (space-separated; may be nested, e.g. bargip/2024)
+  # sizes measured 2026-10-06: bargip/run 7.9 TiB (19 MiB avg), tags 2.1 TiB,
+  # bar_taos/run 1.1 TiB (2.7 MiB avg, 437k files), fra_sodeika 520 GiB (1.9 MiB avg)
+  PREFIXES: "bargip/run bargip/tag tags bar_taos/run bar_taos/tag bar_taos/formatted bar_taos/formatted_not_tested fra_sodeika tuna eel fish_intel salmon_noaa kbatch tuna_mediterranean light_sensor kbatch_papermill ref-data test tag tag_data_demo copernicus_catalogs minrk eeleel"
+  # folders that were split into sub-folders above: copy only the files lying
+  # directly inside them (max-depth 1), since their sub-folders have own Jobs
+  SHALLOW_PREFIXES: "bargip bar_taos"
+  # whole-bucket Job(s) to stop before starting the split copy
+  DELETE_JOBS: "s3-backup-gfts-ifremer"
+  JOB_TIMEOUT_SECONDS: "20000"
+
+jobs:
+  backup:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 350
+    environment: deploy
+    env:
+      KUBECONFIG: ${{ github.workspace }}/gfts-track-reconstruction/jupyterhub/secrets/kubeconfig.yaml
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Unlock git-crypt secrets
+        uses: sliteteam/github-action-git-crypt-unlock@f99c0c6b60bb7ec30dcec033a8f0a3b3d48f21e1
+        env:
+          GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
+
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v3.2
+        with:
+          version: v1.31.0
+
+      - name: Create credentials secret (namespace hub)
+        env:
+          SRC_KEY: ${{ secrets.GFTS_S3_AWS_ACCESS_KEY_ID }}
+          SRC_SECRET: ${{ secrets.GFTS_S3_AWS_SECRET_ACCESS_KEY }}
+          DEST_KEY: ${{ secrets.HOME_BACKUP_AWS_ACCESS_KEY_ID }}
+          DEST_SECRET: ${{ secrets.HOME_BACKUP_AWS_SECRET_ACCESS_KEY }}
+        run: |
+          for v in SRC_KEY SRC_SECRET DEST_KEY DEST_SECRET; do test -n "${!v}" || { echo "$v is not set"; exit 1; }; done
+          kubectl -n hub create secret generic s3-backup-creds-split \
+            --from-literal=RCLONE_CONFIG_SRC_ACCESS_KEY_ID="$SRC_KEY" \
+            --from-literal=RCLONE_CONFIG_SRC_SECRET_ACCESS_KEY="$SRC_SECRET" \
+            --from-literal=RCLONE_CONFIG_DEST_ACCESS_KEY_ID="$DEST_KEY" \
+            --from-literal=RCLONE_CONFIG_DEST_SECRET_ACCESS_KEY="$DEST_SECRET" \
+            --dry-run=client -o yaml | kubectl apply -f -
+
+      - name: Stop the whole-bucket Job(s)
+        run: |
+          for j in $DELETE_JOBS; do kubectl -n hub delete job "$j" --ignore-not-found --wait=true; done
+
+      - name: Start one copy Job per folder
+        run: |
+          start_job () {  # $1 = job name suffix, $2 = rclone subcommand, $3 = src path, $4 = dst path, $5 = extra args
+          kubectl -n hub delete job "s3split-$1" --ignore-not-found --wait=true
+          cat <<EOF | kubectl apply -f -
+          apiVersion: batch/v1
+          kind: Job
+          metadata:
+            name: s3split-$1
+            namespace: hub
+            labels:
+              app: s3-backup
+              split: "true"
+          spec:
+            backoffLimit: 2
+            ttlSecondsAfterFinished: 172800
+            template:
+              metadata:
+                labels:
+                  app: s3-backup
+                  split: "true"
+              spec:
+                restartPolicy: Never
+                containers:
+                  - name: rclone
+                    image: rclone/rclone:1.68
+                    args:
+                      - $2
+                      - "$3"
+                      - "$4"
+                      - --size-only
+                      - --transfers=32
+                      - --checkers=64
+                      - --buffer-size=4M
+                      - --s3-chunk-size=16M
+                      - --s3-upload-concurrency=2
+                      - --s3-no-check-bucket
+                      - --stats=5m
+                      - --stats-one-line
+                      - --stats-log-level=NOTICE
+                      $5
+                    env:
+                      - name: RCLONE_CONFIG_SRC_TYPE
+                        value: s3
+                      - name: RCLONE_CONFIG_SRC_PROVIDER
+                        value: Other
+                      - name: RCLONE_CONFIG_SRC_REGION
+                        value: ${SRC_REGION}
+                      - name: RCLONE_CONFIG_SRC_ENDPOINT
+                        value: ${SRC_ENDPOINT}
+                      - name: RCLONE_CONFIG_DEST_TYPE
+                        value: s3
+                      - name: RCLONE_CONFIG_DEST_PROVIDER
+                        value: Other
+                      - name: RCLONE_CONFIG_DEST_REGION
+                        value: ${DEST_REGION}
+                      - name: RCLONE_CONFIG_DEST_ENDPOINT
+                        value: ${DEST_ENDPOINT}
+                    envFrom:
+                      - secretRef:
+                          name: s3-backup-creds-split
+                    resources:
+                      requests:
+                        cpu: 250m
+                        memory: 512Mi
+                      limits:
+                        memory: 6Gi
+          EOF
+          }
+          for p in $PREFIXES; do
+            name=$(printf '%s' "$p" | tr 'A-Z_.' 'a-z--' | tr -c 'a-z0-9-' '-')
+            start_job "$name" sync "src:${BUCKET}/${p}" "${DEST_PREFIX}/${BUCKET}/${p}/" ""
+          done
+          # files sitting directly at the bucket root (copy, never delete)
+          start_job "root" copy "src:${BUCKET}" "${DEST_PREFIX}/${BUCKET}/" "- --max-depth=1"
+          # same for folders whose sub-folders got their own Jobs
+          for p in $SHALLOW_PREFIXES; do
+            name=$(printf '%s' "$p" | tr 'A-Z_.' 'a-z--' | tr -c 'a-z0-9-' '-')
+            start_job "${name}-root" copy "src:${BUCKET}/${p}" "${DEST_PREFIX}/${BUCKET}/${p}/" "- --max-depth=1"
+          done
+          kubectl -n hub get jobs -l split=true
+
+      - name: Wait for the Jobs
+        run: |
+          deadline=$(( $(date +%s) + JOB_TIMEOUT_SECONDS ))
+          while :; do
+            pending=0
+            for job in $(kubectl -n hub get jobs -l split=true -o jsonpath='{.items[*].metadata.name}'); do
+              st=$(kubectl -n hub get job "$job" -o jsonpath='{.status.conditions[?(@.status=="True")].type}')
+              case "$st" in *Complete*|*Failed*) ;; *) pending=$((pending+1));; esac
+            done
+            [ "$pending" -eq 0 ] && break
+            if [ "$(date +%s)" -ge "$deadline" ]; then echo "timeout: $pending job(s) still running"; break; fi
+            sleep 120
+          done
+          echo "== job status"; kubectl -n hub get jobs -l split=true
+
+      - name: Summaries (rclone stats only)
+        if: always()
+        run: |
+          for job in $(kubectl -n hub get jobs -l split=true -o jsonpath='{.items[*].metadata.name}'); do
+            printf '%-40s ' "$job"; kubectl -n hub logs job/$job --tail=1 2>/dev/null | cut -c1-160 || echo "(no log yet)"
+          done
+
+      # NOTE: the secret is left in place on purpose while Jobs may still be
+      # running after the 5.5 h wait; remove it by hand afterwards:
+      #   kubectl -n hub delete secret s3-backup-creds-split
+      - name: Remove the credentials secret if everything finished
+        if: always()
+        run: |
+          running=$(kubectl -n hub get pods -l split=true --field-selector=status.phase=Running -o name | wc -l)
+          if [ "$running" -eq 0 ]; then kubectl -n hub delete secret s3-backup-creds-split --ignore-not-found; else echo "$running pod(s) still running - keeping the secret"; fi
