@@ -64,6 +64,16 @@ jobs:
         run: |
           echo "== certificates";  kubectl get certificate -A -o custom-columns='NS:.metadata.namespace,NAME:.metadata.name,READY:.status.conditions[0].status,NOT_AFTER:.status.notAfter,RENEWAL:.status.renewalTime'
           echo "== challenges";    kubectl get challenges -A -o custom-columns='NAME:.metadata.name,STATE:.status.state,DOMAIN:.spec.dnsName,AGE:.metadata.creationTimestamp' || true
+          echo "== certificate spec vs status"
+          kubectl -n hub get certificate -o custom-columns='NAME:.metadata.name,DNSNAMES:.spec.dnsNames,ISSUER:.spec.issuerRef.name,REV:.status.revision,ISSUING:.status.conditions[?(@.type=="Issuing")].reason,MSG:.status.conditions[?(@.type=="Issuing")].message' || true
+          echo "== certificate owners (should point at the Ingress)"
+          for c in tls-jupyterhub tls-grafana tls-prometheus; do printf '%-16s ' $c; kubectl -n hub get certificate $c -o jsonpath='{range .metadata.ownerReferences[*]}{.kind}/{.name} uid={.uid}{" "}{end}{"\n"}'; done
+          echo "== ingress hosts / uid / annotations"
+          for i in jupyterhub hub-grafana hub-prometheus-server; do printf '%-22s ' $i; kubectl -n hub get ingress $i -o jsonpath='uid={.metadata.uid} tls={.spec.tls} ann={.metadata.annotations}{"\n"}'; done
+          echo "== certificaterequests / orders"; kubectl -n hub get certificaterequests,orders -o wide || true
+          echo "== cert-manager pods"; kubectl -n cert-manager get pods -o wide
+          echo "== cert-manager log (last 30 min, filtered)"
+          kubectl -n cert-manager logs deploy/cert-manager --since=30m --tail=400 2>/dev/null | grep -iE "grid4earth|tls-jupyterhub|tls-grafana|tls-prometheus|error|ingress-shim" | tail -40 | cut -c1-240 || true
 
       # The runner's preinstalled helm (3.2x) is used here on purpose: the
       # current helm-diff plugin needs a newer helm than the v3.14.0 that
