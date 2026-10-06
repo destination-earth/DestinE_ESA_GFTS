@@ -1,0 +1,164 @@
+# Copy the GFTS S3 buckets (OVH project of the GFTS cluster) into the
+# grid4earth bucket, next to the home backups:
+#   src:<bucket>  ->  dest:gfts-backup/s3/<bucket>/
+#
+# Runs as one Job per bucket inside the GFTS cluster (same OVH region as both
+# endpoints, so it is fast and free of egress charges). Nothing is modified on
+# the source side. Logs only show rclone's summary lines.
+#
+# tf-state-gfts is deliberately NOT copied: the Terraform state contains every
+# GFTS user's S3 secret key.
+#
+# Requirements (GitHub Actions secrets in the `deploy` environment):
+#   GFTS_S3_AWS_ACCESS_KEY_ID / GFTS_S3_AWS_SECRET_ACCESS_KEY   (source, GFTS admin key)
+#   HOME_BACKUP_AWS_ACCESS_KEY_ID / HOME_BACKUP_AWS_SECRET_ACCESS_KEY (destination, gfts-admin)
+name: hub backup s3 buckets
+
+on:
+  push:
+    branches:
+      - hub-status
+    paths:
+      - .github/workflows/hub-backup-s3.yaml
+
+env:
+  SRC_ENDPOINT: https://s3.gra.perf.cloud.ovh.net
+  SRC_REGION: gra
+  DEST_ENDPOINT: https://s3.gra.io.cloud.ovh.net
+  DEST_REGION: gra
+  DEST_PREFIX: dest:gfts-backup/s3
+  BUCKETS: "gfts-ifremer gfts-reference-data gfts-vliz destine-gfts-data-lake destine-gfts-visualisation-data gfts-ref gfts-referen"
+  # space-separated subset of BUCKETS to (re)run; empty = all
+  ONLY_BUCKETS: ""
+  JOB_TIMEOUT_SECONDS: "20000"
+
+jobs:
+  backup:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 350
+    environment: deploy
+    env:
+      KUBECONFIG: ${{ github.workspace }}/gfts-track-reconstruction/jupyterhub/secrets/kubeconfig.yaml
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Unlock git-crypt secrets
+        uses: sliteteam/github-action-git-crypt-unlock@f99c0c6b60bb7ec30dcec033a8f0a3b3d48f21e1
+        env:
+          GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
+
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v3.2
+        with:
+          version: v1.31.0
+
+      - name: Create credentials secret (namespace hub)
+        env:
+          SRC_KEY: ${{ secrets.GFTS_S3_AWS_ACCESS_KEY_ID }}
+          SRC_SECRET: ${{ secrets.GFTS_S3_AWS_SECRET_ACCESS_KEY }}
+          DEST_KEY: ${{ secrets.HOME_BACKUP_AWS_ACCESS_KEY_ID }}
+          DEST_SECRET: ${{ secrets.HOME_BACKUP_AWS_SECRET_ACCESS_KEY }}
+        run: |
+          for v in SRC_KEY SRC_SECRET DEST_KEY DEST_SECRET; do test -n "${!v}" || { echo "$v is not set"; exit 1; }; done
+          kubectl -n hub create secret generic s3-backup-creds \
+            --from-literal=RCLONE_CONFIG_SRC_ACCESS_KEY_ID="$SRC_KEY" \
+            --from-literal=RCLONE_CONFIG_SRC_SECRET_ACCESS_KEY="$SRC_SECRET" \
+            --from-literal=RCLONE_CONFIG_DEST_ACCESS_KEY_ID="$DEST_KEY" \
+            --from-literal=RCLONE_CONFIG_DEST_SECRET_ACCESS_KEY="$DEST_SECRET" \
+            --dry-run=client -o yaml | kubectl apply -f -
+
+      - name: Start one copy Job per bucket
+        run: |
+          buckets="$BUCKETS"; [ -n "$ONLY_BUCKETS" ] && buckets="$ONLY_BUCKETS"
+          echo "buckets: $buckets"
+          for b in $buckets; do
+          kubectl -n hub delete job "s3-backup-${b}" --ignore-not-found --wait=true
+          cat <<EOF | kubectl apply -f -
+          apiVersion: batch/v1
+          kind: Job
+          metadata:
+            name: s3-backup-${b}
+            namespace: hub
+            labels:
+              app: s3-backup
+          spec:
+            backoffLimit: 2
+            ttlSecondsAfterFinished: 172800
+            template:
+              metadata:
+                labels:
+                  app: s3-backup
+              spec:
+                restartPolicy: Never
+                containers:
+                  - name: rclone
+                    image: rclone/rclone:1.68
+                    args:
+                      - sync
+                      - "src:${b}"
+                      - "${DEST_PREFIX}/${b}/"
+                      - --size-only
+                      - --transfers=16
+                      - --checkers=32
+                      - --s3-chunk-size=16M
+                      - --s3-upload-concurrency=2
+                      - --buffer-size=16M
+                      - --s3-no-check-bucket
+                      - --stats=5m
+                      - --stats-one-line
+                      - --stats-log-level=NOTICE
+                    env:
+                      - name: RCLONE_CONFIG_SRC_TYPE
+                        value: s3
+                      - name: RCLONE_CONFIG_SRC_PROVIDER
+                        value: Other
+                      - name: RCLONE_CONFIG_SRC_REGION
+                        value: ${SRC_REGION}
+                      - name: RCLONE_CONFIG_SRC_ENDPOINT
+                        value: ${SRC_ENDPOINT}
+                      - name: RCLONE_CONFIG_DEST_TYPE
+                        value: s3
+                      - name: RCLONE_CONFIG_DEST_PROVIDER
+                        value: Other
+                      - name: RCLONE_CONFIG_DEST_REGION
+                        value: ${DEST_REGION}
+                      - name: RCLONE_CONFIG_DEST_ENDPOINT
+                        value: ${DEST_ENDPOINT}
+                    envFrom:
+                      - secretRef:
+                          name: s3-backup-creds
+                    resources:
+                      requests:
+                        cpu: 250m
+                        memory: 1Gi
+                      limits:
+                        memory: 4Gi
+          EOF
+          done
+          kubectl -n hub get jobs -l app=s3-backup
+
+      - name: Wait for the Jobs
+        run: |
+          deadline=$(( $(date +%s) + JOB_TIMEOUT_SECONDS ))
+          while :; do
+            pending=0
+            for job in $(kubectl -n hub get jobs -l app=s3-backup -o jsonpath='{.items[*].metadata.name}'); do
+              st=$(kubectl -n hub get job "$job" -o jsonpath='{.status.conditions[?(@.status=="True")].type}')
+              case "$st" in *Complete*|*Failed*) ;; *) pending=$((pending+1));; esac
+            done
+            [ "$pending" -eq 0 ] && break
+            if [ "$(date +%s)" -ge "$deadline" ]; then echo "timeout: $pending job(s) still running"; break; fi
+            sleep 120
+          done
+          echo "== job status"; kubectl -n hub get jobs -l app=s3-backup
+
+      - name: Summaries (rclone stats only)
+        if: always()
+        run: |
+          for job in $(kubectl -n hub get jobs -l app=s3-backup -o jsonpath='{.items[*].metadata.name}'); do
+            echo "== $job"; kubectl -n hub logs job/$job --tail=3 2>/dev/null | cut -c1-200 || echo "(no log yet)"
+          done
+
+      - name: Remove the credentials secret
+        if: always()
+        run: kubectl -n hub delete secret s3-backup-creds --ignore-not-found
