@@ -1,0 +1,83 @@
+# One-off fix: make cert-manager issue certificates for the NEW hostnames.
+#
+# Symptom (2026-10-06): the Ingresses already carry the new hosts, but the
+# Certificates still have spec.dnsNames = [gfts.minrk.net, ...] with a 3-week
+# old pending Order, so no challenge for the new names was ever created.
+#
+# Fix: patch spec.dnsNames of the three Certificates and delete the stale
+# CertificateRequests (their Orders/Challenges are garbage-collected), which
+# makes cert-manager start a fresh issuance for the new names.
+#
+# Optional (APPLY_HOSTALIASES_FIX=true): if the new challenges get stuck on
+# "self check ... i/o timeout" (cert-manager cannot reach the new load
+# balancer IP from inside the cluster), add hostAliases to the cert-manager
+# Deployment so that the self-check goes straight to the ingress ClusterIP.
+name: hub fix certs
+
+on:
+  push:
+    branches:
+      - hub-status
+    paths:
+      - .github/workflows/hub-fix-certs.yaml
+
+env:
+  APPLY_HOSTALIASES_FIX: "false"
+  INGRESS_CLUSTER_IP: "10.3.10.88"   # hub-ingress-nginx-controller ClusterIP
+
+jobs:
+  fix:
+    runs-on: ubuntu-22.04
+    environment: deploy
+    env:
+      KUBECONFIG: ${{ github.workspace }}/gfts-track-reconstruction/jupyterhub/secrets/kubeconfig.yaml
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Unlock git-crypt secrets
+        uses: sliteteam/github-action-git-crypt-unlock@f99c0c6b60bb7ec30dcec033a8f0a3b3d48f21e1
+        env:
+          GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
+
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v3.2
+        with:
+          version: v1.31.0
+
+      - name: Before
+        run: |
+          kubectl -n hub get certificate -o custom-columns='NAME:.metadata.name,DNSNAMES:.spec.dnsNames,READY:.status.conditions[?(@.type=="Ready")].status,ISSUING:.status.conditions[?(@.type=="Issuing")].reason'
+          kubectl -n hub get certificaterequests,orders,challenges 2>/dev/null || true
+
+      - name: Point the Certificates at the new hostnames and restart issuance
+        run: |
+          patch () { kubectl -n hub patch certificate "$1" --type=merge -p "{\"spec\":{\"dnsNames\":[\"$2\"]}}"; }
+          patch tls-jupyterhub jupyterhub.gfts.grid4earth.eu
+          patch tls-grafana    grafana.gfts.grid4earth.eu
+          patch tls-prometheus prometheus.gfts.grid4earth.eu
+          # drop the stale in-flight requests (only the three tls-*-16 exist;
+          # their Orders/Challenges are garbage-collected with them)
+          kubectl -n hub delete certificaterequest --all --ignore-not-found
+          kubectl -n hub get certificate -o custom-columns='NAME:.metadata.name,DNSNAMES:.spec.dnsNames'
+
+      - name: Optional hostAliases workaround for the cert-manager self-check
+        if: env.APPLY_HOSTALIASES_FIX == 'true'
+        run: |
+          kubectl -n cert-manager patch deployment cert-manager --type=merge -p "{\"spec\":{\"template\":{\"spec\":{\"hostAliases\":[{\"ip\":\"${INGRESS_CLUSTER_IP}\",\"hostnames\":[\"jupyterhub.gfts.grid4earth.eu\",\"grafana.gfts.grid4earth.eu\",\"prometheus.gfts.grid4earth.eu\"]}]}}}}"
+          kubectl -n cert-manager rollout status deployment cert-manager --timeout=180s
+
+      - name: Watch issuance (up to ~5 min)
+        run: |
+          for i in $(seq 1 10); do
+            sleep 30
+            echo "---- $(date -u +%H:%M:%S)"
+            kubectl -n hub get challenges -o custom-columns='NAME:.metadata.name,DOMAIN:.spec.dnsName,STATE:.status.state,REASON:.status.reason' 2>/dev/null | cut -c1-230 || true
+            kubectl -n hub get certificate -o custom-columns='NAME:.metadata.name,READY:.status.conditions[?(@.type=="Ready")].status,NOT_AFTER:.status.notAfter'
+            if curl -sS -o /dev/null --max-time 10 https://jupyterhub.gfts.grid4earth.eu/hub/api; then echo "TLS OK for jupyterhub.gfts.grid4earth.eu"; curl -sS -v --max-time 10 https://jupyterhub.gfts.grid4earth.eu/hub/api -o /dev/null 2>&1 | grep -E "subject:|expire date"; break; fi
+          done
+
+      - name: After
+        if: always()
+        run: |
+          kubectl -n hub get certificate -o custom-columns='NAME:.metadata.name,DNSNAMES:.spec.dnsNames,READY:.status.conditions[?(@.type=="Ready")].status,NOT_AFTER:.status.notAfter'
+          kubectl -n hub get certificaterequests,orders,challenges 2>/dev/null | cut -c1-200 || true
