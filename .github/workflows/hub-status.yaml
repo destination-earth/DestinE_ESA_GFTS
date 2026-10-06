@@ -33,7 +33,7 @@ jobs:
 
       - name: Cluster status
         run: |
-          chmod 600 "$KUBECONFIG"
+          kubectl version
           echo "== nodes";            kubectl get nodes -o wide
           echo "== hub pods";         kubectl get pods -n hub -o wide
           echo "== non-running pods"; kubectl get pods -A --field-selector=status.phase!=Running
