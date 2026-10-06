@@ -1,0 +1,45 @@
+# Second public entry point for the hub, on an OVHcloud Public Cloud Load
+# Balancer (Octavia).
+#
+# The original `hub-ingress-nginx-controller` Service was created on the legacy
+# "Load Balancer for Managed Kubernetes" (IOLB), which OVHcloud retired in
+# July 2026 (EoL). Its EXTERNAL-IP (91.134.23.233) is still shown by
+# Kubernetes but no longer routes any traffic, which is why the hub became
+# unreachable even though every pod is healthy.
+#
+# Following OVH's migration guide, this adds a *new* LoadBalancer Service in
+# front of the same ingress-nginx pods instead of mutating the old one. Once
+# DNS points at the new floating IP the old Service can be removed.
+apiVersion: v1
+kind: Service
+metadata:
+  name: hub-ingress-nginx-octavia
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: controller-octavia
+  annotations:
+    loadbalancer.ovhcloud.com/class: "octavia"
+    loadbalancer.ovhcloud.com/flavor: "small"
+    # keep the floating IP if this Service is ever deleted/recreated
+    loadbalancer.openstack.org/keep-floatingip: "true"
+    # required with externalTrafficPolicy: Local
+    loadbalancer.openstack.org/enable-health-monitor: "true"
+spec:
+  type: LoadBalancer
+  # preserve client IPs, same as the original Service
+  externalTrafficPolicy: Local
+  selector:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: controller
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+      protocol: TCP
+    - name: https
+      port: 443
+      targetPort: https
+      protocol: TCP
