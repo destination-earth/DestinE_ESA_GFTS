@@ -50,6 +50,16 @@ jobs:
           echo "== ingress-nginx controller log (last 48h, tail 15)"
           kubectl -n hub logs deploy/hub-ingress-nginx-controller --since=48h --tail=15 | cut -c1-200 || true
 
+      # last rclone stats line of every backup Job (transferred / total, %, ETA)
+      - name: Backup jobs progress
+        run: |
+          for app in home-backup s3-backup; do
+            echo "== $app jobs"; kubectl -n hub get jobs -l app=$app 2>/dev/null || true
+            for job in $(kubectl -n hub get jobs -l app=$app -o jsonpath='{.items[*].metadata.name}' 2>/dev/null); do
+              printf '%-45s ' "$job"; kubectl -n hub logs job/$job --tail=1 2>/dev/null | cut -c1-160 || echo "(no log)"
+            done
+          done
+
       - name: TLS certificate status
         run: |
           echo "== certificates";  kubectl get certificate -A -o custom-columns='NS:.metadata.namespace,NAME:.metadata.name,READY:.status.conditions[0].status,NOT_AFTER:.status.notAfter,RENEWAL:.status.renewalTime'
@@ -72,4 +82,5 @@ jobs:
           echo "== helm diff upgrade (suppressing secrets)"
           helm diff upgrade --install --namespace=hub hub ./gfts-hub \
             --values=config/daskhub.yaml --values=secrets/config.yaml \
+            $( [ -f config/public-overrides.yaml ] && echo --values=config/public-overrides.yaml ) \
             --suppress-secrets --context 3 --no-color || true
