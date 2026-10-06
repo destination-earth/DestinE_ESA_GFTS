@@ -1,0 +1,15 @@
+# Plain-text settings that must take precedence over secrets/config.yaml.
+# deploy.py passes this file *after* the encrypted secrets, so values here win.
+# Nothing in this file is secret. The matching client secret is passed by
+# deploy.py from the GFTS_OAUTH_CLIENT_SECRET environment variable (a GitHub
+# Actions secret in the `deploy` environment).
+#
+# Background: the hub moved from gfts.minrk.net to jupyterhub.gfts.grid4earth.eu
+# (see issue #182). The original GitHub OAuth App is bound to the old hostname
+# and owned by an account we cannot edit, so a new OAuth App is used.
+jupyterhub:
+  hub:
+    config:
+      GitHubOAuthenticator:
+        client_id: "Ov23likrrQJn5cx8ftiM"
+        oauth_callback_url: "https://jupyterhub.gfts.grid4earth.eu/hub/oauth_callback"

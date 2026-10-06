@@ -6,9 +6,11 @@ Run:
 
     python3 deploy.py helm
 """
+import json
 import os
 import shlex
 import subprocess
+import tempfile
 from pathlib import Path
 
 import click
@@ -107,22 +109,44 @@ def helm(skip_dependency, diff):
     if not skip_dependency and not diff:
         sh(["helm", "dependency", "update", "./gfts-hub"], cwd=jupyterhub)
 
-    helm = ["helm"]
-    if diff:
-        helm.extend(["diff", "--context", "3"])
-    sh(
-        helm
-        + [
-            "upgrade",
-            "--install",
-            "--namespace=hub",
-            "hub",
-            "./gfts-hub",
-            "--values=config/daskhub.yaml",
-            "--values=secrets/config.yaml",
-        ],
-        env=env,
-    )
+    values_args = [
+        "--values=config/daskhub.yaml",
+        "--values=secrets/config.yaml",
+        # plain-text settings that must win over secrets/config.yaml
+        "--values=config/public-overrides.yaml",
+    ]
+    # The GitHub OAuth client secret is not in the git-crypt secrets (which we
+    # cannot edit). It comes from the GFTS_OAUTH_CLIENT_SECRET environment
+    # variable (a GitHub Actions secret) and is handed to helm through a private
+    # temporary values file, so it never appears on the command line.
+    client_secret = os.environ.get("GFTS_OAUTH_CLIENT_SECRET")
+    with tempfile.TemporaryDirectory() as tmpdir:
+        if client_secret:
+            secret_values = Path(tmpdir) / "oauth-secret.yaml"
+            secret_values.write_text(
+                "jupyterhub:\n"
+                "  hub:\n"
+                "    config:\n"
+                "      GitHubOAuthenticator:\n"
+                f"        client_secret: {json.dumps(client_secret)}\n"
+            )
+            values_args.append(f"--values={secret_values}")
+
+        helm = ["helm"]
+        if diff:
+            helm.extend(["diff", "--context", "3"])
+        sh(
+            helm
+            + [
+                "upgrade",
+                "--install",
+                "--namespace=hub",
+                "hub",
+                "./gfts-hub",
+            ]
+            + values_args,
+            env=env,
+        )
 
 
 if __name__ == "__main__":

@@ -14,11 +14,11 @@ jupyterhub:
       kubernetes.io/ingress.class: nginx
       kubernetes.io/tls-acme: "true"
     hosts:
-      - gfts.minrk.net
+      - jupyterhub.gfts.grid4earth.eu
     tls:
       - secretName: tls-jupyterhub
         hosts:
-          - gfts.minrk.net
+          - jupyterhub.gfts.grid4earth.eu
 
   singleuser:
     events: true
@@ -200,6 +200,7 @@ jupyterhub:
           - davidcasalsvliz
           - capetienne
           - corentin-hue
+          - cchauvea
       KubeSpawner:
         pod_security_context:
           fsGroup: 100
@@ -287,10 +288,10 @@ grafana:
       kubernetes.io/ingress.class: nginx
       kubernetes.io/tls-acme: "true"
     hosts:
-      - grafana.gfts.minrk.net
+      - grafana.gfts.grid4earth.eu
     tls:
       - hosts:
-          - grafana.gfts.minrk.net
+          - grafana.gfts.grid4earth.eu
         secretName: tls-grafana
   persistence:
     size: 2Gi
@@ -304,7 +305,7 @@ grafana:
         - name: prometheus
           orgId: 1
           type: prometheus
-          url: https://prometheus.gfts.minrk.net
+          url: https://prometheus.gfts.grid4earth.eu
           isDefault: true
           editable: false
 
@@ -331,10 +332,10 @@ prometheus:
         kubernetes.io/ingress.class: nginx
         kubernetes.io/tls-acme: "true"
       hosts:
-        - prometheus.gfts.minrk.net
+        - prometheus.gfts.grid4earth.eu
       tls:
         - hosts:
-            - prometheus.gfts.minrk.net
+            - prometheus.gfts.grid4earth.eu
           secretName: tls-prometheus
     retention: 356d
   kube-state-metrics:
@@ -384,7 +385,7 @@ kbatch-proxy:
     # jupyterhub_service_prefix: /services/kbatch-proxy
     # cannot use internal ip
     # pending https://github.com/kbatch-dev/helm-chart/pull/6
-    jupyterhub_api_url: https://gfts.minrk.net/hub/api/
+    jupyterhub_api_url: https://jupyterhub.gfts.grid4earth.eu/hub/api/
     extra_env:
       JUPYTERHUB_SERVICE_NAME: kbatch
       KBATCH_JOB_TEMPLATE_FILE: /srv/job_template.yaml
