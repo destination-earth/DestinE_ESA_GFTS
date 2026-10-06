@@ -30,7 +30,9 @@ env:
   # homes land in <bucket>/HOME/<github username>/ ; GFTS S3 buckets are
   # copied next to them later under <bucket>/s3/<bucket name>/
   BACKUP_DEST: dest:gfts-backup/HOME
-  JOB_TIMEOUT: 5h
+  # space-separated PVC names to (re)run; empty = every claim-* PVC
+  ONLY_PVCS: "claim-aderrien7"
+  JOB_TIMEOUT_SECONDS: "18000"
 
 jobs:
   backup:
@@ -73,9 +75,12 @@ jobs:
         run: |
           # user home PVCs are named claim-<escaped username> by KubeSpawner
           pvcs=$(kubectl -n hub get pvc -o jsonpath='{.items[*].metadata.name}' | tr ' ' '\n' | grep '^claim-' | tr '\n' ' ')
+          [ -n "$ONLY_PVCS" ] && pvcs="$ONLY_PVCS"
           echo "PVCs: $pvcs"
           test -n "$pvcs" || { echo "no claim-* PVCs found"; exit 1; }
           for pvc in $pvcs; do
+          # a Job's pod template is immutable: drop a previous (e.g. failed) Job first
+          kubectl -n hub delete job "home-backup-${pvc}" --ignore-not-found --wait=true
           # real (unescaped) username is kept in an annotation by KubeSpawner;
           # fall back to the PVC name without the claim- prefix
           user=$(kubectl -n hub get pvc "$pvc" -o jsonpath='{.metadata.annotations.hub\.jupyter\.org/username}')
@@ -111,9 +116,13 @@ jobs:
                       - --exclude=.cache/**
                       - --exclude=**/__pycache__/**
                       - --exclude=**/.ipynb_checkpoints/**
-                      - --transfers=16
-                      - --checkers=32
-                      - --s3-chunk-size=64M
+                      # memory: ~ transfers x upload-concurrency x chunk-size
+                      # (16 x 4 x 64M = 4 GiB blew the first 2 GiB limit)
+                      - --transfers=8
+                      - --checkers=16
+                      - --s3-chunk-size=16M
+                      - --s3-upload-concurrency=2
+                      - --buffer-size=16M
                       - --s3-no-check-bucket
                       - --stats=5m
                       - --stats-one-line
@@ -139,9 +148,9 @@ jobs:
                     resources:
                       requests:
                         cpu: 200m
-                        memory: 512Mi
+                        memory: 1Gi
                       limits:
-                        memory: 2Gi
+                        memory: 4Gi
                 volumes:
                   - name: home
                     persistentVolumeClaim:
@@ -151,9 +160,21 @@ jobs:
           done
           kubectl -n hub get jobs -l app=home-backup
 
+      # wait until every Job is Complete OR Failed (kubectl wait would block on
+      # a failed Job until the timeout)
       - name: Wait for the Jobs
         run: |
-          kubectl -n hub wait --for=condition=complete job -l app=home-backup --timeout=${JOB_TIMEOUT} || true
+          deadline=$(( $(date +%s) + JOB_TIMEOUT_SECONDS ))
+          while :; do
+            pending=0
+            for job in $(kubectl -n hub get jobs -l app=home-backup -o jsonpath='{.items[*].metadata.name}'); do
+              st=$(kubectl -n hub get job "$job" -o jsonpath='{.status.conditions[?(@.status=="True")].type}')
+              case "$st" in *Complete*|*Failed*) ;; *) pending=$((pending+1));; esac
+            done
+            [ "$pending" -eq 0 ] && break
+            if [ "$(date +%s)" -ge "$deadline" ]; then echo "timeout: $pending job(s) still running"; break; fi
+            sleep 60
+          done
           echo "== job status"; kubectl -n hub get jobs -l app=home-backup
           echo "== pods still not finished (e.g. PVC attached to a running server)"
           kubectl -n hub get pods -l app=home-backup --field-selector=status.phase!=Succeeded -o wide || true
