@@ -1,0 +1,38 @@
+# Read-only diagnostic: shows whether the GFTS hub is still running and
+# which public IP its ingress has. Makes no changes to the cluster.
+name: hub status (read-only)
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - hub-status
+
+jobs:
+  status:
+    runs-on: ubuntu-22.04
+    environment: deploy
+    steps:
+      - uses: actions/checkout@v4
+
+      # same action + pinned SHA as deploy-hub.yaml
+      - name: Unlock git-crypt secrets
+        uses: sliteteam/github-action-git-crypt-unlock@f99c0c6b60bb7ec30dcec033a8f0a3b3d48f21e1
+        env:
+          GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
+
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v3.2
+        with:
+          version: v1.31.0
+
+      - name: Cluster status
+        env:
+          KUBECONFIG: gfts-track-reconstruction/jupyterhub/secrets/kubeconfig.yaml
+        run: |
+          echo "== nodes";            kubectl get nodes -o wide
+          echo "== hub pods";         kubectl get pods -n hub -o wide
+          echo "== non-running pods"; kubectl get pods -A --field-selector=status.phase!=Running
+          echo "== services";         kubectl get svc -A -o wide
+          echo "== ingress";          kubectl get ingress -A
+          echo "== certificates";     kubectl get certificate -A || true
