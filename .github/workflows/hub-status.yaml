@@ -1,5 +1,6 @@
-# Read-only diagnostic: shows whether the GFTS hub is still running and
-# which public IP its ingress has. Makes no changes to the cluster.
+# Read-only diagnostic: shows whether the GFTS hub is still running, which
+# public IP its ingress has, the state of the load balancer / TLS certs, and
+# what a `deploy.py helm` run would change (helm diff). Makes no changes.
 name: hub status (read-only)
 
 on:
@@ -8,12 +9,19 @@ on:
     branches:
       - hub-status
 
+env:
+  HELM_VERSION: v3.14.0
+
 jobs:
   status:
     runs-on: ubuntu-22.04
     environment: deploy
+    env:
+      KUBECONFIG: ${{ github.workspace }}/gfts-track-reconstruction/jupyterhub/secrets/kubeconfig.yaml
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       # same action + pinned SHA as deploy-hub.yaml
       - name: Unlock git-crypt secrets
@@ -27,12 +35,41 @@ jobs:
           version: v1.31.0
 
       - name: Cluster status
-        env:
-          KUBECONFIG: gfts-track-reconstruction/jupyterhub/secrets/kubeconfig.yaml
         run: |
           echo "== nodes";            kubectl get nodes -o wide
           echo "== hub pods";         kubectl get pods -n hub -o wide
           echo "== non-running pods"; kubectl get pods -A --field-selector=status.phase!=Running
-          echo "== services";         kubectl get svc -A -o wide
+          echo "== services";         kubectl get svc -n hub -o wide
           echo "== ingress";          kubectl get ingress -A
-          echo "== certificates";     kubectl get certificate -A || true
+
+      - name: Load balancer status
+        run: |
+          echo "== LB service annotations / status / traffic policy"
+          kubectl -n hub get svc hub-ingress-nginx-controller -o jsonpath='{.metadata.annotations}{"\n"}{.status}{"\n"}{.spec.externalTrafficPolicy}{"\n"}'
+          echo "== LB service events";  kubectl -n hub describe svc hub-ingress-nginx-controller | sed -n '/^Events/,$p'
+          echo "== recent hub events";  kubectl -n hub get events --sort-by=.lastTimestamp | tail -25
+          echo "== ingress-nginx controller log (last 48h, tail 15)"
+          kubectl -n hub logs deploy/hub-ingress-nginx-controller --since=48h --tail=15 | cut -c1-200 || true
+          echo "== endpoints";          kubectl -n hub get endpoints hub-ingress-nginx-controller proxy-public hub
+
+      - name: TLS certificate status
+        run: |
+          echo "== certificates";  kubectl get certificate -A -o custom-columns='NS:.metadata.namespace,NAME:.metadata.name,READY:.status.conditions[0].status,NOT_AFTER:.status.notAfter,RENEWAL:.status.renewalTime'
+          echo "== challenges";    kubectl get challenges -A -o wide || true
+          echo "== clusterissuer"; kubectl get clusterissuer -o wide || true
+
+      - name: Install helm + helm-diff
+        run: |
+          curl -sf https://raw.githubusercontent.com/helm/helm/${HELM_VERSION}/scripts/get-helm-3 | DESIRED_VERSION=${HELM_VERSION} bash
+          helm plugin install https://github.com/databus23/helm-diff
+
+      # Same command deploy.py uses, but as a diff only (nothing applied).
+      - name: helm diff (what a deploy would change)
+        working-directory: gfts-track-reconstruction/jupyterhub
+        run: |
+          echo "== helm releases"; helm list -n hub
+          helm dependency update ./gfts-hub > /dev/null
+          echo "== helm diff upgrade (suppressing secrets)"
+          helm diff upgrade --install --namespace=hub hub ./gfts-hub \
+            --values=config/daskhub.yaml --values=secrets/config.yaml \
+            --suppress-secrets --context 3 --no-color || true
