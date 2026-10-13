@@ -83,7 +83,7 @@ jobs:
                       - {name: script, mountPath: /scripts}
                     resources:
                       requests: {cpu: 500m, memory: 1Gi}
-                      limits: {memory: 4Gi}
+                      limits: {memory: 8Gi}
                 volumes:
                   - name: script
                     configMap: {name: s3-copy-slash-script}
@@ -99,5 +99,9 @@ jobs:
             sleep 60
           done
           kubectl -n hub get job s3-copy-slash
-          echo "== log (counts only)"; kubectl -n hub logs job/s3-copy-slash --tail=40 | grep -vE '^\s*$'
+          echo "== pods"
+          kubectl -n hub get pods -l app=s3-copy-slash -o jsonpath='{range .items[*]}{.metadata.name}{" phase="}{.status.phase}{" reason="}{.status.reason}{" exit="}{.status.containerStatuses[0].state.terminated.exitCode}{" termreason="}{.status.containerStatuses[0].state.terminated.reason}{" restarts="}{.status.containerStatuses[0].restartCount}{"\n"}{end}'
+          for p in $(kubectl -n hub get pods -l app=s3-copy-slash -o name); do
+            echo "== log $p (counts only)"; kubectl -n hub logs $p --tail=15 | grep -vE '^\s*$|pip|notice'
+          done
           [[ "$st" == *Complete* ]]
