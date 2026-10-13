@@ -358,6 +358,11 @@ ingress-nginx:
     config:
       # Allow POSTs of up to 64MB, for large notebook support.
       proxy-body-size: 64m
+      # ingress-nginx >= 1.12 validates Ingress paths strictly by default and
+      # rejects the ACME HTTP-01 solver Ingress that cert-manager creates
+      # (".../.well-known/acme-challenge/<token>" with pathType Exact), so no
+      # certificate can be issued. Disable the strict check (2026-10-13, #182).
+      strict-validate-path-type: "false"
     stats:
       enabled: true
     service:
