@@ -66,5 +66,9 @@ jobs:
           python3 deploy.py chartpress
 
       - name: Deploy with helm
+        env:
+          # GitHub OAuth client secret for jupyterhub.gfts.grid4earth.eu,
+          # consumed by deploy.py (see config/public-overrides.yaml)
+          GFTS_OAUTH_CLIENT_SECRET: ${{ secrets.GFTS_OAUTH_CLIENT_SECRET }}
         run: |
           python3 deploy.py helm
