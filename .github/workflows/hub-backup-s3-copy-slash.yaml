@@ -1,0 +1,103 @@
+# Copy the objects whose key contains "//" (skipped by rclone) from the GFTS S3
+# project to gfts-backup/s3/<bucket>/ with a small boto3 Job inside the cluster.
+# Source is only read. Logs contain counts only (public repository).
+name: hub backup s3 copy slash keys
+
+on:
+  push:
+    branches:
+      - hub-status
+    paths:
+      - .github/workflows/hub-backup-s3-copy-slash.yaml
+      - .github/hub-status/s3_copy_split.py
+
+jobs:
+  copy:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 350
+    environment: deploy
+    env:
+      KUBECONFIG: ${{ github.workspace }}/gfts-track-reconstruction/jupyterhub/secrets/kubeconfig.yaml
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Unlock git-crypt secrets
+        uses: sliteteam/github-action-git-crypt-unlock@f99c0c6b60bb7ec30dcec033a8f0a3b3d48f21e1
+        env:
+          GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
+
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v3.2
+        with:
+          version: v1.31.0
+
+      - name: Create credentials secret and script ConfigMap
+        env:
+          SRC_KEY: ${{ secrets.GFTS_S3_AWS_ACCESS_KEY_ID }}
+          SRC_SECRET: ${{ secrets.GFTS_S3_AWS_SECRET_ACCESS_KEY }}
+          DEST_KEY: ${{ secrets.HOME_BACKUP_AWS_ACCESS_KEY_ID }}
+          DEST_SECRET: ${{ secrets.HOME_BACKUP_AWS_SECRET_ACCESS_KEY }}
+        run: |
+          for v in SRC_KEY SRC_SECRET DEST_KEY DEST_SECRET; do test -n "${!v}" || { echo "$v is not set"; exit 1; }; done
+          kubectl -n hub create secret generic s3-backup-creds-slash \
+            --from-literal=SRC_KEY="$SRC_KEY" --from-literal=SRC_SECRET="$SRC_SECRET" \
+            --from-literal=DEST_KEY="$DEST_KEY" --from-literal=DEST_SECRET="$DEST_SECRET" \
+            --dry-run=client -o yaml | kubectl apply -f -
+          kubectl -n hub create configmap s3-copy-slash-script \
+            --from-file=copy.py=.github/hub-status/s3_copy_split.py \
+            --dry-run=client -o yaml | kubectl apply -f -
+
+      - name: Run the copy Job
+        run: |
+          kubectl -n hub delete job s3-copy-slash --ignore-not-found --wait=true
+          cat <<'EOF2' | kubectl apply -f -
+          apiVersion: batch/v1
+          kind: Job
+          metadata:
+            name: s3-copy-slash
+            namespace: hub
+            labels:
+              app: s3-copy-slash
+          spec:
+            backoffLimit: 1
+            ttlSecondsAfterFinished: 172800
+            template:
+              metadata:
+                labels:
+                  app: s3-copy-slash
+              spec:
+                restartPolicy: Never
+                containers:
+                  - name: copy
+                    image: python:3.12-slim
+                    command: ["sh", "-c", "pip install --quiet --no-cache-dir boto3 && python -u /scripts/copy.py"]
+                    env:
+                      - {name: SRC_ENDPOINT, value: "https://s3.gra.perf.cloud.ovh.net"}
+                      - {name: DEST_ENDPOINT, value: "https://s3.gra.io.cloud.ovh.net"}
+                      - {name: BUCKETS, value: "gfts-ifremer destine-gfts-data-lake"}
+                      - {name: SRC_KEY, valueFrom: {secretKeyRef: {name: s3-backup-creds-slash, key: SRC_KEY}}}
+                      - {name: SRC_SECRET, valueFrom: {secretKeyRef: {name: s3-backup-creds-slash, key: SRC_SECRET}}}
+                      - {name: DEST_KEY, valueFrom: {secretKeyRef: {name: s3-backup-creds-slash, key: DEST_KEY}}}
+                      - {name: DEST_SECRET, valueFrom: {secretKeyRef: {name: s3-backup-creds-slash, key: DEST_SECRET}}}
+                    volumeMounts:
+                      - {name: script, mountPath: /scripts}
+                    resources:
+                      requests: {cpu: 500m, memory: 1Gi}
+                      limits: {memory: 4Gi}
+                volumes:
+                  - name: script
+                    configMap: {name: s3-copy-slash-script}
+          EOF2
+
+      - name: Wait for the Job
+        run: |
+          deadline=$(( $(date +%s) + 19000 ))
+          while :; do
+            st=$(kubectl -n hub get job s3-copy-slash -o jsonpath='{.status.conditions[?(@.status=="True")].type}')
+            case "$st" in *Complete*|*Failed*) break;; esac
+            [ "$(date +%s)" -ge "$deadline" ] && { echo "timeout"; break; }
+            sleep 60
+          done
+          kubectl -n hub get job s3-copy-slash
+          echo "== log (counts only)"; kubectl -n hub logs job/s3-copy-slash --tail=40 | grep -vE '^\s*$'
+          [[ "$st" == *Complete* ]]
