@@ -8,6 +8,15 @@
 # CertificateRequests (their Orders/Challenges are garbage-collected), which
 # makes cert-manager start a fresh issuance for the new names.
 #
+# v2 (2026-10-13): run 37533948090 showed the real blocker: the ingress-nginx
+# admission webhook rejects the ACME solver Ingress that cert-manager creates:
+#   admission webhook "validate.nginx.ingress.kubernetes.io" denied the request:
+#   ingress contains invalid paths: path /.well-known/acme-challenge/<token> ...
+# ingress-nginx controller 1.12 (chart 4.12, first really applied by the
+# 2026-10-06 deploys) enables strict-validate-path-type by default. Turn it
+# off in the controller ConfigMap (the same key is added to values.yaml on
+# test-deploy so that the next helm upgrade keeps it), then restart issuance.
+#
 # Optional (APPLY_HOSTALIASES_FIX=true): if the new challenges get stuck on
 # "self check ... i/o timeout" (cert-manager cannot reach the new load
 # balancer IP from inside the cluster), add hostAliases to the cert-manager
@@ -49,14 +58,29 @@ jobs:
           kubectl -n hub get certificate -o custom-columns='NAME:.metadata.name,DNSNAMES:.spec.dnsNames,READY:.status.conditions[?(@.type=="Ready")].status,ISSUING:.status.conditions[?(@.type=="Issuing")].reason'
           kubectl -n hub get certificaterequests,orders,challenges 2>/dev/null || true
 
+      - name: Full challenge reason and ingress-nginx version (before)
+        run: |
+          kubectl -n hub get challenges -o jsonpath='{range .items[*]}{.metadata.name}{"\t"}{.status.state}{"\t"}{.status.reason}{"\n"}{end}' || true
+          kubectl -n hub get deploy hub-ingress-nginx-controller -o jsonpath='{.spec.template.spec.containers[0].image}{"\n"}'
+          kubectl -n hub get cm hub-ingress-nginx-controller -o jsonpath='{.data}{"\n"}'
+
+      - name: Allow the ACME solver Ingress (strict-validate-path-type=false)
+        run: |
+          kubectl -n hub patch cm hub-ingress-nginx-controller --type=merge -p '{"data":{"strict-validate-path-type":"false"}}'
+          kubectl -n hub get cm hub-ingress-nginx-controller -o jsonpath='{.data}{"\n"}'
+          # the controller reloads its ConfigMap on change; give it a moment
+          sleep 20
+          kubectl -n hub logs deploy/hub-ingress-nginx-controller --since=60s --tail=20 | cut -c1-200 || true
+
       - name: Point the Certificates at the new hostnames and restart issuance
         run: |
           patch () { kubectl -n hub patch certificate "$1" --type=merge -p "{\"spec\":{\"dnsNames\":[\"$2\"]}}"; }
           patch tls-jupyterhub jupyterhub.gfts.grid4earth.eu
           patch tls-grafana    grafana.gfts.grid4earth.eu
           patch tls-prometheus prometheus.gfts.grid4earth.eu
-          # drop the stale in-flight requests (only the three tls-*-16 exist;
-          # their Orders/Challenges are garbage-collected with them)
+          # drop the in-flight requests (their Orders/Challenges are
+          # garbage-collected with them) so that cert-manager starts fresh
+          # Orders and creates the solver Ingresses again immediately
           kubectl -n hub delete certificaterequest --all --ignore-not-found
           kubectl -n hub get certificate -o custom-columns='NAME:.metadata.name,DNSNAMES:.spec.dnsNames'
 
@@ -66,13 +90,14 @@ jobs:
           kubectl -n cert-manager patch deployment cert-manager --type=merge -p "{\"spec\":{\"template\":{\"spec\":{\"hostAliases\":[{\"ip\":\"${INGRESS_CLUSTER_IP}\",\"hostnames\":[\"jupyterhub.gfts.grid4earth.eu\",\"grafana.gfts.grid4earth.eu\",\"prometheus.gfts.grid4earth.eu\"]}]}}}}"
           kubectl -n cert-manager rollout status deployment cert-manager --timeout=180s
 
-      - name: Watch issuance (up to ~5 min)
+      - name: Watch issuance (up to ~8 min)
         run: |
-          for i in $(seq 1 10); do
+          for i in $(seq 1 16); do
             sleep 30
             echo "---- $(date -u +%H:%M:%S)"
-            kubectl -n hub get challenges -o custom-columns='NAME:.metadata.name,DOMAIN:.spec.dnsName,STATE:.status.state,REASON:.status.reason' 2>/dev/null | cut -c1-230 || true
+            kubectl -n hub get challenges -o custom-columns='NAME:.metadata.name,DOMAIN:.spec.dnsName,STATE:.status.state,REASON:.status.reason' 2>/dev/null | cut -c1-300 || true
             kubectl -n hub get certificate -o custom-columns='NAME:.metadata.name,READY:.status.conditions[?(@.type=="Ready")].status,NOT_AFTER:.status.notAfter'
+            kubectl -n hub get ingress 2>/dev/null | grep -i acme | cut -c1-200 || true
             if curl -sS -o /dev/null --max-time 10 https://jupyterhub.gfts.grid4earth.eu/hub/api; then echo "TLS OK for jupyterhub.gfts.grid4earth.eu"; curl -sS -v --max-time 10 https://jupyterhub.gfts.grid4earth.eu/hub/api -o /dev/null 2>&1 | grep -E "subject:|expire date"; break; fi
           done
 
