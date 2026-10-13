@@ -44,7 +44,7 @@ jobs:
             --from-literal=DEST_KEY="$DEST_KEY" --from-literal=DEST_SECRET="$DEST_SECRET" \
             --dry-run=client -o yaml | kubectl apply -f -
           kubectl -n hub create configmap s3-copy-slash-script \
-            --from-file=copy.py=.github/hub-status/s3_copy_split.py \
+            --from-file=s3copy.py=.github/hub-status/s3_copy_split.py \
             --dry-run=client -o yaml | kubectl apply -f -
 
       - name: Run the copy Job
@@ -70,7 +70,7 @@ jobs:
                 containers:
                   - name: copy
                     image: python:3.12-slim
-                    command: ["sh", "-c", "pip install --quiet --no-cache-dir boto3 && python -u /scripts/copy.py"]
+                    command: ["sh", "-c", "pip install --quiet --no-cache-dir boto3 && python -u /scripts/s3copy.py"]
                     env:
                       - {name: SRC_ENDPOINT, value: "https://s3.gra.perf.cloud.ovh.net"}
                       - {name: DEST_ENDPOINT, value: "https://s3.gra.io.cloud.ovh.net"}
