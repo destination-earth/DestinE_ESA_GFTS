@@ -39,7 +39,7 @@ def copy_one(args):
 
 failed = 0
 for bucket in os.environ["BUCKETS"].split():
-    s = {k: v for k, v in listing(src, bucket).items() if "//" in k}
+    s = {k: v for k, v in listing(src, bucket).items() if k.startswith("/") or "//" in k}
     d = listing(dst, DEST_BUCKET, f"s3/{bucket}/")
     d = {k[len(f"s3/{bucket}/"):]: v for k, v in d.items()}
     todo = [(bucket, k) for k, v in s.items() if d.get(k) != v]
