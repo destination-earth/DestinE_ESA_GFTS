@@ -1,0 +1,131 @@
+# Copy one user's home directory into a sub-folder of another user's home.
+#   corentin-hue -> cchauvea:~/corentin-hue/
+#   capetienne   -> renanhuerre:~/capetienne/
+# A pair whose destination PVC does not exist yet (user never logged in) is
+# skipped, so the workflow can be pushed again later for the other pair.
+#
+# Both PVCs are RWO: the destination user's server must be stopped (and the
+# source user's too) while this runs, otherwise the Job stays Pending.
+# The source is mounted READ-ONLY. Files are written to
+# /home/jovyan/<DST_SUBDIR>/ of the destination user and chowned to jovyan.
+name: hub copy home
+
+on:
+  push:
+    branches:
+      - hub-status
+    paths:
+      - .github/workflows/hub-copy-home.yaml
+
+jobs:
+  copy:
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        include:
+          - SRC_PVC: claim-corentin-2dhue   # corentin-hue (KubeSpawner-escaped name)
+            DST_PVC: claim-cchauvea         # exists only after cchauvea's first login
+            DST_SUBDIR: corentin-hue
+            JOB: copy-home-cchauvea
+          - SRC_PVC: claim-capetienne       # Etienne
+            DST_PVC: claim-renanhuerre      # GitHub "RenanHuerre", hub lowercases names
+            DST_SUBDIR: capetienne
+            JOB: copy-home-renanhuerre
+    runs-on: ubuntu-22.04
+    timeout-minutes: 300
+    environment: deploy
+    env:
+      SRC_PVC: ${{ matrix.SRC_PVC }}
+      DST_PVC: ${{ matrix.DST_PVC }}
+      DST_SUBDIR: ${{ matrix.DST_SUBDIR }}
+      JOB: ${{ matrix.JOB }}
+      KUBECONFIG: ${{ github.workspace }}/gfts-track-reconstruction/jupyterhub/secrets/kubeconfig.yaml
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Unlock git-crypt secrets
+        uses: sliteteam/github-action-git-crypt-unlock@f99c0c6b60bb7ec30dcec033a8f0a3b3d48f21e1
+        env:
+          GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
+
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v3.2
+        with:
+          version: v1.31.0
+
+      - name: Preflight
+        id: pre
+        run: |
+          kubectl -n hub get pvc "$SRC_PVC"
+          if ! kubectl -n hub get pvc "$DST_PVC"; then
+            echo "::warning::$DST_PVC does not exist yet (user has not logged in) - skipping"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          fi
+          # RWO volumes: both users' servers (pod jupyter-<user>) must be stopped
+          for pod in "jupyter-${SRC_PVC#claim-}" "jupyter-${DST_PVC#claim-}"; do
+            if kubectl -n hub get pod "$pod" >/dev/null 2>&1; then
+              echo "::warning::server $pod is still running - stop it, then push again"
+              echo "skip=true" >> "$GITHUB_OUTPUT"
+            fi
+          done
+          echo "== running user servers (must not include the two users)"
+          kubectl -n hub get pods -l component=singleuser-server -o name || true
+
+      - name: Run the copy Job
+        if: steps.pre.outputs.skip != 'true'
+        run: |
+          kubectl -n hub delete job "$JOB" --ignore-not-found --wait=true
+          cat <<EOF | kubectl apply -f -
+          apiVersion: batch/v1
+          kind: Job
+          metadata:
+            name: ${JOB}
+            namespace: hub
+          spec:
+            backoffLimit: 0
+            ttlSecondsAfterFinished: 172800
+            template:
+              spec:
+                restartPolicy: Never
+                securityContext:
+                  runAsUser: 0
+                containers:
+                  - name: copy
+                    image: alpine:3.20
+                    command:
+                      - /bin/sh
+                      - -c
+                      - |
+                        set -e
+                        apk add --no-cache rsync >/dev/null
+                        mkdir -p "/dst/${DST_SUBDIR}"
+                        rsync -a --info=stats2 --exclude='.cache/' /src/ "/dst/${DST_SUBDIR}/"
+                        chown -R 1000:100 "/dst/${DST_SUBDIR}"
+                        du -sh "/dst/${DST_SUBDIR}"
+                    volumeMounts:
+                      - name: src
+                        mountPath: /src
+                        readOnly: true
+                      - name: dst
+                        mountPath: /dst
+                    resources:
+                      requests:
+                        cpu: 200m
+                        memory: 256Mi
+                      limits:
+                        memory: 1Gi
+                volumes:
+                  - name: src
+                    persistentVolumeClaim:
+                      claimName: ${SRC_PVC}
+                      readOnly: true
+                  - name: dst
+                    persistentVolumeClaim:
+                      claimName: ${DST_PVC}
+          EOF
+          kubectl -n hub wait --for=condition=complete "job/$JOB" --timeout=4h || kubectl -n hub get job "$JOB" -o wide
+
+      - name: Result
+        if: always() && steps.pre.outputs.skip != 'true'
+        run: kubectl -n hub logs "job/$JOB" --tail=25 || true
