@@ -201,6 +201,7 @@ jupyterhub:
           - capetienne
           - corentin-hue
           - cchauvea
+          - RenanHuerre
       KubeSpawner:
         pod_security_context:
           fsGroup: 100
