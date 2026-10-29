@@ -24,10 +24,8 @@ jobs:
       max-parallel: 1
       matrix:
         include:
-          - SRC_PVC: claim-corentin-2dhue   # corentin-hue (KubeSpawner-escaped name)
-            DST_PVC: claim-cchauvea         # exists only after cchauvea's first login
-            DST_SUBDIR: corentin-hue
-            JOB: copy-home-cchauvea
+          # corentin-hue -> cchauvea done 2026-10-23 (run 39976408461). Do not
+          # re-run: rsync would overwrite files cchauvea has since edited.
           - SRC_PVC: claim-capetienne       # Etienne
             DST_PVC: claim-renanhuerre      # GitHub "RenanHuerre", hub lowercases names
             DST_SUBDIR: capetienne
